@@ -2,7 +2,7 @@ package com.adil.pixplash.di.module
 
 import android.app.Application
 import android.content.Context
-import com.adil.pixplash.UnsplashApplication
+import com.adil.pixplash.PixplashApplication
 import com.adil.pixplash.di.ApplicationContext
 import com.adil.pixplash.utils.rx.RxScheduleProvider
 import com.adil.pixplash.utils.rx.ScheduleProvider
@@ -12,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Singleton
 
 @Module
-class ApplicationModule (private val application: UnsplashApplication) {
+class ApplicationModule (private val application: PixplashApplication) {
 
     @Singleton
     @Provides

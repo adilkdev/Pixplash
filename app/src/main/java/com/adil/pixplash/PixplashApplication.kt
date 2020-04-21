@@ -5,7 +5,7 @@ import com.adil.pixplash.di.component.ApplicationComponent
 import com.adil.pixplash.di.component.DaggerApplicationComponent
 import com.adil.pixplash.di.module.ApplicationModule
 
-class UnsplashApplication : Application() {
+class PixplashApplication : Application() {
 
     lateinit var applicationComponent: ApplicationComponent
 

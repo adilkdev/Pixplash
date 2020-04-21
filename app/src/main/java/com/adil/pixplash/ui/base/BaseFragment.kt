@@ -8,7 +8,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.adil.pixplash.UnsplashApplication
+import com.adil.pixplash.PixplashApplication
 import com.adil.pixplash.di.component.DaggerFragmentComponent
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.di.module.FragmentModule
@@ -54,7 +54,7 @@ abstract class BaseFragment<VM: BaseViewModel> : Fragment() {
     private fun buildFragmentComponent() =
         DaggerFragmentComponent
             .builder()
-            .applicationComponent((context!!.applicationContext as UnsplashApplication).applicationComponent)
+            .applicationComponent((context!!.applicationContext as PixplashApplication).applicationComponent)
             .fragmentModule(FragmentModule(this))
             .build()
 

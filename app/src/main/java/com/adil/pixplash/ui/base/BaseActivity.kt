@@ -5,7 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.adil.pixplash.UnsplashApplication
+import com.adil.pixplash.PixplashApplication
 import com.adil.pixplash.di.component.ActivityComponent
 import com.adil.pixplash.di.component.DaggerActivityComponent
 import com.adil.pixplash.di.module.ActivityModule
@@ -41,7 +41,7 @@ abstract class BaseActivity <VM: BaseViewModel> : AppCompatActivity() {
     private fun buildActivityComponent() =
         DaggerActivityComponent
             .builder()
-            .applicationComponent((application as UnsplashApplication).applicationComponent)
+            .applicationComponent((application as PixplashApplication).applicationComponent)
             .activityModule(ActivityModule(this))
             .build()
 
