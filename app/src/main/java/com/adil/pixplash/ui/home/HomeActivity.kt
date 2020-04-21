@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.adil.pixplash.R
 import com.adil.pixplash.di.component.ActivityComponent
@@ -34,7 +33,6 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
                     resources.displayMetrics
                 )
                 outline.setRoundRect(0, - cornerRadius.toInt(), view.width, ((view.height) ).toInt(), cornerRadius)
-                //outline.setOval(0, 0, view.width, view.height)
             }
         }
         relative.outlineProvider = viewOutlineProvider
