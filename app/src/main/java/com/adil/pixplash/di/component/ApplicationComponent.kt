@@ -6,6 +6,7 @@ import com.adil.pixplash.UnsplashApplication
 import com.adil.pixplash.di.ApplicationContext
 import com.adil.pixplash.di.module.ApplicationModule
 import dagger.Component
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Singleton
 
 @Singleton
@@ -18,6 +19,8 @@ interface ApplicationComponent {
 
     @ApplicationContext
     fun getContext(): Context
+
+    fun getCompositeDisposable(): CompositeDisposable
 
 
 }
