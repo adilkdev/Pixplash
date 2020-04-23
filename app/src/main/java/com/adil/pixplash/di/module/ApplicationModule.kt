@@ -7,6 +7,7 @@ import com.adil.pixplash.data.remote.NetworkService
 import com.adil.pixplash.data.remote.Networking
 import com.adil.pixplash.di.ApplicationContext
 import com.adil.pixplash.utils.AppConstants
+import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.RxSchedulerProvider
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Module
@@ -49,5 +50,9 @@ class ApplicationModule (private val application: PixplashApplication) {
             application.cacheDir,
             10 * 1024 * 1024 // 10MB
         )
+
+    @Singleton
+    @Provides
+    fun provideNetworkHelper(): NetworkHelper = NetworkHelper(application)
 
 }

@@ -6,6 +6,7 @@ import com.adil.pixplash.PixplashApplication
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.di.ApplicationContext
 import com.adil.pixplash.di.module.ApplicationModule
+import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Component
 import io.reactivex.disposables.CompositeDisposable
@@ -27,6 +28,8 @@ interface ApplicationComponent {
     fun getSchedulerProvider(): SchedulerProvider
 
     fun getCompositeDisposable(): CompositeDisposable
+
+    fun getNetworkHelper(): NetworkHelper
 
 
 }

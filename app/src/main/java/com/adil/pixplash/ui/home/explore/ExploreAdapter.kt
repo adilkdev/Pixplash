@@ -28,7 +28,7 @@ class ExploreAdapter(val context: Context) : RecyclerView.Adapter<ExploreAdapter
         get().load(image).into(holder.imageView)
     }
 
-    fun updateList(list: List<PhotoResponse>) {
+    fun appendList(list: List<PhotoResponse>) {
         this.list.addAll(list)
         notifyDataSetChanged()
     }

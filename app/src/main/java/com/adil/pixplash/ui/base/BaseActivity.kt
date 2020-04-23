@@ -30,12 +30,6 @@ abstract class BaseActivity <VM: BaseViewModel> : AppCompatActivity() {
     protected abstract fun provideLayoutId(): Int
 
     protected open fun setupObservers() {
-        viewModel.messageStringId.observe(this, Observer {
-            it.data?.run { showMessage(this) }
-        })
-        viewModel.messageString.observe(this, Observer {
-            it.data?.run { showMessage(this) }
-        })
     }
 
     private fun buildActivityComponent() =

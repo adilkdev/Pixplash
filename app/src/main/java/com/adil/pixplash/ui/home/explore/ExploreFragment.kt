@@ -7,16 +7,16 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
-import com.adil.pixplash.data.remote.Networking
-import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.utils.view.GridSpacingItemDecoration
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
+import kotlinx.android.synthetic.main.fragment_explore.loadingView
 
 class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
@@ -29,9 +29,14 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             fragment.arguments = args
             return fragment
         }
+
+
+
     }
 
-    private lateinit var adapter: ExploreAdapter
+    private lateinit var exploreAdapter: ExploreAdapter
+
+    private var isFirstLoad = true
 
     override fun provideLayoutId(): Int = R.layout.fragment_explore
 
@@ -53,40 +58,98 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     }
 
     private fun setupRecyclerView() {
-        adapter =
+        exploreAdapter =
             ExploreAdapter(activity!!.applicationContext)
-        rvExplore.adapter = adapter
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
-        rvExplore.layoutManager = layoutManager
-        rvExplore.addItemDecoration(GridSpacingItemDecoration(25))
+        rvExplore.apply {
+            this.adapter = exploreAdapter
+            val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+            layoutManager = gridLayoutManager
+            addItemDecoration(GridSpacingItemDecoration(25))
+
+            var pastVisibleItems: Int = 0
+            var visibleItemCount: Int
+            var totalItemCount: Int
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    layoutManager.run {
+                        visibleItemCount = (layoutManager as StaggeredGridLayoutManager).childCount
+                        totalItemCount = (layoutManager as StaggeredGridLayoutManager).itemCount
+                        var firstVisibleItems: IntArray? = null
+                        firstVisibleItems =
+                            (layoutManager as StaggeredGridLayoutManager).findFirstVisibleItemPositions(firstVisibleItems)
+                        if (firstVisibleItems != null && firstVisibleItems.isNotEmpty()) {
+                            pastVisibleItems = firstVisibleItems[0]
+                        }
+                        if (viewModel.loading.value!! == null || !viewModel.loading.value!!) {
+                            if (visibleItemCount + pastVisibleItems >= totalItemCount) {
+                                viewModel.loading.value = true
+                                viewModel.onLoadMore()
+                                Log.e("tag", "LOAD NEXT ITEM")
+                            }
+                        }
+                    }
+                }
+            })
+        }
     }
 
     override fun setupObservers() {
         super.setupObservers()
+        viewModel.loading.value = true
         viewModel.photos.observe(this, Observer {
-            adapter.updateList(it)
+            it.data?.run { exploreAdapter.appendList(this) }
+            viewModel.loading.value = false
+            doneLoadingView()
+            if (isFirstLoad) isFirstLoad = false
         })
-        //fetchPhotos()
+        viewModel.error.observe(this, Observer {
+                if (isFirstLoad) {
+                        isFirstLoad = false
+                        onErrorView(it)
+                        cardRetry.setOnClickListener{
+                            viewModel.onLoadMore()
+                            loadingView()
+                    }
+                } else {
+
+                }
+        })
+    }
+
+    private fun doneLoadingView() {
+        loadingView.visibility = View.GONE
+        errorLayout.visibility = View.GONE
+        rvExplore.visibility = View.VISIBLE
+    }
+
+    private fun loadingView() {
+        loadingView.visibility = View.VISIBLE
+        errorLayout.visibility = View.GONE
+        rvExplore.visibility = View.GONE
+    }
+
+    private fun onErrorView(it: Int) {
+        errorLayout.visibility = View.VISIBLE
+        errorLayout.bringToFront()
+        tvDescription.text = context?.resources?.getString(it)
+    }
+
+    fun scrollToTop() {
+        rvExplore.smoothSnapToPosition(0)
+    }
+
+    fun RecyclerView.smoothSnapToPosition(position: Int, snapMode: Int = LinearSmoothScroller.SNAP_TO_START) {
+        val smoothScroller = object : LinearSmoothScroller(this.context) {
+            override fun getVerticalSnapPreference(): Int = snapMode
+            override fun getHorizontalSnapPreference(): Int = snapMode
+        }
+        smoothScroller.targetPosition = position
+        layoutManager?.startSmoothScroll(smoothScroller)
     }
 
     override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-
-    private fun fetchPhotos() {
-        val ns = Networking.create(cacheDir = activity?.application!!.cacheDir, cacheSize = 10 * 1024 * 1024)
-        val photoRepository = PhotoRepository(ns)
-        photoRepository.fetchPhotos()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    Log.e(TAG, "${it.size}")
-                    adapter.updateList(it)
-                },
-                {
-                    Log.e(TAG, "${it.localizedMessage}")
-                }
-            )
-    }
 
 }

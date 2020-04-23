@@ -7,6 +7,7 @@ import com.adil.pixplash.di.ActivityScope
 import com.adil.pixplash.ui.base.BaseActivity
 import com.adil.pixplash.ui.home.HomeViewModel
 import com.adil.pixplash.utils.ViewModelProviderFactory
+import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Module
 import dagger.Provides
@@ -22,11 +23,12 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     @Provides
     fun provideHomeViewModel(
         schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable
+        compositeDisposable: CompositeDisposable,
+        networkHelper: NetworkHelper
     ) : HomeViewModel =
         ViewModelProviders.of(activity,
             ViewModelProviderFactory(HomeViewModel::class) {
-                HomeViewModel(schedulerProvider, compositeDisposable)
+                HomeViewModel(schedulerProvider, compositeDisposable, networkHelper)
             }).get(HomeViewModel::class.java)
 
 }

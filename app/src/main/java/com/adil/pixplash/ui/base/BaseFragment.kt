@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.adil.pixplash.PixplashApplication
 import com.adil.pixplash.di.component.DaggerFragmentComponent
 import com.adil.pixplash.di.component.FragmentComponent
@@ -42,12 +41,12 @@ abstract class BaseFragment<VM: BaseViewModel> : Fragment() {
     protected abstract fun provideLayoutId(): Int
 
     protected open fun setupObservers() {
-        viewModel.messageStringId.observe(this, Observer {
-            it.data?.run { showMessage(this) }
-        })
-        viewModel.messageString.observe(this, Observer {
-            it.data?.run { showMessage(this) }
-        })
+//        viewModel.messageStringId.observe(this, Observer {
+//            //it.data?.run { showMessage(this) }
+//        })
+//        viewModel.messageString.observe(this, Observer {
+//            //it.data?.run { showMessage(this) }
+//        })
     }
 
     private fun buildFragmentComponent() =
