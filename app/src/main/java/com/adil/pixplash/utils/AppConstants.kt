@@ -6,4 +6,12 @@ object AppConstants {
 
     const val SECRET_KEY = "IYA7025ykvk7h4vki_0AeQy4Mf_U07CEod66WSPnYcc"
 
+    const val BASE_URL = "https://api.unsplash.com"
+
+    const val DARK_THEME = 1
+
+    const val LIGHT_THEME = 2
+
+    var ACTIVE_THEME = 1
+
 }

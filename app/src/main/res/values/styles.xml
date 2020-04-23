@@ -11,4 +11,16 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="Widget.PixBottomNavigationViewActive" parent="@style/Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/source_sans_pro_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+
+    <style name="Widget.PixBottomNavigationView" parent="@style/Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/source_sans_pro_regular</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+
 </resources>

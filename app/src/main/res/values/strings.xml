@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Pixplash</string>
+    <string name="photos">Photos</string>
+    <string name="developed_by_adil_khan">Developed by ADIL KHAN</string>
+    <string name="img_desc">Background Image</string>
+    <string name="explore">Explore</string>
+    <string name="collection">Collection</string>
+    <string name="profile">Profile</string>
 </resources>

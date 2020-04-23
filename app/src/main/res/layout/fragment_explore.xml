@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".ui.home.HomeActivity"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:background="#00000000"
+            app:elevation="0dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="280dp">
+
+            <RelativeLayout
+                android:id="@+id/relative"
+                app:layout_scrollFlags="scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:src="@drawable/pic"
+                    app:layout_collapseMode="parallax"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/img_desc" />
+                <View
+                    android:id="@+id/searchView"
+                    android:layout_marginTop="140dp"
+                    android:background="@drawable/home_appbar_rounded_bg"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+                <TextView
+                    android:letterSpacing="0.03"
+                    android:textSize="35sp"
+                    android:layout_marginTop="80dp"
+                    android:textColor="#fff"
+                    android:fontFamily="@font/source_sans_pro"
+                    android:textStyle="bold"
+                    android:text="@string/photos"
+                    android:layout_alignStart="@+id/searchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:letterSpacing="0.1"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/source_sans_pro"
+                    android:textStyle="normal"
+                    android:textColor="@color/dark_subtitle_text"
+                    android:text="@string/developed_by_adil_khan"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvExplore"
+        android:paddingTop="20dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+            <View
+                android:background="@drawable/home_rounded_bg"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>

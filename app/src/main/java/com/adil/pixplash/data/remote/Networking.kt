@@ -1,6 +1,7 @@
-package com.mindorks.bootcamp.instagram.data.remote
+package com.adil.pixplash.data.remote
 
 import com.adil.pixplash.BuildConfig
+import com.adil.pixplash.utils.AppConstants
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -17,10 +18,8 @@ object Networking {
 //    const val HEADER_USER_ID = "x-user-id"
 
     private const val NETWORK_CALL_TIMEOUT = 60
-    internal lateinit var API_KEY: String
 
-    fun create(apiKey: String, baseUrl: String, cacheDir: File, cacheSize: Long): NetworkService {
-        API_KEY = apiKey
+    fun create(baseUrl: String = AppConstants.BASE_URL, cacheDir: File, cacheSize: Long): NetworkService {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(

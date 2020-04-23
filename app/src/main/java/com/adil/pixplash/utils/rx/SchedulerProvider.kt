@@ -2,7 +2,7 @@ package com.adil.pixplash.utils.rx
 
 import io.reactivex.Scheduler
 
-interface ScheduleProvider {
+interface SchedulerProvider {
 
     fun computation(): Scheduler
 

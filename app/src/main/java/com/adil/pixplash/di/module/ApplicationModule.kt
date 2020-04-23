@@ -3,9 +3,12 @@ package com.adil.pixplash.di.module
 import android.app.Application
 import android.content.Context
 import com.adil.pixplash.PixplashApplication
+import com.adil.pixplash.data.remote.NetworkService
+import com.adil.pixplash.data.remote.Networking
 import com.adil.pixplash.di.ApplicationContext
-import com.adil.pixplash.utils.rx.RxScheduleProvider
-import com.adil.pixplash.utils.rx.ScheduleProvider
+import com.adil.pixplash.utils.AppConstants
+import com.adil.pixplash.utils.rx.RxSchedulerProvider
+import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -35,7 +38,16 @@ class ApplicationModule (private val application: PixplashApplication) {
      */
     @Singleton
     @Provides
-    fun provideSchedulerProvider(): ScheduleProvider =
-        RxScheduleProvider()
+    fun provideSchedulerProvider(): SchedulerProvider =
+        RxSchedulerProvider()
+
+    @Provides
+    @Singleton
+    fun provideNetworkService(): NetworkService =
+        Networking.create(
+            AppConstants.BASE_URL,
+            application.cacheDir,
+            10 * 1024 * 1024 // 10MB
+        )
 
 }

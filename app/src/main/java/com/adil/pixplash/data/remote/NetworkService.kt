@@ -1,15 +1,23 @@
-package com.mindorks.bootcamp.instagram.data.remote
+package com.adil.pixplash.data.remote
 
 import com.adil.pixplash.data.remote.Endpoints
+import com.adil.pixplash.data.remote.response.PhotoResponse
+import com.adil.pixplash.utils.AppConstants
 import io.reactivex.Single
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.Call
+import retrofit2.http.*
 import javax.inject.Singleton
 
 @Singleton
 interface NetworkService {
 
+    @GET(Endpoints.PHOTOS)
+    fun fetchPhotos(
+        @Query("client_id") clientId: String = AppConstants.ACCESS_KEY,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
+        @Query("order_by") orderBy: String
+    ): Single<List<PhotoResponse>>
 
     /*@POST(Endpoints.DUMMY)
     fun doDummyCall(

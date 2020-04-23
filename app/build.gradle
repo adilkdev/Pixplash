@@ -46,7 +46,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:$support_library_version"
 
     // CardView
-    implementation "androidx.cardview:cardview:$support_library_version"
+    implementation "androidx.cardview:cardview:1.0.0"
 
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
@@ -69,6 +69,8 @@ dependencies {
     // Image
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Networking
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
