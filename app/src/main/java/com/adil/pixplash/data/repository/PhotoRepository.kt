@@ -12,4 +12,6 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
     fun fetchPhotos(page: Int = 1, itemsPerPage: Int = 30, orderBy: String = "latest"): Single<List<PhotoResponse>> =
         networkService.fetchPhotos(page = page, perPage = itemsPerPage, orderBy = orderBy)
 
+    fun fetchOneRandomPhoto(): Single<PhotoResponse> = networkService.fetchOneRandomPhoto()
+
 }

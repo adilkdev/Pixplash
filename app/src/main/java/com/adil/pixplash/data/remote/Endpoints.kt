@@ -5,4 +5,6 @@ object Endpoints {
     const val DUMMY = "dummy/list"
 
     const val PHOTOS = "/photos"
+
+    const val RANDOM_PHOTO = "/photos/random"
 }

@@ -19,6 +19,11 @@ interface NetworkService {
         @Query("order_by") orderBy: String
     ): Single<List<PhotoResponse>>
 
+    @GET(Endpoints.RANDOM_PHOTO)
+    fun fetchOneRandomPhoto(
+        @Query("client_id") clientId: String = AppConstants.ACCESS_KEY
+    ): Single<PhotoResponse>
+
     /*@POST(Endpoints.DUMMY)
     fun doDummyCall(
         @Body request: DummyRequest,

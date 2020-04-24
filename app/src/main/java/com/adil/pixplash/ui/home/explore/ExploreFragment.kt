@@ -14,6 +14,7 @@ import com.adil.pixplash.R
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.utils.view.GridSpacingItemDecoration
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kotlinx.android.synthetic.main.fragment_explore.loadingView
@@ -65,7 +66,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         rvExplore.apply {
             this.adapter = exploreAdapter
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
             layoutManager = gridLayoutManager
             val itemSpacingDP = 10f
             val itemSpacing: Int = TypedValue.applyDimension(
@@ -106,6 +107,11 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
     override fun setupObservers() {
         super.setupObservers()
+        viewModel.randomPhoto.observe(this, Observer {
+            Picasso.get().load(it).into(ivBanner)
+            Log.e("adil", "$it")
+        })
+
         viewModel.loading.value = true
         viewModel.photos.observe(this, Observer {
             it.data?.run { exploreAdapter.appendList(this) }

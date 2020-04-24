@@ -23,6 +23,7 @@ class ExploreViewModel(
     val loading: MutableLiveData<Boolean> = MutableLiveData()
     val photos: MutableLiveData<Resource<List<PhotoResponse>>> = MutableLiveData()
     val error: MutableLiveData<Int> = MutableLiveData()
+    val randomPhoto: MutableLiveData<String> = MutableLiveData()
 
     private var page = 1
     private var orderByStr = "latest"
@@ -37,6 +38,7 @@ class ExploreViewModel(
 
     private fun makeCall(pageNo: Int = page, orderBy: String = orderByStr) {
         //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
+        randomPhoto()
         compositeDisposable.add(
             photoRepository
                 .fetchPhotos(page = pageNo, orderBy = orderBy)
@@ -51,6 +53,22 @@ class ExploreViewModel(
                     {
                         error.postValue(getNetworkError(it))
                         loading.postValue(false)
+                    }
+                )
+        )
+    }
+
+    private fun randomPhoto() {
+        compositeDisposable.add(
+            photoRepository
+                .fetchOneRandomPhoto()
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        randomPhoto.postValue(it.urls.regular)
+                    },
+                    {
+                        Log.e("adil", "${it.localizedMessage}")
                     }
                 )
         )
