@@ -84,8 +84,8 @@
         android:id="@+id/rvExplore"
         android:visibility="gone"
         android:paddingTop="20dp"
-        android:paddingLeft="7dp"
-        android:paddingRight="7dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

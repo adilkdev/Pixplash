@@ -33,8 +33,6 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
     private lateinit var exploreAdapter: ExploreAdapter
 
-    private var isFirstLoad = true
-
     override fun provideLayoutId(): Int = R.layout.fragment_explore
 
     override fun setupView(savedInstanceState: View) {
@@ -59,14 +57,23 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             exploreAdapter.resetList()
             viewModel.updateState(type)
         }
+        val reload: (value: Boolean) -> Unit = {
+            viewModel.onLoadMore()
+        }
         exploreAdapter =
-            ExploreAdapter(activity!!.applicationContext, itemOnClick)
+            ExploreAdapter(activity!!.applicationContext, itemOnClick, reload)
         rvExplore.apply {
             this.adapter = exploreAdapter
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
             layoutManager = gridLayoutManager
-            addItemDecoration(GridSpacingItemDecoration(25))
+            val itemSpacingDP = 10f
+            val itemSpacing: Int = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                itemSpacingDP,
+                resources.displayMetrics
+            ).toInt()
+            addItemDecoration(GridSpacingItemDecoration(itemSpacing))
 
             var pastVisibleItems: Int = 0
             var visibleItemCount: Int
@@ -88,7 +95,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
                             if (visibleItemCount + pastVisibleItems >= totalItemCount) {
                                 viewModel.loading.value = true
                                 viewModel.onLoadMore()
-                                Log.e("tag", "LOAD NEXT ITEM")
+                                //Log.e("tag", "LOAD NEXT ITEM")
                             }
                         }
                     }
@@ -104,19 +111,18 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             it.data?.run { exploreAdapter.appendList(this) }
             viewModel.loading.value = false
             doneLoadingView()
-            if (isFirstLoad) isFirstLoad = false
+            exploreAdapter.enableFooterRetry(false)
         })
         viewModel.error.observe(this, Observer {
-                if (isFirstLoad) {
-                        isFirstLoad = false
-                        onErrorView(it)
-                        cardRetry.setOnClickListener{
-                            viewModel.onLoadMore()
-                            loadingView()
-                    }
-                } else {
-
+            if (exploreAdapter.itemCount > 2) {
+                exploreAdapter.enableFooterRetry(true)
+            } else {
+                onErrorView(it)
+                cardRetry.setOnClickListener{
+                    viewModel.onLoadMore()
+                    loadingView()
                 }
+            }
         })
     }
 

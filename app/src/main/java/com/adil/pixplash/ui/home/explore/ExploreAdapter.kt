@@ -8,19 +8,23 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.data.remote.response.PhotoResponse
 import com.adil.pixplash.data.remote.response.Urls
+import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso.get
+import kotlinx.android.synthetic.main.footer_view.view.*
 import kotlinx.android.synthetic.main.grid_item_image.view.*
 import kotlinx.android.synthetic.main.header_view.view.*
+import kotlinx.android.synthetic.main.header_view.view.tvLatest
 
 
 class ExploreAdapter(
-    val context: Context,open val itemClickListener: (String) -> Unit
+    val context: Context,val itemClickListener: (String) -> Unit, val reloadListener: (Boolean) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -28,6 +32,10 @@ class ExploreAdapter(
         const val TYPE_ITEM = 1
         const val TYPE_FOOTER = 2
     }
+
+    private var isFooterEnabled = true
+
+    private var isRetryFooter = false
 
     private var list : MutableList<PhotoResponse> = mutableListOf()
 
@@ -41,29 +49,67 @@ class ExploreAdapter(
             TYPE_HEADER ->
                 HeaderViewHolder(layoutInflater.inflate(R.layout.header_view, parent, false), context)
             TYPE_ITEM -> ViewHolder(layoutInflater.inflate(R.layout.grid_item_image, parent, false))
-            else -> ViewHolder(layoutInflater.inflate(R.layout.grid_item_image, parent, false))
+            else -> FooterView(layoutInflater.inflate(R.layout.footer_view, parent, false))
         }
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = if (isFooterEnabled) list.size + 1 else list.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is HeaderViewHolder) {
-            val layoutParams =
-                StaggeredGridLayoutManager.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-            layoutParams.isFullSpan = true
-            holder.itemView.layoutParams = layoutParams
-        } else if (holder is ViewHolder) {
-            val image = list[position].urls.small
-            get().load(image).into(holder.imageView)
+        when (holder) {
+            is HeaderViewHolder -> {
+                val layoutParams =
+                    StaggeredGridLayoutManager.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+                layoutParams.isFullSpan = true
+                holder.itemView.layoutParams = layoutParams
+            }
+            is ViewHolder -> {
+                val image = list[position].urls.small
+                get().load(image).into(holder.imageView)
+            }
+            is FooterView -> {
+                val layoutParams =
+                    StaggeredGridLayoutManager.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+                layoutParams.isFullSpan = true
+                holder.itemView.layoutParams = layoutParams
+                if (isRetryFooter) {
+                    holder.loadingView.visibility = View.GONE
+                    holder.cardRetry.visibility = View.VISIBLE
+                } else {
+                    holder.loadingView.visibility = View.VISIBLE
+                    holder.cardRetry.visibility = View.GONE
+                }
+                holder.cardRetry.setOnClickListener {
+                    reloadListener(true)
+                }
+            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position==0) TYPE_HEADER else TYPE_ITEM
+        return if (position==0) TYPE_HEADER
+        else if (isFooterEnabled && position >= list.size) TYPE_FOOTER
+        else TYPE_ITEM
+    }
+
+    /**
+     * Enable or disable footer (Default is true)
+     *
+     * @param isEnabled boolean to turn on or off footer.
+     */
+    fun enableFooter(isEnabled: Boolean) {
+        isFooterEnabled = isEnabled
+    }
+
+    fun enableFooterRetry(value: Boolean) {
+        isRetryFooter = value
+        notifyItemChanged(list.size-1)
     }
 
     fun appendList(list: List<PhotoResponse>) {
@@ -125,7 +171,8 @@ class ExploreAdapter(
         }
     }
 
-    class FooterView(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+    inner class FooterView(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val cardRetry: FrameLayout = itemView.cardRetry
+        val loadingView: LottieAnimationView = itemView.loadingView
     }
 }

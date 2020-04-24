@@ -36,11 +36,11 @@ class ExploreViewModel(
     }
 
     private fun makeCall(pageNo: Int = page, orderBy: String = orderByStr) {
-        Log.e("adil", "page = $pageNo  orderBy = $orderBy")
+        //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
         compositeDisposable.add(
             photoRepository
                 .fetchPhotos(page = pageNo, orderBy = orderBy)
-                .delay(600, TimeUnit.MILLISECONDS)
+                .delay(0, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {
