@@ -1,6 +1,7 @@
 package com.adil.pixplash.ui.home.explore
 
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.adil.pixplash.data.remote.response.PhotoResponse
 import com.adil.pixplash.data.repository.PhotoRepository
@@ -23,7 +24,8 @@ class ExploreViewModel(
     val photos: MutableLiveData<Resource<List<PhotoResponse>>> = MutableLiveData()
     val error: MutableLiveData<Int> = MutableLiveData()
 
-    var page = 1
+    private var page = 1
+    private var orderByStr = "latest"
 
     init {
         makeCall()
@@ -33,10 +35,11 @@ class ExploreViewModel(
         //loadMorePosts()
     }
 
-    private fun makeCall() {
+    private fun makeCall(pageNo: Int = page, orderBy: String = orderByStr) {
+        Log.e("adil", "page = $pageNo  orderBy = $orderBy")
         compositeDisposable.add(
             photoRepository
-                .fetchPhotos(page = page)
+                .fetchPhotos(page = pageNo, orderBy = orderBy)
                 .delay(600, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
@@ -51,6 +54,11 @@ class ExploreViewModel(
                     }
                 )
         )
+    }
+
+    fun updateState(orderBy: String){
+        this.page = 1
+        this.orderByStr = orderBy
     }
 
     fun onLoadMore() {

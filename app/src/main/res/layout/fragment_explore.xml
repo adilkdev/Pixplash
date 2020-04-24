@@ -23,11 +23,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <ImageView
+                    android:id="@+id/ivBanner"
                     android:src="@drawable/pic"
                     app:layout_collapseMode="parallax"
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="280dp"
                     android:contentDescription="@string/img_desc" />
                 <View
                     android:id="@+id/searchView"
@@ -57,7 +58,7 @@
                     android:textColor="@color/dark_subtitle_text"
                     android:text="@string/developed_by_adil_khan"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignBottom="@+id/ivBanner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -100,52 +101,52 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>
             <View
-                android:background="@drawable/home_rounded_bg"
+                android:background="@drawable/card_rounded_bg_gray"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"/>

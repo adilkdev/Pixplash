@@ -29,9 +29,6 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             fragment.arguments = args
             return fragment
         }
-
-
-
     }
 
     private lateinit var exploreAdapter: ExploreAdapter
@@ -58,8 +55,12 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     }
 
     private fun setupRecyclerView() {
+        val itemOnClick: (String) -> Unit = { type ->
+            exploreAdapter.resetList()
+            viewModel.updateState(type)
+        }
         exploreAdapter =
-            ExploreAdapter(activity!!.applicationContext)
+            ExploreAdapter(activity!!.applicationContext, itemOnClick)
         rvExplore.apply {
             this.adapter = exploreAdapter
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
