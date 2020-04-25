@@ -28,16 +28,13 @@ class ExploreViewModel(
     private var page = 1
     private var orderByStr = "latest"
 
-    init {
-        makeCall()
-    }
-
     override fun onCreate() {
-        //loadMorePosts()
+        makeCall()
     }
 
     private fun makeCall(pageNo: Int = page, orderBy: String = orderByStr) {
         //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
+        loading.value = true
         randomPhoto()
         compositeDisposable.add(
             photoRepository
@@ -65,7 +62,7 @@ class ExploreViewModel(
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {
-                        randomPhoto.postValue(it.urls.regular)
+                        randomPhoto.postValue(it.urls.small)
                     },
                     {
                         Log.e("adil", "${it.localizedMessage}")
@@ -80,11 +77,7 @@ class ExploreViewModel(
     }
 
     fun onLoadMore() {
-        if (loading.value !== null || loading.value == false) loadMorePosts()
-    }
-
-    private fun loadMorePosts() {
-        makeCall()
+        if (loading.value !== null || loading.value == false) makeCall()
     }
 
 }

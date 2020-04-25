@@ -2,7 +2,6 @@ package com.adil.pixplash.ui.home.explore
 
 import android.graphics.Outline
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -18,6 +17,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kotlinx.android.synthetic.main.fragment_explore.loadingView
+
 
 class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
@@ -54,7 +54,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     }
 
     private fun setupRecyclerView() {
-        val itemOnClick: (String) -> Unit = { type ->
+        val orderByClick: (String) -> Unit = { type ->
             exploreAdapter.resetList()
             viewModel.updateState(type)
         }
@@ -62,8 +62,10 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             viewModel.onLoadMore()
         }
         exploreAdapter =
-            ExploreAdapter(activity!!.applicationContext, itemOnClick, reload)
+            ExploreAdapter(activity!!.applicationContext, orderByClick, reload)
+
         rvExplore.apply {
+
             this.adapter = exploreAdapter
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
@@ -94,7 +96,6 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
                         }
                         if (viewModel.loading.value!! == null || !viewModel.loading.value!!) {
                             if (visibleItemCount + pastVisibleItems >= totalItemCount) {
-                                viewModel.loading.value = true
                                 viewModel.onLoadMore()
                                 //Log.e("tag", "LOAD NEXT ITEM")
                             }
@@ -107,18 +108,17 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
     override fun setupObservers() {
         super.setupObservers()
+
         viewModel.randomPhoto.observe(this, Observer {
             Picasso.get().load(it).into(ivBanner)
-            Log.e("adil", "$it")
         })
 
-        viewModel.loading.value = true
         viewModel.photos.observe(this, Observer {
             it.data?.run { exploreAdapter.appendList(this) }
-            viewModel.loading.value = false
             doneLoadingView()
             exploreAdapter.enableFooterRetry(false)
         })
+
         viewModel.error.observe(this, Observer {
             if (exploreAdapter.itemCount > 2) {
                 exploreAdapter.enableFooterRetry(true)
@@ -145,8 +145,9 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     }
 
     private fun onErrorView(it: Int) {
+        loadingView.visibility = View.GONE
         errorLayout.visibility = View.VISIBLE
-        errorLayout.bringToFront()
+        rvExplore.visibility = View.GONE
         tvDescription.text = context?.resources?.getString(it)
     }
 

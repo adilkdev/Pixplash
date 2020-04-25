@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.header_view.view.tvLatest
 
 
 class ExploreAdapter(
-    val context: Context,val itemClickListener: (String) -> Unit, val reloadListener: (Boolean) -> Unit
+    val context: Context,val orderByClickListener: (String) -> Unit, val reloadListener: (Boolean) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -56,6 +56,10 @@ class ExploreAdapter(
     override fun getItemCount(): Int = if (isFooterEnabled) list.size + 1 else list.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        bind(holder)
+    }
+
+    private fun bind(holder: RecyclerView.ViewHolder) {
         when (holder) {
             is HeaderViewHolder -> {
                 val layoutParams =
@@ -67,7 +71,7 @@ class ExploreAdapter(
                 holder.itemView.layoutParams = layoutParams
             }
             is ViewHolder -> {
-                val image = list[position].urls.small
+                val image = list[holder.adapterPosition].urls.small
                 get().load(image).into(holder.imageView)
             }
             is FooterView -> {
@@ -84,9 +88,6 @@ class ExploreAdapter(
                 } else {
                     holder.loadingView.visibility = View.VISIBLE
                     holder.cardRetry.visibility = View.GONE
-                }
-                holder.cardRetry.setOnClickListener {
-                    reloadListener(true)
                 }
             }
         }
@@ -146,7 +147,7 @@ class ExploreAdapter(
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.black))
                 activeOrder = "latest"
-                itemClickListener(activeOrder)
+                orderByClickListener(activeOrder)
             }
             cardOldest.setOnClickListener{
                 cardLatest.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_gray)
@@ -156,7 +157,7 @@ class ExploreAdapter(
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.white))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.black))
                 activeOrder = "oldest"
-                itemClickListener(activeOrder)
+                orderByClickListener(activeOrder)
             }
             cardPopular.setOnClickListener{
                 cardLatest.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_gray)
@@ -166,7 +167,7 @@ class ExploreAdapter(
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.white))
                 activeOrder = "popular"
-                itemClickListener(activeOrder)
+                orderByClickListener(activeOrder)
             }
         }
     }
@@ -174,5 +175,10 @@ class ExploreAdapter(
     inner class FooterView(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cardRetry: FrameLayout = itemView.cardRetry
         val loadingView: LottieAnimationView = itemView.loadingView
+        init {
+            cardRetry.setOnClickListener {
+                reloadListener(true)
+            }
+        }
     }
 }

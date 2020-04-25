@@ -1,6 +1,9 @@
 package com.adil.pixplash.ui.home
 
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.adil.pixplash.R
@@ -10,7 +13,6 @@ import com.adil.pixplash.ui.home.collection.CollectionFragment
 import com.adil.pixplash.ui.home.explore.ExploreFragment
 import com.adil.pixplash.ui.home.profile.ProfileFragment
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.fragment_explore.*
 
 
 class HomeActivity : BaseActivity<HomeViewModel>() {
