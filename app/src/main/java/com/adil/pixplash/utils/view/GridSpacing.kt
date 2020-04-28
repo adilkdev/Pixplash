@@ -1,6 +1,7 @@
 package com.adil.pixplash.utils.view
 
 import android.graphics.Rect
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,7 +48,8 @@ class GridSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDec
         return GridItemData(
             layoutManager.spanCount,
             lp.spanIndex,
-            if (lp.isFullSpan) layoutManager.spanCount else 1
+            1
+            //if (lp.isFullSpan) layoutManager.spanCount else 1
         )
     }
 

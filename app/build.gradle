@@ -24,6 +24,10 @@ android {
         }
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
 }
 
 dependencies {
@@ -89,7 +93,18 @@ dependencies {
     // Parser
     implementation "com.google.code.gson:gson:$gson_version"
 
+    // Lottie
     implementation 'com.airbnb.android:lottie:3.4.0'
+
+    // Swipe down to dismiss activity
+    // implementation("com.thefuntasty.hauler:core:3.1.0")
+
+    // Touch enabled Imageview
+    implementation 'com.jsibbold:zoomage:1.3.1'
+
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
 
     /* Testing */
 //    testImplementation 'junit:junit:4.12'

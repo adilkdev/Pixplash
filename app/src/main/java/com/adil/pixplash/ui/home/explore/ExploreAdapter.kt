@@ -1,20 +1,23 @@
 package com.adil.pixplash.ui.home.explore
 
 import android.content.Context
-import android.util.Log
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.data.remote.response.PhotoResponse
 import com.adil.pixplash.data.remote.response.Urls
+import com.adil.pixplash.ui.home.HomeActivity
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso.get
 import kotlinx.android.synthetic.main.footer_view.view.*
@@ -108,6 +111,8 @@ class ExploreAdapter(
         isFooterEnabled = isEnabled
     }
 
+
+
     fun enableFooterRetry(value: Boolean) {
         isRetryFooter = value
         notifyItemChanged(list.size-1)
@@ -124,8 +129,18 @@ class ExploreAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    /**
+     * All ViewHolders (header, iem, footer)
+     * */
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.image
+        init {
+            imageView.setOnClickListener {
+                context.startActivity(Intent(context as HomeActivity, ImageDetailActivity::class.java))
+                context.overridePendingTransition(R.anim.slide_up, R.anim.nothing)
+            }
+        }
     }
 
     inner class HeaderViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.jsibbold.zoomage.ZoomageView
+        android:id="@+id/ivImage"
+        android:scaleType="centerInside"
+        android:src="@drawable/pic"
+        app:zoomage_minScale="0.6"
+        app:zoomage_maxScale="8"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <View
+        android:id="@+id/bottom_sheet"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        android:background="#39393A"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

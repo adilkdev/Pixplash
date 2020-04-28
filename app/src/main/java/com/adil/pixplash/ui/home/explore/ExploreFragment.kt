@@ -62,7 +62,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             viewModel.onLoadMore()
         }
         exploreAdapter =
-            ExploreAdapter(activity!!.applicationContext, orderByClick, reload)
+            ExploreAdapter(activity!!, orderByClick, reload)
 
         rvExplore.apply {
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import com.adil.pixplash.di.ActivityScope
 import com.adil.pixplash.di.module.ActivityModule
 import com.adil.pixplash.ui.home.HomeActivity
+import com.adil.pixplash.ui.home.explore.ImageDetailActivity
 import dagger.Component
 
 @ActivityScope
@@ -14,5 +15,7 @@ import dagger.Component
 interface ActivityComponent {
 
     fun inject(activity: HomeActivity)
+
+    fun inject(activity: ImageDetailActivity)
 
 }
