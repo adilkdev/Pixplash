@@ -1,5 +1,6 @@
 package com.adil.pixplash.data.remote
 
+import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.remote.Endpoints
 import com.adil.pixplash.data.remote.response.PhotoResponse
 import com.adil.pixplash.utils.AppConstants
@@ -17,12 +18,12 @@ interface NetworkService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
         @Query("order_by") orderBy: String
-    ): Single<List<PhotoResponse>>
+    ): Single<List<Photo>>
 
     @GET(Endpoints.RANDOM_PHOTO)
     fun fetchOneRandomPhoto(
         @Query("client_id") clientId: String = AppConstants.ACCESS_KEY
-    ): Single<PhotoResponse>
+    ): Single<Photo>
 
     /*@POST(Endpoints.DUMMY)
     fun doDummyCall(

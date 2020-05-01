@@ -3,6 +3,7 @@ package com.adil.pixplash.ui.home.explore
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.remote.response.PhotoResponse
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseViewModel
@@ -21,7 +22,7 @@ class ExploreViewModel(
 ) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
 
     val loading: MutableLiveData<Boolean> = MutableLiveData()
-    val photos: MutableLiveData<Resource<List<PhotoResponse>>> = MutableLiveData()
+    val photos: MutableLiveData<Resource<List<Photo>>> = MutableLiveData()
     val error: MutableLiveData<Int> = MutableLiveData()
     val randomPhoto: MutableLiveData<String> = MutableLiveData()
 
@@ -62,7 +63,7 @@ class ExploreViewModel(
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {
-                        randomPhoto.postValue(it.urls.small)
+                        randomPhoto.postValue(it.urls.regular)
                     },
                     {
                         Log.e("adil", "${it.localizedMessage}")

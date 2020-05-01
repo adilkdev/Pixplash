@@ -53,13 +53,13 @@ class ImageDetailActivity: BaseActivity<HomeViewModel>() {
         if (isDismissable) {
             when (event!!.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    y1 = event!!.y
-                    x1 = event!!.x
+                    y1 = event.y
+                    x1 = event.x
                 }
                 MotionEvent.ACTION_MOVE -> {
                     isDownMotionEnabled = kotlin.math.abs(event!!.x - x1) < 30
                     if (event!!.y > y1 && isDownMotionEnabled) {
-                        y2 = event!!.y
+                        y2 = event.y
                         rvImages.translationY = y2-y1
                         bg.alpha = interpolator.getInterpolation(1-(rvImages.y/rvImages.height*0.7f))
                     }

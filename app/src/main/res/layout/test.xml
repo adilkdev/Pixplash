@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.adil.pixplash.utils.view.ShadowLayout
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        app:sl_shadow_color="#8400BCD4"
+        app:sl_shadow_radius="10dp"
+        android:id="@+id/sl"
+        android:layout_height="match_parent">
+        <androidx.cardview.widget.CardView
+            app:cardCornerRadius="12dp"
+            android:layout_margin="50dp"
+            app:cardElevation="0dp"
+            android:background="#83E91E1E"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/pic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </androidx.cardview.widget.CardView>
+    </com.adil.pixplash.utils.view.ShadowLayout>
+
+</RelativeLayout>

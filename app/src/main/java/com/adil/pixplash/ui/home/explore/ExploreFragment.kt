@@ -63,14 +63,16 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         }
         exploreAdapter =
             ExploreAdapter(activity!!, orderByClick, reload)
+        exploreAdapter.setHasStableIds(true)
 
         rvExplore.apply {
 
+            setItemViewCacheSize(30)
             this.adapter = exploreAdapter
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
             layoutManager = gridLayoutManager
-            val itemSpacingDP = 10f
+            val itemSpacingDP = 12f
             val itemSpacing: Int = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 itemSpacingDP,

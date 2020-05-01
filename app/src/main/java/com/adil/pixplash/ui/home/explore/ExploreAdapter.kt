@@ -2,21 +2,20 @@ package com.adil.pixplash.ui.home.explore
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
-import com.adil.pixplash.data.remote.response.PhotoResponse
-import com.adil.pixplash.data.remote.response.Urls
+import com.adil.pixplash.data.local.db.entity.Link
+import com.adil.pixplash.data.local.db.entity.Photo
+import com.adil.pixplash.data.local.db.entity.Url
 import com.adil.pixplash.ui.home.HomeActivity
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso.get
@@ -40,10 +39,13 @@ class ExploreAdapter(
 
     private var isRetryFooter = false
 
-    private var list : MutableList<PhotoResponse> = mutableListOf()
+    private var list : MutableList<Photo> = mutableListOf()
 
     init {
-        list.add(PhotoResponse("","","","",Urls("","","")))
+        //list.add(PhotoResponse("","","","",Urls("","","")))
+        list.add(Photo(0,"","","","",
+            Url("","","","","")
+            ,Link(""),""))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -57,6 +59,10 @@ class ExploreAdapter(
     }
 
     override fun getItemCount(): Int = if (isFooterEnabled) list.size + 1 else list.size
+
+    override fun getItemId(position: Int): Long {
+        return if(position==0) super.getItemId(position) else list[position-1].photoId.hashCode().toLong()
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         bind(holder)
@@ -118,14 +124,16 @@ class ExploreAdapter(
         notifyItemChanged(list.size-1)
     }
 
-    fun appendList(list: List<PhotoResponse>) {
+    fun appendList(list: List<Photo>) {
         this.list.addAll(list)
         notifyDataSetChanged()
     }
 
     fun resetList() {
         list.clear()
-        list.add(PhotoResponse("","","","",Urls("","","")))
+        list.add(Photo(0,"","","","",
+            Url("","","","","")
+            ,Link(""),""))
         notifyDataSetChanged()
     }
 
