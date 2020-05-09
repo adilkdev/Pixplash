@@ -4,61 +4,126 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
+import androidx.lifecycle.Observer
+import androidx.viewpager2.widget.ViewPager2
 import com.adil.pixplash.R
+import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.di.component.ActivityComponent
 import com.adil.pixplash.ui.base.BaseActivity
-import com.adil.pixplash.ui.home.HomeViewModel
+import com.adil.pixplash.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_image_detail.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 
-class ImageDetailActivity: BaseActivity<HomeViewModel>() {
+class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
+
+    private var isDismissible = true
+
+    @Inject
+    lateinit var imageDetailAdapter: ImageDetailAdapter
+
+    @Inject
+    lateinit var photoRepository: PhotoRepository
+
+    private var photoId: String = ""
+
+    private var itemCount: Int = 0
+
+    private var page = 0
+
+    private var activeOrder = ""
+
+    private val dismissListener: (value: Boolean) -> Unit = { value ->
+        isDismissible = value
+    }
 
     override fun provideLayoutId(): Int = R.layout.activity_image_detail
 
-    private var isDismissable = true
-
-    lateinit var imageDetailAdapter: ImageDetailAdapter
-
     override fun setupView(savedInstanceState: Bundle?) {
 
+        photoId = intent.extras?.get(AppConstants.ADAPTER_POSITION_PHOTO_ID) as String
+        page = intent.extras?.get(AppConstants.LOADED_PAGES) as Int
+        activeOrder = intent.extras?.get(AppConstants.ACTIVE_ORDER) as String
+        viewModel.setPage(page)
+        viewModel.setActiveOrder(activeOrder)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
+        imageDetailAdapter.setTheDismissListener(dismissListener)
+
         rvImages.apply {
-            val dismissListener: (value: Boolean) -> Unit = { value ->
-                isDismissable = value
-            }
-            imageDetailAdapter = ImageDetailAdapter(dismissListener)
             adapter = imageDetailAdapter
+
+            CoroutineScope(Dispatchers.IO).launch {
+                setupViewpager()
+                withContext(Dispatchers.Main) {
+                    post {
+                        setCurrentItem(findPic(photoId), true)
+                    }
+                }
+            }
+
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if (position==imageDetailAdapter.itemCount-3) {
+                        viewModel.loadMore()
+                    }
+                }
+            })
         }
 
     }
 
+    private fun setupViewpager() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val photos = photoRepository.getAllPhotosFromDB()
+            imageDetailAdapter.appendList(photos)
+            itemCount = photos.size
+            page = itemCount / 10
+        }
+    }
+
+    private fun findPic(id: String): Int {
+        val tempList = photoRepository.getAllPhotosFromDB()
+        val item = tempList.find { it.photoId == id }
+        return tempList.indexOf(item)
+    }
+
     override fun setupObservers() {
         super.setupObservers()
+        viewModel.photos.observe(this, Observer {
+            it.data?.let { it1 -> imageDetailAdapter.appendList(it1) }
+            Log.e("adil","$page")
+        })
     }
 
     private var y1 = 0f
     private  var y2 = 0f
     private var x1 = 0f
-    private  var x2 = 0f
-    private val MIN_DISTANCE = 300
+    //private  var x2 = 0f
+    private val MIN_DISTANCE = 500
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         val interpolator = AccelerateInterpolator()
-        var isDownMotionEnabled = true
-        if (isDismissable) {
+        var isDownMotionEnabled: Boolean
+        if (isDismissible) {
             when (event!!.action) {
                 MotionEvent.ACTION_DOWN -> {
                     y1 = event.y
                     x1 = event.x
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    isDownMotionEnabled = kotlin.math.abs(event!!.x - x1) < 30
-                    if (event!!.y > y1 && isDownMotionEnabled) {
+                    isDownMotionEnabled = kotlin.math.abs(event.x - x1) < 30
+                    if (event.y > y1 && isDownMotionEnabled) {
                         y2 = event.y
                         rvImages.translationY = y2-y1
                         bg.alpha = interpolator.getInterpolation(1-(rvImages.y/rvImages.height*0.7f))

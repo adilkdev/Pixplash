@@ -14,4 +14,9 @@ object AppConstants {
 
     var ACTIVE_THEME = 1
 
+    // Explore Adapter
+    const val ADAPTER_POSITION_PHOTO_ID = "id"
+    const val LOADED_PAGES = "page"
+    const val ACTIVE_ORDER = "active_order"
+
 }

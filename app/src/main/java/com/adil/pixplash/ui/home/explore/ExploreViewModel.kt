@@ -4,7 +4,6 @@ package com.adil.pixplash.ui.home.explore
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.adil.pixplash.data.local.db.entity.Photo
-import com.adil.pixplash.data.remote.response.PhotoResponse
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseViewModel
 import com.adil.pixplash.utils.common.Resource
@@ -26,6 +25,7 @@ class ExploreViewModel(
     val error: MutableLiveData<Int> = MutableLiveData()
     val randomPhoto: MutableLiveData<String> = MutableLiveData()
 
+    private val TAG = this::class.simpleName
     private var page = 1
     private var orderByStr = "latest"
 
@@ -49,6 +49,7 @@ class ExploreViewModel(
                         page++
                     },
                     {
+                        Log.e(TAG, "${it.localizedMessage}")
                         error.postValue(getNetworkError(it))
                         loading.postValue(false)
                     }
@@ -66,10 +67,18 @@ class ExploreViewModel(
                         randomPhoto.postValue(it.urls.regular)
                     },
                     {
-                        Log.e("adil", "${it.localizedMessage}")
+                        Log.e(TAG, "${it.localizedMessage}")
                     }
                 )
         )
+    }
+
+    fun savePhotos(list: List<Photo>) {
+        photoRepository.savePhotos(list)
+    }
+
+    fun removePhotos() {
+        photoRepository.removePhotos()
     }
 
     fun updateState(orderBy: String){
@@ -80,5 +89,7 @@ class ExploreViewModel(
     fun onLoadMore() {
         if (loading.value !== null || loading.value == false) makeCall()
     }
+
+    fun getPage() = page - 1
 
 }

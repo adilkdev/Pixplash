@@ -11,7 +11,8 @@ class Test : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.test)
-        sl.shadowColor = Color.parseColor("#83E91E1E")
+        //sl.shadowColor = Color.parseColor("#83E91E1E")
+
     }
 
 }

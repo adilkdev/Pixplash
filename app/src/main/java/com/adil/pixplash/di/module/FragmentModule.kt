@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.ui.home.HomeViewModel
+import com.adil.pixplash.ui.home.explore.ExploreAdapter
 import com.adil.pixplash.ui.home.explore.ExploreViewModel
 import com.adil.pixplash.utils.ViewModelProviderFactory
 import com.adil.pixplash.utils.network.NetworkHelper
@@ -37,5 +38,8 @@ class FragmentModule(private val fragment: BaseFragment<*>) {
             ViewModelProviderFactory(ExploreViewModel::class) {
                 ExploreViewModel(schedulerProvider, compositeDisposable, networkHelper, photoRepository)
             }).get(ExploreViewModel::class.java)
+
+    @Provides
+    fun provideExploreAdapter() = ExploreAdapter(context = fragment.context!!)
 
 }

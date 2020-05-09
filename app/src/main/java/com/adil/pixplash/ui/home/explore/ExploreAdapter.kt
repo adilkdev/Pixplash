@@ -2,7 +2,6 @@ package com.adil.pixplash.ui.home.explore
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,35 +16,47 @@ import com.adil.pixplash.data.local.db.entity.Link
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.local.db.entity.Url
 import com.adil.pixplash.ui.home.HomeActivity
+import com.adil.pixplash.utils.AppConstants
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso.get
 import kotlinx.android.synthetic.main.footer_view.view.*
 import kotlinx.android.synthetic.main.grid_item_image.view.*
 import kotlinx.android.synthetic.main.header_view.view.*
 import kotlinx.android.synthetic.main.header_view.view.tvLatest
+import kotlinx.coroutines.*
 
 
 class ExploreAdapter(
-    val context: Context,val orderByClickListener: (String) -> Unit, val reloadListener: (Boolean) -> Unit
+    val context: Context
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val TYPE_HEADER = 0
         const val TYPE_ITEM = 1
         const val TYPE_FOOTER = 2
+        var activeOrder = "latest"
     }
 
-    private var isFooterEnabled = true
+    lateinit var orderByClickListener: (String) -> Unit
+    lateinit var reloadListener: (Boolean) -> Unit
+    lateinit var savePhotoListener: (List<Photo>) -> Unit
+    lateinit var removePhotoListener: (Boolean) -> Unit
 
+    private var isFooterEnabled = true
     private var isRetryFooter = false
+    private var errorString: String = ""
+
+    private var job: CompletableJob
 
     private var list : MutableList<Photo> = mutableListOf()
 
+    private var page: Int = 0
+
     init {
-        //list.add(PhotoResponse("","","","",Urls("","","")))
         list.add(Photo(0,"","","","",
             Url("","","","","")
             ,Link(""),""))
+        job = Job()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -59,10 +70,6 @@ class ExploreAdapter(
     }
 
     override fun getItemCount(): Int = if (isFooterEnabled) list.size + 1 else list.size
-
-    override fun getItemId(position: Int): Long {
-        return if(position==0) super.getItemId(position) else list[position-1].photoId.hashCode().toLong()
-    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         bind(holder)
@@ -94,7 +101,10 @@ class ExploreAdapter(
                 if (isRetryFooter) {
                     holder.loadingView.visibility = View.GONE
                     holder.cardRetry.visibility = View.VISIBLE
+                    holder.tvError.visibility = View.VISIBLE
+                    holder.tvError.text = errorString
                 } else {
+                    holder.tvError.visibility = View.GONE
                     holder.loadingView.visibility = View.VISIBLE
                     holder.cardRetry.visibility = View.GONE
                 }
@@ -117,24 +127,52 @@ class ExploreAdapter(
         isFooterEnabled = isEnabled
     }
 
-
-
-    fun enableFooterRetry(value: Boolean) {
+    fun enableFooterRetry(value: Boolean, errorString: String?) {
         isRetryFooter = value
-        notifyItemChanged(list.size-1)
+        if (errorString!=null)
+            this.errorString = errorString
+        notifyDataSetChanged()
     }
 
-    fun appendList(list: List<Photo>) {
-        this.list.addAll(list)
+    fun appendList(appendThisList: List<Photo>, page: Int) {
+        CoroutineScope(Dispatchers.IO + job).launch {
+            this@ExploreAdapter.page = page
+            list.addAll(appendThisList)
+            savePhotoListener(appendThisList)
+        }
         notifyDataSetChanged()
     }
 
     fun resetList() {
-        list.clear()
-        list.add(Photo(0,"","","","",
-            Url("","","","","")
-            ,Link(""),""))
+        CoroutineScope(Dispatchers.IO + job).launch {
+            list.clear()
+            list.add(Photo(0,"","","","",
+                Url("","","","","")
+                ,Link(""),""))
+            removePhotoListener(true)
+        }
         notifyDataSetChanged()
+    }
+
+    fun setTheReloadListener(listener: (Boolean) -> Unit) {
+        this.reloadListener = listener
+    }
+
+    fun setSortingListener(orderByClickListener: (String) -> Unit) {
+        this.orderByClickListener = orderByClickListener
+    }
+
+    fun setSavePhotoInDBListener(savePhotoListener: (List<Photo>) -> Unit) {
+        this.savePhotoListener = savePhotoListener
+    }
+
+    fun setRemovePhotoInDBListener(removePhotoListener: (Boolean) -> Unit) {
+        this.removePhotoListener = removePhotoListener
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        job.cancel()
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     /**
@@ -145,7 +183,11 @@ class ExploreAdapter(
         val imageView: ImageView = itemView.image
         init {
             imageView.setOnClickListener {
-                context.startActivity(Intent(context as HomeActivity, ImageDetailActivity::class.java))
+                context.startActivity(Intent(context as HomeActivity, ImageDetailActivity::class.java)
+                    .putExtra(AppConstants.ADAPTER_POSITION_PHOTO_ID, list[adapterPosition].photoId)
+                    .putExtra(AppConstants.LOADED_PAGES, page)
+                    .putExtra(AppConstants.ACTIVE_ORDER, activeOrder)
+                )
                 context.overridePendingTransition(R.anim.slide_up, R.anim.nothing)
             }
         }
@@ -158,8 +200,6 @@ class ExploreAdapter(
         val tvLatest: TextView = itemView.tvLatest
         val tvOldest: TextView = itemView.tvOldest
         val tvPopular: TextView = itemView.tvPopular
-
-        var activeOrder = "latest"
 
         init {
             cardLatest.setOnClickListener{
@@ -198,6 +238,7 @@ class ExploreAdapter(
     inner class FooterView(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cardRetry: FrameLayout = itemView.cardRetry
         val loadingView: LottieAnimationView = itemView.loadingView
+        val tvError: TextView = itemView.tvError
         init {
             cardRetry.setOnClickListener {
                 reloadListener(true)

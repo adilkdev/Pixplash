@@ -2,7 +2,9 @@ package com.adil.pixplash.di.module
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
 import com.adil.pixplash.PixplashApplication
+import com.adil.pixplash.data.local.db.DatabaseService
 import com.adil.pixplash.data.remote.NetworkService
 import com.adil.pixplash.data.remote.Networking
 import com.adil.pixplash.di.ApplicationContext
@@ -13,6 +15,8 @@ import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CompletableJob
+import kotlinx.coroutines.Job
 import javax.inject.Singleton
 
 @Module
@@ -50,6 +54,17 @@ class ApplicationModule (private val application: PixplashApplication) {
             application.cacheDir,
             10 * 1024 * 1024 // 10MB
         )
+
+    @Provides
+    @Singleton
+    fun provideDatabaseService(): DatabaseService =
+        Room.databaseBuilder(
+            application, DatabaseService::class.java,
+            "pixplash-db"
+        ).build()
+
+    @Provides
+    fun provideCoroutineJob(): CompletableJob = Job()
 
     @Singleton
     @Provides

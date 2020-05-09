@@ -15,12 +15,10 @@ class GridSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDec
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        if (outRect != null && view != null && parent != null) {
-            val (spanCount, spanIndex, spanSize) = extractGridData(parent, view)
-            outRect.left = (spacing * ((spanCount - spanIndex) / spanCount.toFloat())).toInt()
-            outRect.right = (spacing * ((spanIndex + spanSize) / spanCount.toFloat())).toInt()
-            outRect.bottom = spacing
-        }
+        val (spanCount, spanIndex, spanSize) = extractGridData(parent, view)
+        outRect.left = (spacing * ((spanCount - spanIndex) / spanCount.toFloat())).toInt()
+        outRect.right = (spacing * ((spanIndex + spanSize) / spanCount.toFloat())).toInt()
+        outRect.bottom = spacing
     }
 
     private fun extractGridData(parent: RecyclerView, view: View): GridItemData {

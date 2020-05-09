@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
+import com.adil.pixplash.data.local.db.DatabaseService
+import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.utils.view.GridSpacingItemDecoration
@@ -17,6 +19,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kotlinx.android.synthetic.main.fragment_explore.loadingView
+import javax.inject.Inject
 
 
 class ExploreFragment: BaseFragment<ExploreViewModel>() {
@@ -32,7 +35,24 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         }
     }
 
-    private lateinit var exploreAdapter: ExploreAdapter
+    private val savePhotos: (value: List<Photo>) -> Unit = {
+        viewModel.savePhotos(it)
+    }
+
+    private val removePhotos: (value: Boolean) -> Unit = {
+        viewModel.removePhotos()
+    }
+
+    private val orderByClick: (String) -> Unit = { type ->
+        exploreAdapter.resetList()
+        viewModel.updateState(type)
+    }
+    private val reload: (value: Boolean) -> Unit = {
+        viewModel.onLoadMore()
+    }
+
+    @Inject
+    lateinit var exploreAdapter: ExploreAdapter
 
     override fun provideLayoutId(): Int = R.layout.fragment_explore
 
@@ -54,16 +74,10 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     }
 
     private fun setupRecyclerView() {
-        val orderByClick: (String) -> Unit = { type ->
-            exploreAdapter.resetList()
-            viewModel.updateState(type)
-        }
-        val reload: (value: Boolean) -> Unit = {
-            viewModel.onLoadMore()
-        }
-        exploreAdapter =
-            ExploreAdapter(activity!!, orderByClick, reload)
-        exploreAdapter.setHasStableIds(true)
+        exploreAdapter.setSortingListener(orderByClick)
+        exploreAdapter.setTheReloadListener(reload)
+        exploreAdapter.setSavePhotoInDBListener(savePhotos)
+        exploreAdapter.setRemovePhotoInDBListener(removePhotos)
 
         rvExplore.apply {
 
@@ -80,7 +94,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             ).toInt()
             addItemDecoration(GridSpacingItemDecoration(itemSpacing))
 
-            var pastVisibleItems: Int = 0
+            var pastVisibleItems = 0
             var visibleItemCount: Int
             var totalItemCount: Int
 
@@ -96,7 +110,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
                         if (firstVisibleItems != null && firstVisibleItems.isNotEmpty()) {
                             pastVisibleItems = firstVisibleItems[0]
                         }
-                        if (viewModel.loading.value!! == null || !viewModel.loading.value!!) {
+                        if (!viewModel.loading.value!!) {
                             if (visibleItemCount + pastVisibleItems >= totalItemCount) {
                                 viewModel.onLoadMore()
                                 //Log.e("tag", "LOAD NEXT ITEM")
@@ -110,20 +124,21 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
     override fun setupObservers() {
         super.setupObservers()
+        removePhotos(true)
 
         viewModel.randomPhoto.observe(this, Observer {
             Picasso.get().load(it).into(ivBanner)
         })
 
         viewModel.photos.observe(this, Observer {
-            it.data?.run { exploreAdapter.appendList(this) }
+            it.data?.run { exploreAdapter.appendList(this, viewModel.getPage()) }
             doneLoadingView()
-            exploreAdapter.enableFooterRetry(false)
+            exploreAdapter.enableFooterRetry(false, null)
         })
 
         viewModel.error.observe(this, Observer {
             if (exploreAdapter.itemCount > 2) {
-                exploreAdapter.enableFooterRetry(true)
+                exploreAdapter.enableFooterRetry(true, context?.resources?.getString(it))
             } else {
                 onErrorView(it)
                 cardRetry.setOnClickListener{
@@ -153,6 +168,8 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         tvDescription.text = context?.resources?.getString(it)
     }
 
+
+
     fun scrollToTop() {
         rvExplore.smoothSnapToPosition(0)
     }
@@ -167,5 +184,10 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     }
 
     override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.removePhotos()
+    }
 
 }

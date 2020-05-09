@@ -1,16 +1,30 @@
 package com.adil.pixplash.ui.home.explore
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
+import com.adil.pixplash.data.local.db.entity.Photo
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jsibbold.zoomage.ZoomageView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_full_image.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ImageDetailAdapter(val dismissListener: (value: Boolean) -> Unit): RecyclerView.Adapter<ImageDetailAdapter.ImageDetailViewHolder>() {
+class ImageDetailAdapter(val context: Context
+): RecyclerView.Adapter<ImageDetailAdapter.ImageDetailViewHolder>() {
+
+    private val list: MutableList<Photo> = mutableListOf()
+
+    lateinit var dismissListener: (value: Boolean) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageDetailViewHolder {
         return ImageDetailViewHolder(LayoutInflater.from(parent.context)
@@ -18,10 +32,25 @@ class ImageDetailAdapter(val dismissListener: (value: Boolean) -> Unit): Recycle
         )
     }
 
-    override fun getItemCount(): Int = 20
+    override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: ImageDetailViewHolder, position: Int) {
+        val image = list[holder.adapterPosition].urls.regular
+        Picasso.get().load(image).into(holder.ivImage)
+        //Glide.with(context).load("url").into(holder.ivImage)
+    }
 
+    fun setTheDismissListener(dismissListener: (value: Boolean) -> Unit) {
+        this.dismissListener = dismissListener
+    }
+
+    fun appendList(tempList: List<Photo>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            list.addAll(tempList)
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
+            }
+        }
     }
 
     inner class ImageDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
