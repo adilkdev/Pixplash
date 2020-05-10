@@ -1,7 +1,6 @@
 package com.adil.pixplash.ui.home.explore
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -9,17 +8,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Photo
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jsibbold.zoomage.ZoomageView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_full_image.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
-class ImageDetailAdapter(val context: Context
+class ImageDetailAdapter(val context: Context,
+                         val job: CompletableJob
 ): RecyclerView.Adapter<ImageDetailAdapter.ImageDetailViewHolder>() {
 
     private val list: MutableList<Photo> = mutableListOf()
@@ -45,12 +41,17 @@ class ImageDetailAdapter(val context: Context
     }
 
     fun appendList(tempList: List<Photo>) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO + job).launch {
             list.addAll(tempList)
             withContext(Dispatchers.Main) {
                 notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        job.cancel()
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     inner class ImageDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

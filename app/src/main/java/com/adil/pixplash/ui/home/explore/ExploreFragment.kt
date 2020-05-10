@@ -35,6 +35,12 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         }
     }
 
+    @Inject
+    lateinit var exploreAdapter: ExploreAdapter
+
+    /**
+     * All type of listeners
+     */
     private val savePhotos: (value: List<Photo>) -> Unit = {
         viewModel.savePhotos(it)
     }
@@ -50,9 +56,6 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     private val reload: (value: Boolean) -> Unit = {
         viewModel.onLoadMore()
     }
-
-    @Inject
-    lateinit var exploreAdapter: ExploreAdapter
 
     override fun provideLayoutId(): Int = R.layout.fragment_explore
 
@@ -113,7 +116,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
                         if (!viewModel.loading.value!!) {
                             if (visibleItemCount + pastVisibleItems >= totalItemCount) {
                                 viewModel.onLoadMore()
-                                //Log.e("tag", "LOAD NEXT ITEM")
+                                //Log.e(TAG, "LOAD NEXT ITEM")
                             }
                         }
                     }
@@ -174,7 +177,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         rvExplore.smoothSnapToPosition(0)
     }
 
-    fun RecyclerView.smoothSnapToPosition(position: Int, snapMode: Int = LinearSmoothScroller.SNAP_TO_START) {
+    private fun RecyclerView.smoothSnapToPosition(position: Int, snapMode: Int = LinearSmoothScroller.SNAP_TO_START) {
         val smoothScroller = object : LinearSmoothScroller(this.context) {
             override fun getVerticalSnapPreference(): Int = snapMode
             override fun getHorizontalSnapPreference(): Int = snapMode
@@ -186,8 +189,8 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 
     override fun onDestroy() {
-        super.onDestroy()
         viewModel.removePhotos()
+        super.onDestroy()
     }
 
 }

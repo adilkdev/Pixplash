@@ -64,7 +64,7 @@ class ApplicationModule (private val application: PixplashApplication) {
         ).build()
 
     @Provides
-    fun provideCoroutineJob(): CompletableJob = Job()
+    fun provideCompletableJob(): CompletableJob = Job()
 
     @Singleton
     @Provides

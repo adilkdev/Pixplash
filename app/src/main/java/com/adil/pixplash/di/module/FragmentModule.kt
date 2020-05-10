@@ -12,6 +12,8 @@ import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CompletableJob
+import kotlinx.coroutines.Job
 
 @Module
 class FragmentModule(private val fragment: BaseFragment<*>) {
@@ -40,6 +42,7 @@ class FragmentModule(private val fragment: BaseFragment<*>) {
             }).get(ExploreViewModel::class.java)
 
     @Provides
-    fun provideExploreAdapter() = ExploreAdapter(context = fragment.context!!)
+    fun provideExploreAdapter(job: CompletableJob) =
+        ExploreAdapter(context = fragment.context!!, job = job)
 
 }

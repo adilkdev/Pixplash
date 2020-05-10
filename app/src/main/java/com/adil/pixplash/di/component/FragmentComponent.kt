@@ -6,6 +6,7 @@ import com.adil.pixplash.ui.home.collection.CollectionFragment
 import com.adil.pixplash.ui.home.explore.ExploreFragment
 import com.adil.pixplash.ui.home.profile.ProfileFragment
 import dagger.Component
+import kotlinx.coroutines.CompletableJob
 
 @FragmentScope
 @Component(

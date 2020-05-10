@@ -15,6 +15,7 @@ import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CompletableJob
 
 @Module
 class ActivityModule(private val activity: BaseActivity<*>) {
@@ -47,6 +48,6 @@ class ActivityModule(private val activity: BaseActivity<*>) {
             }).get(ImageDetailViewModel::class.java)
 
     @Provides
-    fun provideImageDetailAdapter() = ImageDetailAdapter(activity)
+    fun provideImageDetailAdapter(job: CompletableJob) = ImageDetailAdapter(activity, job)
 
 }

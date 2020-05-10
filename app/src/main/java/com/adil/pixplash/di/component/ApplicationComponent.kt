@@ -10,6 +10,8 @@ import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Component
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CompletableJob
+import kotlinx.coroutines.Job
 import javax.inject.Singleton
 
 @Singleton
@@ -28,6 +30,8 @@ interface ApplicationComponent {
     fun getSchedulerProvider(): SchedulerProvider
 
     fun getCompositeDisposable(): CompositeDisposable
+
+    fun getJob(): CompletableJob
 
     fun getNetworkHelper(): NetworkHelper
 

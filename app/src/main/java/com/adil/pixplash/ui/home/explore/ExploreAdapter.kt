@@ -27,7 +27,8 @@ import kotlinx.coroutines.*
 
 
 class ExploreAdapter(
-    val context: Context
+    val context: Context,
+    val job: CompletableJob
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -46,8 +47,6 @@ class ExploreAdapter(
     private var isRetryFooter = false
     private var errorString: String = ""
 
-    private var job: CompletableJob
-
     private var list : MutableList<Photo> = mutableListOf()
 
     private var page: Int = 0
@@ -56,7 +55,7 @@ class ExploreAdapter(
         list.add(Photo(0,"","","","",
             Url("","","","","")
             ,Link(""),""))
-        job = Job()
+        //job = Job()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -123,9 +122,6 @@ class ExploreAdapter(
      *
      * @param isEnabled boolean to turn on or off footer.
      */
-    fun enableFooter(isEnabled: Boolean) {
-        isFooterEnabled = isEnabled
-    }
 
     fun enableFooterRetry(value: Boolean, errorString: String?) {
         isRetryFooter = value
@@ -154,6 +150,10 @@ class ExploreAdapter(
         notifyDataSetChanged()
     }
 
+    /**
+     * Setting all listeners
+     */
+
     fun setTheReloadListener(listener: (Boolean) -> Unit) {
         this.reloadListener = listener
     }
@@ -169,6 +169,10 @@ class ExploreAdapter(
     fun setRemovePhotoInDBListener(removePhotoListener: (Boolean) -> Unit) {
         this.removePhotoListener = removePhotoListener
     }
+
+    /**
+     * Cancel all the background tasks while removing adapter
+     */
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         job.cancel()

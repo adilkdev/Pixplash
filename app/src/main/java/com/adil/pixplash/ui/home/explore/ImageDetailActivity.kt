@@ -17,10 +17,7 @@ import com.adil.pixplash.di.component.ActivityComponent
 import com.adil.pixplash.ui.base.BaseActivity
 import com.adil.pixplash.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_image_detail.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
@@ -33,6 +30,9 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
 
     @Inject
     lateinit var photoRepository: PhotoRepository
+
+    @Inject
+    lateinit var job: CompletableJob
 
     private var photoId: String = ""
 
@@ -59,11 +59,16 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
 
         imageDetailAdapter.setTheDismissListener(dismissListener)
 
+        setupViewPager()
+
+    }
+
+    private fun setupViewPager() {
         rvImages.apply {
             adapter = imageDetailAdapter
 
-            CoroutineScope(Dispatchers.IO).launch {
-                setupViewpager()
+            CoroutineScope(Dispatchers.IO + job).launch {
+                setupData()
                 withContext(Dispatchers.Main) {
                     post {
                         setCurrentItem(findPic(photoId), true)
@@ -74,17 +79,16 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    if (position==imageDetailAdapter.itemCount-3) {
+                    if (position == imageDetailAdapter.itemCount - 3) {
                         viewModel.loadMore()
                     }
                 }
             })
         }
-
     }
 
-    private fun setupViewpager() {
-        CoroutineScope(Dispatchers.IO).launch {
+    private fun setupData() {
+        CoroutineScope(Dispatchers.IO + job).launch {
             val photos = photoRepository.getAllPhotosFromDB()
             imageDetailAdapter.appendList(photos)
             itemCount = photos.size
@@ -110,7 +114,7 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
     private  var y2 = 0f
     private var x1 = 0f
     //private  var x2 = 0f
-    private val MIN_DISTANCE = 500
+    private val MIN_DISTANCE = 350
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         val interpolator = AccelerateInterpolator()
@@ -190,6 +194,11 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
     override fun finish() {
         super.finish()
         overridePendingTransition(0,0)
+    }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
     }
 
 }
