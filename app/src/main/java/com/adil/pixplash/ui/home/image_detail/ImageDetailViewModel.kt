@@ -1,4 +1,4 @@
-package com.adil.pixplash.ui.home.explore
+package com.adil.pixplash.ui.home.image_detail
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

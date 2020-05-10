@@ -2,6 +2,7 @@ package com.adil.pixplash.data.remote
 
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.remote.Endpoints
+import com.adil.pixplash.data.remote.response.PhotoDetailResponse
 import com.adil.pixplash.data.remote.response.PhotoResponse
 import com.adil.pixplash.utils.AppConstants
 import io.reactivex.Single
@@ -24,6 +25,11 @@ interface NetworkService {
     fun fetchOneRandomPhoto(
         @Query("client_id") clientId: String = AppConstants.ACCESS_KEY
     ): Single<Photo>
+
+    @GET(Endpoints.PHOTO_DETAIL+"{id}")
+    fun fetchPhotoDetails(@Path("id") id: String,
+        @Query("client_id") clientId: String = AppConstants.ACCESS_KEY
+    ): Single<PhotoDetailResponse>
 
     /*@POST(Endpoints.DUMMY)
     fun doDummyCall(

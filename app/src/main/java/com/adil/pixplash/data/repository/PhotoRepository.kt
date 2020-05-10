@@ -4,6 +4,7 @@ import android.util.Log
 import com.adil.pixplash.data.local.db.DatabaseService
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.remote.NetworkService
+import com.adil.pixplash.data.remote.response.PhotoDetailResponse
 import com.adil.pixplash.data.remote.response.PhotoResponse
 import io.reactivex.Single
 import kotlinx.coroutines.*
@@ -16,14 +17,18 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
                                           private val job: CompletableJob
 ) {
 
-    fun fetchPhotos(page: Int = 1, itemsPerPage: Int = 30, orderBy: String = "latest"): Single<List<Photo>> =
+    fun fetchPhotos(page: Int = 1, itemsPerPage: Int = 30, orderBy: String = "latest")
+            : Single<List<Photo>> =
         networkService.fetchPhotos(page = page, perPage = itemsPerPage, orderBy = orderBy)
 
     fun fetchOneRandomPhoto(): Single<Photo> = networkService.fetchOneRandomPhoto()
 
+    fun fetchPhotoDetails(photoId: String): Single<PhotoDetailResponse> =
+        networkService.fetchPhotoDetails(photoId)
+
     fun savePhotos(photos: List<Photo>) {
         CoroutineScope(Dispatchers.IO + job).launch {
-            val ids = databaseService.exploreDao().addImageList(photos)
+            databaseService.exploreDao().addImageList(photos)
         }
     }
 

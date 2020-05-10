@@ -16,6 +16,7 @@ import com.adil.pixplash.data.local.db.entity.Link
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.local.db.entity.Url
 import com.adil.pixplash.ui.home.HomeActivity
+import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import com.adil.pixplash.utils.AppConstants
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso.get

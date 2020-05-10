@@ -1,9 +1,6 @@
 package com.adil.pixplash.ui.home
 
-import android.app.ActivityManager
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.adil.pixplash.R
@@ -11,7 +8,7 @@ import com.adil.pixplash.di.component.ActivityComponent
 import com.adil.pixplash.ui.base.BaseActivity
 import com.adil.pixplash.ui.home.collection.CollectionFragment
 import com.adil.pixplash.ui.home.explore.ExploreFragment
-import com.adil.pixplash.ui.home.profile.ProfileFragment
+import com.adil.pixplash.ui.home.setting.SettingFragment
 import kotlinx.android.synthetic.main.activity_home.*
 
 
@@ -30,7 +27,7 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
         /*initialize all fragments */
         val exploreFragment = ExploreFragment.newInstance()
         val collectionFragment = CollectionFragment.newInstance()
-        val profileFragment = ProfileFragment.newInstance()
+        val profileFragment = SettingFragment.newInstance()
         var activeFragment: Fragment = exploreFragment
 
         supportFragmentManager.beginTransaction().add(R.id.containerLayout, profileFragment,"3").hide(profileFragment).commit()

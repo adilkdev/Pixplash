@@ -10,7 +10,7 @@ import com.adil.pixplash.data.local.db.entity.Photo
 interface ExploreDao {
 
     @Insert
-    suspend fun addImageList(photos: List<Photo>): List<Long>
+    suspend fun addImageList(photos: List<Photo>)
 
     @Query("DELETE FROM photo_entity")
     suspend fun removePhotos()

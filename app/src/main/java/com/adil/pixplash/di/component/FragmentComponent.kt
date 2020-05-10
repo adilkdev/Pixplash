@@ -4,9 +4,8 @@ import com.adil.pixplash.di.FragmentScope
 import com.adil.pixplash.di.module.FragmentModule
 import com.adil.pixplash.ui.home.collection.CollectionFragment
 import com.adil.pixplash.ui.home.explore.ExploreFragment
-import com.adil.pixplash.ui.home.profile.ProfileFragment
+import com.adil.pixplash.ui.home.setting.SettingFragment
 import dagger.Component
-import kotlinx.coroutines.CompletableJob
 
 @FragmentScope
 @Component(
@@ -19,6 +18,6 @@ interface FragmentComponent {
 
     fun inject(fragment: CollectionFragment)
 
-    fun inject(fragment: ProfileFragment)
+    fun inject(fragment: SettingFragment)
 
 }

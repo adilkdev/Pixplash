@@ -6,5 +6,7 @@ object Endpoints {
 
     const val PHOTOS = "/photos"
 
+    const val PHOTO_DETAIL = "/photos/"
+
     const val RANDOM_PHOTO = "/photos/random"
 }

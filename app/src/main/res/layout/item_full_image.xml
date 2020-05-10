@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.jsibbold.zoomage.ZoomageView
@@ -12,16 +11,39 @@
         android:src="@drawable/pic"
         app:zoomage_minScale="0.6"
         app:zoomage_maxScale="8"
+        android:layout_marginBottom="0dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <View
+    <ImageView
+        android:id="@+id/ivInfo"
+        android:visibility="gone"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom"
+        android:padding="8dp"
+        android:src="@drawable/download"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
+    <ImageView
+        android:id="@+id/ivDownload"
+        android:visibility="gone"
+        android:layout_margin="10dp"
+        android:layout_gravity="bottom|right"
+        android:padding="10dp"
+        android:src="@drawable/download"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"/>
+
+    <RelativeLayout
         android:id="@+id/bottom_sheet"
+        android:background="#515151"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
         app:layout_behavior="@string/bottom_sheet_behavior"
-        android:background="#39393A"
         android:layout_width="match_parent"
-        android:layout_height="500dp"/>
+        android:layout_height="500dp">
+
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

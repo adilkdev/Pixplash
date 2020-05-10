@@ -1,4 +1,4 @@
-package com.adil.pixplash.ui.home.profile
+package com.adil.pixplash.ui.home.setting
 
 import android.os.Bundle
 import android.view.View
@@ -8,14 +8,14 @@ import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.ui.home.HomeViewModel
 
-class ProfileFragment: BaseFragment<HomeViewModel>() {
+class SettingFragment: BaseFragment<HomeViewModel>() {
 
     companion object {
         val TAG = "HomeFragment"
 
-        fun newInstance() : ProfileFragment {
+        fun newInstance() : SettingFragment {
             val args = Bundle()
-            val fragment = ProfileFragment()
+            val fragment = SettingFragment()
             fragment.arguments = args
             return fragment
         }

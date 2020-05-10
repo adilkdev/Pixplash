@@ -8,7 +8,7 @@ import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.ui.home.HomeViewModel
 
-class CollectionFragment: BaseFragment<HomeViewModel>() {
+class CollectionFragment: BaseFragment<CollectionViewModel>() {
 
     companion object {
         val TAG = "CollectionFragment"
@@ -30,9 +30,9 @@ class CollectionFragment: BaseFragment<HomeViewModel>() {
 
     override fun setupObservers() {
         super.setupObservers()
-        viewModel.data.observe(this, Observer {
-
-        })
+//        viewModel.data.observe(this, Observer {
+//
+//        })
     }
 
     override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
