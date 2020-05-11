@@ -3,6 +3,7 @@ package com.adil.pixplash.di.component
 import com.adil.pixplash.di.ActivityScope
 import com.adil.pixplash.di.module.ActivityModule
 import com.adil.pixplash.ui.home.HomeActivity
+import com.adil.pixplash.ui.home.collection.CollectionPhotosActivity
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import dagger.Component
 
@@ -16,5 +17,7 @@ interface ActivityComponent {
     fun inject(activity: HomeActivity)
 
     fun inject(activity: ImageDetailActivity)
+
+    fun inject(activity: CollectionPhotosActivity)
 
 }

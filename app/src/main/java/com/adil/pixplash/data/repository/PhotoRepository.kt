@@ -4,6 +4,7 @@ import android.util.Log
 import com.adil.pixplash.data.local.db.DatabaseService
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.remote.NetworkService
+import com.adil.pixplash.data.remote.response.Collection
 import com.adil.pixplash.data.remote.response.PhotoDetailResponse
 import com.adil.pixplash.data.remote.response.PhotoResponse
 import io.reactivex.Single
@@ -25,6 +26,12 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
 
     fun fetchPhotoDetails(photoId: String): Single<PhotoDetailResponse> =
         networkService.fetchPhotoDetails(photoId)
+
+    fun fetchCollections(page: Int = 1, itemsPerPage: Int = 20) : Single<List<Collection>> =
+        networkService.fetchCollections(page = page, perPage = itemsPerPage)
+
+    fun fetchFeaturedCollections(page: Int = 1, itemsPerPage: Int = 20) : Single<List<Collection>> =
+        networkService.fetchFeaturedCollections(page = page, perPage = itemsPerPage)
 
     fun savePhotos(photos: List<Photo>) {
         CoroutineScope(Dispatchers.IO + job).launch {

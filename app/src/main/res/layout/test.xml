@@ -4,15 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.yinglan.shadowimageview.ShadowImageView
-        android:id="@+id/shadow"
-        android:layout_centerInParent="true"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:shadowRound="20dp"
-        app:shadowSrc="@drawable/pic"
-        app:shadowColor="#22E61C"/>
-
     <com.adil.pixplash.utils.view.ShadowLayout
         android:visibility="gone"
         android:layout_width="match_parent"

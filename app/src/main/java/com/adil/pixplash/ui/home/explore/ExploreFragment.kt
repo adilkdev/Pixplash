@@ -50,11 +50,12 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     }
 
     private val orderByClick: (String) -> Unit = { type ->
-        exploreAdapter.resetList()
         viewModel.updateState(type)
+        exploreAdapter.resetList()
     }
     private val reload: (value: Boolean) -> Unit = {
         viewModel.onLoadMore()
+        exploreAdapter.enableFooterRetry(false, "")
     }
 
     override fun provideLayoutId(): Int = R.layout.fragment_explore
@@ -170,8 +171,6 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         rvExplore.visibility = View.GONE
         tvDescription.text = context?.resources?.getString(it)
     }
-
-
 
     fun scrollToTop() {
         rvExplore.smoothSnapToPosition(0)

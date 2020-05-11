@@ -81,7 +81,7 @@ class ExploreViewModel(
         photoRepository.removePhotos()
     }
 
-    fun updateState(orderBy: String){
+    fun updateState(orderBy: String) {
         this.page = 1
         this.orderByStr = orderBy
     }

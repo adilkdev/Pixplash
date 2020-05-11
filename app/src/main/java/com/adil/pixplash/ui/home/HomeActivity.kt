@@ -63,7 +63,7 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
                     exploreFragment.scrollToTop()
                 }
                 R.id.navCollection -> {
-
+                    collectionFragment.scrollToTop()
                 }
                 R.id.navProfile -> {
 

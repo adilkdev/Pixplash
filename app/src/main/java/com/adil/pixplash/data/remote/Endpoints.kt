@@ -9,4 +9,8 @@ object Endpoints {
     const val PHOTO_DETAIL = "/photos/"
 
     const val RANDOM_PHOTO = "/photos/random"
+
+    const val COLLECTIONS = "/collections"
+
+    const val COLLECTION_FEATURED = "/collections/featured"
 }

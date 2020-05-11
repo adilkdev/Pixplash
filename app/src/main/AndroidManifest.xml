@@ -31,6 +31,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Draggable"
             tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".ui.home.collection.CollectionPhotosActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

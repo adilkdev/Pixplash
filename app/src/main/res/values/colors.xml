@@ -10,4 +10,5 @@
     <color name="black">#000000</color>
     <color name="shadow_color">#069FFF</color>
     <color name="dark_gray">#99323232</color>
+    <color name="light_gray">#A0A0A1</color>
 </resources>

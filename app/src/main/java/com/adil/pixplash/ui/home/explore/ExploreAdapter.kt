@@ -56,7 +56,6 @@ class ExploreAdapter(
         list.add(Photo(0,"","","","",
             Url("","","","","")
             ,Link(""),""))
-        //job = Job()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
