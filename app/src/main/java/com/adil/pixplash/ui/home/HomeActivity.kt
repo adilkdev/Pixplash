@@ -1,6 +1,7 @@
 package com.adil.pixplash.ui.home
 
 import android.os.Bundle
+import android.transition.Fade
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.adil.pixplash.R
@@ -24,6 +25,7 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
+        setTransitions()
         /*initialize all fragments */
         val exploreFragment = ExploreFragment.newInstance()
         val collectionFragment = CollectionFragment.newInstance()
@@ -73,6 +75,14 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
                 }
             }
         }
+    }
+
+    private fun setTransitions() {
+        val fade = Fade()
+        fade.excludeTarget(android.R.id.statusBarBackground, true)
+        fade.excludeTarget(android.R.id.navigationBarBackground, true)
+        window.enterTransition = fade
+        window.exitTransition = fade
     }
 
     override fun injectDependencies(activityComponent: ActivityComponent) = activityComponent.inject(this)

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:background="#00000000"
+        app:elevation="4dp"
+        android:translationZ="6dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="280dp">
+
+        <RelativeLayout
+            android:id="@+id/relative"
+            app:layout_scrollFlags="scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivCover"
+                android:transitionName="image_transition"
+                android:src="@drawable/pic"
+                android:background="@android:color/transparent"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/img_desc" />
+            <View
+                android:layout_alignParentBottom="true"
+                android:visibility="visible"
+                android:background="@drawable/bg_scrim"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"/>
+            <TextView
+                android:id="@+id/tvBigTitle"
+                android:letterSpacing="0.03"
+                android:textSize="25sp"
+                android:lines="1"
+                android:textColor="#fff"
+                android:fontFamily="@font/source_sans_pro"
+                android:textStyle="bold"
+                android:text=""
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/searchView"
+                android:layout_margin="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:lottie_fileName="loading.json"/>
+
+    <include
+        android:id="@+id/errorLayout"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        layout="@layout/error_layout"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPhotos"
+        android:visibility="gone"
+        android:paddingTop="0dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -7,12 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
 import com.adil.pixplash.data.remote.response.Collection
 import com.adil.pixplash.data.remote.response.CoverPhoto
 import com.adil.pixplash.data.remote.response.Urls
+import com.adil.pixplash.ui.home.HomeActivity
 import com.adil.pixplash.ui.home.collection.CollectionFragment.Companion.TYPE_ALL
 import com.adil.pixplash.ui.home.collection.CollectionFragment.Companion.TYPE_FEATURED
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
@@ -59,8 +62,10 @@ class CollectionAdapter(val context: Context,
         return when (viewType) {
             ExploreAdapter.TYPE_HEADER ->
                 HeaderViewHolder(layoutInflater.inflate(R.layout.header_view, parent, false), context)
-            ExploreAdapter.TYPE_ITEM -> CollectionViewHolder(layoutInflater.inflate(R.layout.collection_item, parent, false))
-            else -> FooterView(layoutInflater.inflate(R.layout.footer_view, parent, false))
+            ExploreAdapter.TYPE_ITEM ->
+                CollectionViewHolder(layoutInflater.inflate(R.layout.collection_item, parent, false))
+            else ->
+                FooterView(layoutInflater.inflate(R.layout.footer_view, parent, false))
         }
     }
 
@@ -165,8 +170,13 @@ class CollectionAdapter(val context: Context,
         init {
             ivImage.setOnClickListener {
                 val intent = Intent(context, CollectionPhotosActivity::class.java)
-                intent.putExtra("id", list[adapterPosition].id)
-                context.startActivity(intent)
+                val item = list[adapterPosition]
+                intent.putExtra("id", item.id)
+                intent.putExtra("cover", item.coverPhoto.urls.regular)
+                intent.putExtra("title", item.title)
+                val options: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation((context as HomeActivity), ivImage, ViewCompat.getTransitionName(ivImage)!!)
+                context.startActivity(intent, options.toBundle())
             }
         }
     }

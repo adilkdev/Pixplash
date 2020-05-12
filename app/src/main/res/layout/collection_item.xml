@@ -17,6 +17,7 @@
         android:layout_height="200dp">
         <ImageView
             android:id="@+id/ivImage"
+            android:transitionName="image_transition"
             android:scaleType="center"
             android:src="@drawable/pic"
             android:adjustViewBounds="true"
