@@ -1,4 +1,4 @@
-package com.adil.pixplash.ui.home.collection
+package com.adil.pixplash.ui.home.collection.activity
 
 import android.content.Context
 import android.content.Intent
@@ -14,7 +14,6 @@ import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Link
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.local.db.entity.Url
-import com.adil.pixplash.ui.home.HomeActivity
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import com.adil.pixplash.utils.AppConstants
@@ -60,7 +59,9 @@ class CollectionPhotoAdapter(
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             ExploreAdapter.TYPE_HEADER ->
-                HeaderViewHolder(layoutInflater.inflate(R.layout.header_view_blank, parent, false))
+                HeaderViewHolder(
+                    layoutInflater.inflate(R.layout.header_view_blank, parent, false)
+                )
             ExploreAdapter.TYPE_ITEM -> ViewHolder(
                 layoutInflater.inflate(
                     R.layout.grid_item_image,
@@ -130,7 +131,7 @@ class CollectionPhotoAdapter(
     /**
      * Enable or disable footer (Default is true)
      *
-     * @param isEnabled boolean to turn on or off footer.
+     * @param isFooterEnabled boolean to turn on or off footer.
      */
 
     fun enableFooterRetry(value: Boolean, errorString: String?) {

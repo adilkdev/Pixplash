@@ -1,19 +1,24 @@
 package com.adil.pixplash.ui.home.explore
 
+import android.R.attr.transitionName
+import android.content.Intent
 import android.graphics.Outline
 import android.os.Bundle
+import android.transition.Fade
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
-import com.adil.pixplash.data.local.db.DatabaseService
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
+import com.adil.pixplash.ui.home.HomeActivity
+import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
 import com.adil.pixplash.utils.view.GridSpacingItemDecoration
 import com.squareup.picasso.Picasso
@@ -62,6 +67,8 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     override fun provideLayoutId(): Int = R.layout.fragment_explore
 
     override fun setupView(savedInstanceState: View) {
+        setTransition()
+
         val viewOutlineProvider: ViewOutlineProvider = object : ViewOutlineProvider() {
             override fun getOutline(view: View, outline: Outline) {
                 val cornerRadiusDP = 35f
@@ -76,6 +83,23 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         relative.outlineProvider = viewOutlineProvider
         relative.clipToOutline = true
         setupRecyclerView()
+
+        searchView.setOnClickListener {
+            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this.activity!!,
+                it,  // Starting view
+                "search_transition" // The String
+            )
+            context?.startActivity(Intent(this.activity, SearchActivity::class.java), options.toBundle())
+        }
+    }
+
+    private fun setTransition() {
+        val fade = Fade()
+        fade.excludeTarget(android.R.id.statusBarBackground, true)
+        fade.excludeTarget(android.R.id.navigationBarBackground, true)
+        activity?.window?.enterTransition = fade
+        activity?.window?.exitTransition = fade
     }
 
     private fun setupRecyclerView() {

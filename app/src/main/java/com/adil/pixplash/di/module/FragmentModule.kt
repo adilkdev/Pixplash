@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.ui.home.HomeViewModel
-import com.adil.pixplash.ui.home.collection.CollectionAdapter
-import com.adil.pixplash.ui.home.collection.CollectionViewModel
+import com.adil.pixplash.ui.home.collection.fragment.CollectionAdapter
+import com.adil.pixplash.ui.home.collection.fragment.CollectionViewModel
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
 import com.adil.pixplash.ui.home.explore.ExploreViewModel
 import com.adil.pixplash.utils.ViewModelProviderFactory
@@ -15,7 +15,6 @@ import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.Job
 
 @Module
 class FragmentModule(private val fragment: BaseFragment<*>) {
@@ -52,7 +51,12 @@ class FragmentModule(private val fragment: BaseFragment<*>) {
     ) : CollectionViewModel =
         ViewModelProviders.of(fragment,
             ViewModelProviderFactory(CollectionViewModel::class) {
-                CollectionViewModel(schedulerProvider, compositeDisposable, networkHelper, photoRepository)
+                CollectionViewModel(
+                    schedulerProvider,
+                    compositeDisposable,
+                    networkHelper,
+                    photoRepository
+                )
             }).get(CollectionViewModel::class.java)
 
     @Provides
@@ -61,6 +65,9 @@ class FragmentModule(private val fragment: BaseFragment<*>) {
 
     @Provides
     fun provideCollectionAdapter(job: CompletableJob) =
-        CollectionAdapter(context = fragment.context!!, job = job)
+        CollectionAdapter(
+            context = fragment.context!!,
+            job = job
+        )
 
 }

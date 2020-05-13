@@ -2,7 +2,7 @@ package com.adil.pixplash.di.component
 
 import com.adil.pixplash.di.FragmentScope
 import com.adil.pixplash.di.module.FragmentModule
-import com.adil.pixplash.ui.home.collection.CollectionFragment
+import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment
 import com.adil.pixplash.ui.home.explore.ExploreFragment
 import com.adil.pixplash.ui.home.setting.SettingFragment
 import dagger.Component

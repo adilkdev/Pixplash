@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import com.adil.pixplash.R
 import com.adil.pixplash.di.component.ActivityComponent
 import com.adil.pixplash.ui.base.BaseActivity
-import com.adil.pixplash.ui.home.collection.CollectionFragment
+import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment
 import com.adil.pixplash.ui.home.explore.ExploreFragment
 import com.adil.pixplash.ui.home.setting.SettingFragment
 import kotlinx.android.synthetic.main.activity_home.*

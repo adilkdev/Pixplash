@@ -33,14 +33,40 @@
                     android:background="#72000000"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
-                <View
+
+                <LinearLayout
                     android:id="@+id/searchView"
+                    android:transitionName="search_transition"
                     android:layout_marginTop="170dp"
                     android:background="@drawable/home_appbar_rounded_bg"
                     android:layout_marginRight="35dp"
                     android:layout_marginLeft="35dp"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"/>
+                    android:layout_height="40dp">
+                    <TextView
+                        android:text="Search"
+                        android:textSize="17sp"
+                        android:textColor="@color/dark_gray"
+                        android:fontFamily="@font/source_sans_pro"
+                        android:letterSpacing="0.03"
+                        android:layout_gravity="center_vertical"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+<!--                <View-->
+<!--                    android:id="@+id/searchView"-->
+<!--                    android:transitionName="search_transition"-->
+<!--                    android:layout_marginTop="170dp"-->
+<!--                    android:background="@drawable/home_appbar_rounded_bg"-->
+<!--                    android:layout_marginRight="35dp"-->
+<!--                    android:layout_marginLeft="35dp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="40dp"/>-->
+
                 <TextView
                     android:id="@+id/tvBigTitle"
                     android:letterSpacing="0.03"

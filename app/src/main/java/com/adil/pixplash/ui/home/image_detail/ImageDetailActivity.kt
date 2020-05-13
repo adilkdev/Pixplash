@@ -134,11 +134,11 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
     private  var y2 = 0f
     private var x1 = 0f
     //private  var x2 = 0f
-    private val MIN_DISTANCE = 350
+    private val MIN_DISTANCE = 250
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         val interpolator = AccelerateInterpolator()
-        var isDownMotionEnabled: Boolean
+        val isDownMotionEnabled: Boolean
         if (isDismissible) {
             when (event!!.action) {
                 MotionEvent.ACTION_DOWN -> {

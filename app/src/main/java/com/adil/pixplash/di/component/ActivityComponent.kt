@@ -3,8 +3,9 @@ package com.adil.pixplash.di.component
 import com.adil.pixplash.di.ActivityScope
 import com.adil.pixplash.di.module.ActivityModule
 import com.adil.pixplash.ui.home.HomeActivity
-import com.adil.pixplash.ui.home.collection.CollectionPhotosActivity
+import com.adil.pixplash.ui.home.collection.activity.CollectionPhotosActivity
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
+import com.adil.pixplash.ui.home.search.SearchActivity
 import dagger.Component
 
 @ActivityScope
@@ -19,5 +20,7 @@ interface ActivityComponent {
     fun inject(activity: ImageDetailActivity)
 
     fun inject(activity: CollectionPhotosActivity)
+
+    fun inject(activity: SearchActivity)
 
 }

@@ -1,8 +1,7 @@
-package com.adil.pixplash.ui.home.collection
+package com.adil.pixplash.ui.home.collection.fragment
 
 import android.graphics.Outline
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -10,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment

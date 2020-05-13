@@ -1,4 +1,4 @@
-package com.adil.pixplash.ui.home.collection
+package com.adil.pixplash.ui.home.collection.activity
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

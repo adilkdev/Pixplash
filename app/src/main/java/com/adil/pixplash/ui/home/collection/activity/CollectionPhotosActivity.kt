@@ -1,8 +1,7 @@
-package com.adil.pixplash.ui.home.collection
+package com.adil.pixplash.ui.home.collection.activity
 
 import android.graphics.Outline
 import android.os.Bundle
-import android.transition.Fade
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider

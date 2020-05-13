@@ -1,12 +1,11 @@
-package com.adil.pixplash.ui.home.collection
+package com.adil.pixplash.ui.home.collection.fragment
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.remote.response.Collection
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseViewModel
-import com.adil.pixplash.ui.home.collection.CollectionFragment.Companion.TYPE_ALL
+import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment.Companion.TYPE_ALL
 import com.adil.pixplash.utils.common.Resource
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider

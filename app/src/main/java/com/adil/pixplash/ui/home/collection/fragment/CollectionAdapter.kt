@@ -1,4 +1,4 @@
-package com.adil.pixplash.ui.home.collection
+package com.adil.pixplash.ui.home.collection.fragment
 
 import android.content.Context
 import android.content.Intent
@@ -7,17 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
 import com.adil.pixplash.data.remote.response.Collection
 import com.adil.pixplash.data.remote.response.CoverPhoto
 import com.adil.pixplash.data.remote.response.Urls
 import com.adil.pixplash.ui.home.HomeActivity
-import com.adil.pixplash.ui.home.collection.CollectionFragment.Companion.TYPE_ALL
-import com.adil.pixplash.ui.home.collection.CollectionFragment.Companion.TYPE_FEATURED
+import com.adil.pixplash.ui.home.collection.activity.CollectionPhotosActivity
+import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment.Companion.TYPE_ALL
+import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment.Companion.TYPE_FEATURED
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso
@@ -109,7 +108,7 @@ class CollectionAdapter(val context: Context,
     /**
      * Enable or disable footer (Default is true)
      *
-     * @param isEnabled boolean to turn on or off footer.
+     * @param isFooterEnabled boolean to turn on or off footer.
      */
 
     fun enableFooterRetry(value: Boolean, errorString: String?) {
