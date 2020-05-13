@@ -42,6 +42,9 @@ data class Photo(
 
     @ColumnInfo(name = "likes")
     @SerializedName("likes")
-    val likes: String
+    val likes: String,
+
+    @ColumnInfo(name = "photoType", defaultValue = "explore")
+    var photoType: String
 
 )

@@ -19,4 +19,8 @@ object AppConstants {
     const val LOADED_PAGES = "page"
     const val ACTIVE_ORDER = "active_order"
 
+    // Save & use of photo type from the respective fragment
+    const val PHOTO_TYPE_EXPLORE = "explore"
+    const val PHOTO_TYPE_COLLECTION = "collection"
+
 }

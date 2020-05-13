@@ -6,7 +6,9 @@ import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.di.ActivityScope
 import com.adil.pixplash.ui.base.BaseActivity
 import com.adil.pixplash.ui.home.HomeViewModel
+import com.adil.pixplash.ui.home.collection.CollectionPhotoAdapter
 import com.adil.pixplash.ui.home.collection.CollectionPhotosViewModel
+import com.adil.pixplash.ui.home.explore.ExploreAdapter
 import com.adil.pixplash.ui.home.image_detail.ImageDetailAdapter
 import com.adil.pixplash.ui.home.image_detail.ImageDetailViewModel
 import com.adil.pixplash.utils.ViewModelProviderFactory
@@ -55,6 +57,10 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     @Provides
     fun provideImageDetailAdapter(job: CompletableJob) =
         ImageDetailAdapter(activity, job)
+
+    @Provides
+    fun provideCollectionPhotoAdapter(job: CompletableJob) =
+        CollectionPhotoAdapter(context = activity, job = job)
 
     @Provides
     fun provideCollectionPhotosViewModel(

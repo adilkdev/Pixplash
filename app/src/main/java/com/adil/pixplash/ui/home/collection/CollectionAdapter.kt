@@ -174,9 +174,8 @@ class CollectionAdapter(val context: Context,
                 intent.putExtra("id", item.id)
                 intent.putExtra("cover", item.coverPhoto.urls.regular)
                 intent.putExtra("title", item.title)
-                val options: ActivityOptionsCompat =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation((context as HomeActivity), ivImage, ViewCompat.getTransitionName(ivImage)!!)
-                context.startActivity(intent, options.toBundle())
+                context.startActivity(intent)
+                (context as HomeActivity).overridePendingTransition(R.anim.slide_up, R.anim.nothing)
             }
         }
     }

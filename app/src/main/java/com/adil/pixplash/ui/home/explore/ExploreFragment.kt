@@ -14,6 +14,7 @@ import com.adil.pixplash.data.local.db.DatabaseService
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
+import com.adil.pixplash.utils.AppConstants
 import com.adil.pixplash.utils.view.GridSpacingItemDecoration
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.error_layout.*
@@ -42,11 +43,11 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
      * All type of listeners
      */
     private val savePhotos: (value: List<Photo>) -> Unit = {
-        viewModel.savePhotos(it)
+        viewModel.savePhotos(it, AppConstants.PHOTO_TYPE_EXPLORE)
     }
 
     private val removePhotos: (value: Boolean) -> Unit = {
-        viewModel.removePhotos()
+        viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
     }
 
     private val orderByClick: (String) -> Unit = { type ->
@@ -116,6 +117,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
                         }
                         if (!viewModel.loading.value!!) {
                             if (visibleItemCount + pastVisibleItems >= totalItemCount) {
+                                exploreAdapter.enableFooter(true)
                                 viewModel.onLoadMore()
                                 //Log.e(TAG, "LOAD NEXT ITEM")
                             }
@@ -137,6 +139,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         viewModel.photos.observe(this, Observer {
             it.data?.run { exploreAdapter.appendList(this, viewModel.getPage()) }
             doneLoadingView()
+            exploreAdapter.enableFooter(false)
             exploreAdapter.enableFooterRetry(false, null)
         })
 
@@ -188,7 +191,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 
     override fun onDestroy() {
-        viewModel.removePhotos()
+        viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
         super.onDestroy()
     }
 

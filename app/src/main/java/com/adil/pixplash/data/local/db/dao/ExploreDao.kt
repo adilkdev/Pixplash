@@ -12,11 +12,11 @@ interface ExploreDao {
     @Insert
     suspend fun addImageList(photos: List<Photo>)
 
-    @Query("DELETE FROM photo_entity")
-    suspend fun removePhotos()
+    @Query("DELETE FROM photo_entity WHERE photoType = :type")
+    suspend fun removePhotos(type: String)
 
-    @Query("SELECT * FROM photo_entity")
-    suspend fun getAllPhotosFromDB(): List<Photo>
+    @Query("SELECT * FROM photo_entity WHERE photoType = :type")
+    suspend fun getAllPhotosFromDB(type: String): List<Photo>
 
 
 }

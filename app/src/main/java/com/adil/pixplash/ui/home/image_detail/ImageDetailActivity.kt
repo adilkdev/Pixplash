@@ -19,6 +19,7 @@ import com.adil.pixplash.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_image_detail.*
 import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlin.reflect.typeOf
 
 
 class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
@@ -42,6 +43,12 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
 
     private var activeOrder = ""
 
+    private var pagerType = ""
+
+    private var collectionId: String = ""
+
+    private var extras: Bundle? = null
+
     private val dismissListener: (value: Boolean) -> Unit = { value ->
         isDismissible = value
     }
@@ -50,12 +57,17 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
 
     override fun setupView(savedInstanceState: Bundle?) {
 
-        photoId = intent.extras?.get(AppConstants.ADAPTER_POSITION_PHOTO_ID) as String
-        page = intent.extras?.get(AppConstants.LOADED_PAGES) as Int
-        activeOrder = intent.extras?.get(AppConstants.ACTIVE_ORDER) as String
+        extras = intent.extras
+        photoId = extras?.get(AppConstants.ADAPTER_POSITION_PHOTO_ID) as String
+        page = extras?.get(AppConstants.LOADED_PAGES) as Int
+        activeOrder = extras?.get(AppConstants.ACTIVE_ORDER) as String
         viewModel.setPage(page)
         viewModel.setActiveOrder(activeOrder)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+        collectionId = extras?.getString("collectionId")!!
+        pagerType = extras?.getString("type")!!
+        setPagerType(pagerType, collectionId)
 
         imageDetailAdapter.setTheDismissListener(dismissListener)
 
@@ -80,7 +92,11 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     if (position == imageDetailAdapter.itemCount - 3) {
-                        viewModel.loadMore()
+                        if (pagerType == AppConstants.PHOTO_TYPE_EXPLORE) {
+                            viewModel.loadMore()
+                        } else {
+                            viewModel.loadMoreCollectionPhotos()
+                        }
                     }
                 }
             })
@@ -89,15 +105,19 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
 
     private fun setupData() {
         CoroutineScope(Dispatchers.IO + job).launch {
-            val photos = photoRepository.getAllPhotosFromDB()
+            val photos = photoRepository.getAllPhotosFromDB(pagerType)
             imageDetailAdapter.appendList(photos)
             itemCount = photos.size
-            page = itemCount / 10
+            page = itemCount / PhotoRepository.pageSize
         }
     }
 
+    private fun setPagerType(type: String, id: String) {
+        viewModel.setPagerType(type, id)
+    }
+
     private fun findPic(id: String): Int {
-        val tempList = photoRepository.getAllPhotosFromDB()
+        val tempList = photoRepository.getAllPhotosFromDB(pagerType)
         val item = tempList.find { it.photoId == id }
         return tempList.indexOf(item)
     }

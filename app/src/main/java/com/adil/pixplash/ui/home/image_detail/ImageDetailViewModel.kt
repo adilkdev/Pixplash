@@ -21,6 +21,8 @@ class ImageDetailViewModel(schedulerProvider: SchedulerProvider,
     private val TAG = this::class.simpleName
     private var page = 1
     private var orderByStr = "latest"
+    private var type = "photo"
+    private var collectionId = ""
 
     val photos: MutableLiveData<Resource<List<Photo>>> = MutableLiveData()
 
@@ -30,11 +32,36 @@ class ImageDetailViewModel(schedulerProvider: SchedulerProvider,
 
     }
 
+    fun setPagerType(type: String, id: String) {
+        this.type = type
+        this.collectionId = id
+    }
+
     fun loadMore(pageNo: Int = page, orderBy: String = orderByStr) {
         //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
         compositeDisposable.add(
             photoRepository
                 .fetchPhotos(page = pageNo, orderBy = orderBy)
+                .delay(0, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        photos.postValue(Resource.success(it))
+                        page++
+                    },
+                    {
+                        Log.e(TAG, "${it.localizedMessage}")
+                        error.postValue(getNetworkError(it))
+                    }
+                )
+        )
+    }
+
+    fun loadMoreCollectionPhotos(pageNo: Int = page) {
+        //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
+        compositeDisposable.add(
+            photoRepository
+                .fetchCollectionPhoto(collectionId = collectionId,page = pageNo)
                 .delay(0, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .subscribe(

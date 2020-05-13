@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseViewModel
+import com.adil.pixplash.utils.AppConstants
 import com.adil.pixplash.utils.common.Resource
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
@@ -73,12 +74,12 @@ class ExploreViewModel(
         )
     }
 
-    fun savePhotos(list: List<Photo>) {
-        photoRepository.savePhotos(list)
+    fun savePhotos(list: List<Photo>, photoType: String) {
+        photoRepository.savePhotos(list, photoType)
     }
 
-    fun removePhotos() {
-        photoRepository.removePhotos()
+    fun removePhotos(photoType: String) {
+        photoRepository.removePhotos(photoType)
     }
 
     fun updateState(orderBy: String) {

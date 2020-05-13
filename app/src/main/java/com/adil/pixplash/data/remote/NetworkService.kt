@@ -46,6 +46,14 @@ interface NetworkService {
         @Query("per_page") perPage: Int
     ) : Single<List<Collection>>
 
+    @GET(Endpoints.COLLECTION_PHOTOS+"{id}/photos")
+    fun fetchCollectionPhotos(
+        @Path("id") id: String,
+        @Query("client_id") clientId: String = AppConstants.ACCESS_KEY,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ) : Single<List<Photo>>
+
     /*@POST(Endpoints.DUMMY)
     fun doDummyCall(
         @Body request: DummyRequest,

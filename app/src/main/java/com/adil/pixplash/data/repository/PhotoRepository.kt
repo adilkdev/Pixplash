@@ -18,7 +18,11 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
                                           private val job: CompletableJob
 ) {
 
-    fun fetchPhotos(page: Int = 1, itemsPerPage: Int = 30, orderBy: String = "latest")
+    companion object {
+        const val pageSize = 20
+    }
+
+    fun fetchPhotos(page: Int = 1, itemsPerPage: Int = pageSize, orderBy: String = "latest")
             : Single<List<Photo>> =
         networkService.fetchPhotos(page = page, perPage = itemsPerPage, orderBy = orderBy)
 
@@ -27,33 +31,39 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
     fun fetchPhotoDetails(photoId: String): Single<PhotoDetailResponse> =
         networkService.fetchPhotoDetails(photoId)
 
-    fun fetchCollections(page: Int = 1, itemsPerPage: Int = 20) : Single<List<Collection>> =
+    fun fetchCollections(page: Int = 1, itemsPerPage: Int = pageSize) : Single<List<Collection>> =
         networkService.fetchCollections(page = page, perPage = itemsPerPage)
 
-    fun fetchFeaturedCollections(page: Int = 1, itemsPerPage: Int = 20) : Single<List<Collection>> =
+    fun fetchFeaturedCollections(page: Int = 1, itemsPerPage: Int = pageSize) : Single<List<Collection>> =
         networkService.fetchFeaturedCollections(page = page, perPage = itemsPerPage)
 
-    fun savePhotos(photos: List<Photo>) {
+    fun fetchCollectionPhoto(collectionId: String, page: Int = 1, itemsPerPage: Int = pageSize) : Single<List<Photo>> =
+        networkService.fetchCollectionPhotos(id = collectionId, page = page, perPage = itemsPerPage)
+
+    fun savePhotos(photos: List<Photo>, photoType: String) {
         CoroutineScope(Dispatchers.IO + job).launch {
+            photos.map {
+                it.photoType = photoType
+            }
             databaseService.exploreDao().addImageList(photos)
         }
     }
 
-    fun removePhotos() {
+    fun removePhotos(photoType: String) {
         CoroutineScope(Dispatchers.IO + job).launch {
-            databaseService.exploreDao().removePhotos()
+            databaseService.exploreDao().removePhotos(photoType)
         }
     }
 
-    fun getAllPhotosFromDB(): List<Photo> {
+    fun getAllPhotosFromDB(photoType: String): List<Photo> {
         lateinit var photos: List<Photo>
         runBlocking(Dispatchers.IO + job) {
-            val job = async { gettingPhotos() }
+            val job = async { gettingPhotos(photoType) }
             photos = job.await()
         }
         return photos
     }
 
-    private suspend fun gettingPhotos() = databaseService.exploreDao().getAllPhotosFromDB()
+    private suspend fun gettingPhotos(photoType: String) = databaseService.exploreDao().getAllPhotosFromDB(photoType)
 
 }
