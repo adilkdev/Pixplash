@@ -45,7 +45,9 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
 
     private var pagerType = ""
 
-    private var collectionId: String = ""
+    private var collectionId = ""
+
+    private var query = ""
 
     private var extras: Bundle? = null
 
@@ -60,13 +62,19 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
         extras = intent.extras
         photoId = extras?.get(AppConstants.ADAPTER_POSITION_PHOTO_ID) as String
         page = extras?.get(AppConstants.LOADED_PAGES) as Int
-        activeOrder = extras?.get(AppConstants.ACTIVE_ORDER) as String
         viewModel.setPage(page)
-        viewModel.setActiveOrder(activeOrder)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-        collectionId = extras?.getString("collectionId")!!
+
         pagerType = extras?.getString("type")!!
+        if (pagerType == AppConstants.PHOTO_TYPE_EXPLORE) {
+            activeOrder = extras?.get(AppConstants.ACTIVE_ORDER) as String
+            viewModel.setActiveOrder(activeOrder)
+        } else if (pagerType == AppConstants.PHOTO_TYPE_COLLECTION) {
+            collectionId = extras?.getString("collectionId")!!
+        } else {
+            query = extras?.getString("query")!!
+        }
         setPagerType(pagerType, collectionId)
 
         imageDetailAdapter.setTheDismissListener(dismissListener)
@@ -94,8 +102,10 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
                     if (position == imageDetailAdapter.itemCount - 3) {
                         if (pagerType == AppConstants.PHOTO_TYPE_EXPLORE) {
                             viewModel.loadMore()
-                        } else {
+                        } else if (pagerType == AppConstants.PHOTO_TYPE_COLLECTION) {
                             viewModel.loadMoreCollectionPhotos()
+                        } else {
+                            viewModel.searchPhotos(query = query)
                         }
                     }
                 }

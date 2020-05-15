@@ -4,6 +4,7 @@ import com.adil.pixplash.di.FragmentScope
 import com.adil.pixplash.di.module.FragmentModule
 import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment
 import com.adil.pixplash.ui.home.explore.ExploreFragment
+import com.adil.pixplash.ui.home.search.collection.SearchCollectionFragment
 import com.adil.pixplash.ui.home.search.photo.SearchPhotoFragment
 import com.adil.pixplash.ui.home.setting.SettingFragment
 import dagger.Component
@@ -22,5 +23,7 @@ interface FragmentComponent {
     fun inject(fragment: SettingFragment)
 
     fun inject(fragment: SearchPhotoFragment)
+
+    fun inject(fragment: SearchCollectionFragment)
 
 }

@@ -4,9 +4,8 @@ import android.util.Log
 import com.adil.pixplash.data.local.db.DatabaseService
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.remote.NetworkService
+import com.adil.pixplash.data.remote.response.*
 import com.adil.pixplash.data.remote.response.Collection
-import com.adil.pixplash.data.remote.response.PhotoDetailResponse
-import com.adil.pixplash.data.remote.response.PhotoResponse
 import io.reactivex.Single
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -26,6 +25,10 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
             : Single<List<Photo>> =
         networkService.fetchPhotos(page = page, perPage = itemsPerPage, orderBy = orderBy)
 
+    fun searchPhotos(page: Int = 1, itemsPerPage: Int = pageSize, query: String = "")
+            : Single<SearchPhotoResponse> =
+        networkService.searchPhotos(page = page, perPage = itemsPerPage, query = query)
+
     fun fetchOneRandomPhoto(): Single<Photo> = networkService.fetchOneRandomPhoto()
 
     fun fetchPhotoDetails(photoId: String): Single<PhotoDetailResponse> =
@@ -33,6 +36,9 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
 
     fun fetchCollections(page: Int = 1, itemsPerPage: Int = pageSize) : Single<List<Collection>> =
         networkService.fetchCollections(page = page, perPage = itemsPerPage)
+
+    fun searchCollections(page: Int = 1, itemsPerPage: Int = pageSize, query: String = "") : Single<SearchCollectionResponse> =
+        networkService.searchCollections(page = page, perPage = itemsPerPage, query = query)
 
     fun fetchFeaturedCollections(page: Int = 1, itemsPerPage: Int = pageSize) : Single<List<Collection>> =
         networkService.fetchFeaturedCollections(page = page, perPage = itemsPerPage)

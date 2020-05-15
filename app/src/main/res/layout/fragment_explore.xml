@@ -57,16 +57,6 @@
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
 
-<!--                <View-->
-<!--                    android:id="@+id/searchView"-->
-<!--                    android:transitionName="search_transition"-->
-<!--                    android:layout_marginTop="170dp"-->
-<!--                    android:background="@drawable/home_appbar_rounded_bg"-->
-<!--                    android:layout_marginRight="35dp"-->
-<!--                    android:layout_marginLeft="35dp"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="40dp"/>-->
-
                 <TextView
                     android:id="@+id/tvBigTitle"
                     android:letterSpacing="0.03"

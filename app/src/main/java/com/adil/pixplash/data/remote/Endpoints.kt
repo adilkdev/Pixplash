@@ -15,4 +15,8 @@ object Endpoints {
     const val COLLECTION_PHOTOS = "/collections/"
 
     const val COLLECTION_FEATURED = "/collections/featured"
+
+    const val SEARCH_PHOTOS = "/search/photos"
+
+    const val SEARCH_COLLECTION = "/search/collections"
 }

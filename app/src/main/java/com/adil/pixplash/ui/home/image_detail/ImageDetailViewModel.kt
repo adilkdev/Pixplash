@@ -77,6 +77,26 @@ class ImageDetailViewModel(schedulerProvider: SchedulerProvider,
         )
     }
 
+    fun searchPhotos(pageNo: Int = page, query: String = "") {
+        //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
+        compositeDisposable.add(
+            photoRepository
+                .searchPhotos(page = pageNo, query = query)
+                .delay(0, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        photos.postValue(Resource.success(it.results))
+                        page++
+                    },
+                    {
+                        Log.e(TAG, "${it.localizedMessage}")
+                        error.postValue(getNetworkError(it))
+                    }
+                )
+        )
+    }
+
     fun setPage(page: Int) {
         this.page = page + 1
     }

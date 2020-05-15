@@ -2,6 +2,7 @@ package com.adil.pixplash.di.component
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import com.adil.pixplash.PixplashApplication
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.di.ApplicationContext
@@ -34,6 +35,8 @@ interface ApplicationComponent {
     fun getJob(): CompletableJob
 
     fun getNetworkHelper(): NetworkHelper
+
+    fun getPreferences(): SharedPreferences
 
 
 }

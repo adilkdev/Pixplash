@@ -8,9 +8,9 @@ object AppConstants {
 
     const val BASE_URL = "https://api.unsplash.com"
 
-    const val DARK_THEME = 1
+    const val DARK_THEME = 2
 
-    const val LIGHT_THEME = 2
+    const val LIGHT_THEME = 1
 
     var ACTIVE_THEME = 1
 
@@ -21,6 +21,7 @@ object AppConstants {
 
     // Save & use of photo type from the respective fragment
     const val PHOTO_TYPE_EXPLORE = "explore"
+    const val PHOTO_TYPE_SEARCH = "search"
     const val PHOTO_TYPE_COLLECTION = "collection"
 
 }

@@ -8,6 +8,10 @@ import com.adil.pixplash.ui.home.collection.fragment.CollectionAdapter
 import com.adil.pixplash.ui.home.collection.fragment.CollectionViewModel
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
 import com.adil.pixplash.ui.home.explore.ExploreViewModel
+import com.adil.pixplash.ui.home.search.collection.SearchCollectionAdapter
+import com.adil.pixplash.ui.home.search.collection.SearchCollectionViewModel
+import com.adil.pixplash.ui.home.search.photo.SearchPhotoAdapter
+import com.adil.pixplash.ui.home.search.photo.SearchPhotoViewModel
 import com.adil.pixplash.utils.ViewModelProviderFactory
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
@@ -60,14 +64,43 @@ class FragmentModule(private val fragment: BaseFragment<*>) {
             }).get(CollectionViewModel::class.java)
 
     @Provides
+    fun provideSearchPhotoViewModel(
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        networkHelper: NetworkHelper,
+        photoRepository: PhotoRepository
+    ) : SearchPhotoViewModel =
+        ViewModelProviders.of(fragment,
+            ViewModelProviderFactory(SearchPhotoViewModel::class) {
+                SearchPhotoViewModel(schedulerProvider, compositeDisposable, networkHelper, photoRepository)
+            }).get(SearchPhotoViewModel::class.java)
+
+    @Provides
+    fun provideSearchCollectionViewModel(
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        networkHelper: NetworkHelper,
+        photoRepository: PhotoRepository
+    ) : SearchCollectionViewModel =
+        ViewModelProviders.of(fragment,
+            ViewModelProviderFactory(SearchCollectionViewModel::class) {
+                SearchCollectionViewModel(schedulerProvider, compositeDisposable, networkHelper, photoRepository)
+            }).get(SearchCollectionViewModel::class.java)
+
+    @Provides
     fun provideExploreAdapter(job: CompletableJob) =
         ExploreAdapter(context = fragment.context!!, job = job)
 
     @Provides
+    fun provideSearchPhotoAdapter(job: CompletableJob) =
+        SearchPhotoAdapter(context = fragment.context!!, job = job)
+
+    @Provides
     fun provideCollectionAdapter(job: CompletableJob) =
-        CollectionAdapter(
-            context = fragment.context!!,
-            job = job
-        )
+        CollectionAdapter(context = fragment.context!!, job = job)
+
+    @Provides
+    fun provideSearchCollectionAdapter(job: CompletableJob) =
+        SearchCollectionAdapter(context = fragment.context!!, job = job)
 
 }

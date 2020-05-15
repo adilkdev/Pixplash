@@ -2,6 +2,7 @@ package com.adil.pixplash.di.module
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.adil.pixplash.PixplashApplication
 import com.adil.pixplash.data.local.db.DatabaseService
@@ -69,5 +70,10 @@ class ApplicationModule (private val application: PixplashApplication) {
     @Singleton
     @Provides
     fun provideNetworkHelper(): NetworkHelper = NetworkHelper(application)
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(): SharedPreferences =
+        application.getSharedPreferences("pixplash-prefs", Context.MODE_PRIVATE)
 
 }

@@ -1,17 +1,22 @@
 package com.adil.pixplash.ui.home.collection.fragment
 
+import android.content.Intent
+import android.graphics.Color
 import android.graphics.Outline
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
+import com.adil.pixplash.data.local.prefs.UserPreferences
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
+import com.adil.pixplash.ui.home.search.SearchActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
@@ -34,6 +39,9 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
         val TYPE_ALL = 0
         val TYPE_FEATURED = 1
     }
+
+    @Inject
+    lateinit var prefs: UserPreferences
 
     @Inject
     lateinit var collectionAdapter: CollectionAdapter
@@ -71,6 +79,15 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
         relative.outlineProvider = viewOutlineProvider
         relative.clipToOutline = true
         setupRecyclerView()
+
+        searchView.setOnClickListener {
+            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this.activity!!,
+                it,  // Starting view
+                "search_transition" // The String
+            )
+            context?.startActivity(Intent(this.activity, SearchActivity::class.java), options.toBundle())
+        }
     }
 
     private fun setupRecyclerView() {

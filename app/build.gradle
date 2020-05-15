@@ -115,9 +115,6 @@ dependencies {
     // Swipe down to dismiss activity
     // implementation("com.thefuntasty.hauler:core:3.1.0")
 
-    // Physics animations
-//    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
-
     /* Testing */
 //    testImplementation 'junit:junit:4.12'
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.1'

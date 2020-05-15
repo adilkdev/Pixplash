@@ -2,6 +2,8 @@ package com.adil.pixplash.ui.home.explore
 
 import android.R.attr.transitionName
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.graphics.Outline
 import android.os.Bundle
 import android.transition.Fade
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Photo
+import com.adil.pixplash.data.local.prefs.UserPreferences
+import com.adil.pixplash.data.local.prefs.UserPreferences_Factory
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.ui.home.HomeActivity
@@ -43,6 +47,9 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             return fragment
         }
     }
+
+    @Inject
+    lateinit var prefs: UserPreferences
 
     @Inject
     lateinit var exploreAdapter: ExploreAdapter
