@@ -14,6 +14,7 @@ import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Link
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.local.db.entity.Url
+import com.adil.pixplash.data.remote.response.User
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import com.adil.pixplash.utils.AppConstants
@@ -52,7 +53,8 @@ class CollectionPhotoAdapter(
     init {
         list.add(Photo(0,"","","","",
             Url("","","","","")
-            , Link(""),"", AppConstants.PHOTO_TYPE_COLLECTION))
+            , Link(""),"", AppConstants.PHOTO_TYPE_COLLECTION, User("","")
+        ))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

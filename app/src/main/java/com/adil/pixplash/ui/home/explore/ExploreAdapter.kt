@@ -15,6 +15,7 @@ import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Link
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.local.db.entity.Url
+import com.adil.pixplash.data.remote.response.User
 import com.adil.pixplash.ui.home.HomeActivity
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import com.adil.pixplash.utils.AppConstants
@@ -55,7 +56,7 @@ class ExploreAdapter(
     init {
         list.add(Photo(0,"","","","",
             Url("","","","","")
-            ,Link(""),"",AppConstants.PHOTO_TYPE_EXPLORE))
+            ,Link(""),"",AppConstants.PHOTO_TYPE_EXPLORE, User("","")))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -149,7 +150,7 @@ class ExploreAdapter(
             list.clear()
             list.add(Photo(0,"","","","",
                 Url("","","","","")
-                ,Link(""),"",AppConstants.PHOTO_TYPE_EXPLORE))
+                ,Link(""),"",AppConstants.PHOTO_TYPE_EXPLORE, User("","")))
             removePhotoListener(true)
         }
         notifyDataSetChanged()

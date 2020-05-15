@@ -21,10 +21,13 @@ import com.adil.pixplash.ui.home.HomeActivity
 import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
 import com.adil.pixplash.utils.view.GridSpacingItemDecoration
+import com.bumptech.glide.GenericTransitionOptions.with
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kotlinx.android.synthetic.main.fragment_explore.loadingView
+import java.lang.Exception
 import javax.inject.Inject
 
 

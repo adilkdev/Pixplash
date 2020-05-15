@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:layout_height="match_parent">
 
@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"/>
 
     <LinearLayout
+        android:id="@+id/searchLayout"
         android:layout_toLeftOf="@+id/tvCancel"
         android:background="@drawable/search_rounded_bg_light"
         android:layout_marginTop="40dp"
@@ -57,15 +58,20 @@
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/searchView"
-        android:visibility="gone"
-        android:transitionName="search_transition"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/search_rounded_bg_light"
-        android:layout_marginRight="35dp"
-        android:layout_marginLeft="35dp"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_below="@+id/searchLayout"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="2dp"
+        app:tabIndicatorColor="@color/colorPrimaryDark"
         android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+        android:layout_height="wrap_content"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_below="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 
 </RelativeLayout>

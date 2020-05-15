@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.adil.pixplash.data.remote.response.User
 import com.google.gson.annotations.SerializedName
 import org.jetbrains.annotations.NotNull
-import org.jetbrains.annotations.Nullable
 
 @Entity(tableName = "photo_entity")
 data class Photo(
@@ -45,6 +45,10 @@ data class Photo(
     val likes: String,
 
     @ColumnInfo(name = "photoType", defaultValue = "explore")
-    var photoType: String
+    var photoType: String,
+
+    @Embedded
+    @SerializedName("user")
+    val user: User
 
 )

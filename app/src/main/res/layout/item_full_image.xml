@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.jsibbold.zoomage.ZoomageView
@@ -16,34 +17,83 @@
         android:layout_height="match_parent"/>
 
     <ImageView
-        android:id="@+id/ivInfo"
+        android:id="@+id/ivLink"
         android:visibility="gone"
-        android:layout_margin="16dp"
-        android:layout_gravity="bottom"
-        android:padding="8dp"
-        android:src="@drawable/download"
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="top|right"
+        android:padding="14dp"
+        android:src="@drawable/link"
+        android:layout_width="45dp"
+        android:layout_height="45dp"/>
 
     <ImageView
         android:id="@+id/ivDownload"
         android:visibility="gone"
-        android:layout_margin="10dp"
+        android:layout_margin="16dp"
         android:layout_gravity="bottom|right"
-        android:padding="10dp"
+        android:padding="6dp"
         android:src="@drawable/download"
+        android:layout_width="55dp"
+        android:layout_height="55dp" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="45dp"/>
-
-    <RelativeLayout
-        android:id="@+id/bottom_sheet"
-        android:background="#515151"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="0dp"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        android:layout_width="match_parent"
-        android:layout_height="500dp">
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|left"
+        >
+        <TextView
+            android:id="@+id/tvAuthor"
+            android:textColor="#BBBBBB"
+            android:visibility="gone"
+            android:textSize="15sp"
+            android:letterSpacing="0.04"
+            android:fontFamily="@font/source_sans_pro"
+            android:textStyle="normal"
+            android:layout_marginLeft="14dp"
+            android:layout_marginBottom="4dp"
+            android:text="Author name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tvUnsplash"
+            android:textColor="#BBBBBB"
+            android:visibility="gone"
+            android:textSize="13sp"
+            android:letterSpacing="0.03"
+            android:fontFamily="@font/source_sans_pro"
+            android:textStyle="normal"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="14dp"
+            android:text="Unsplash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+<!--    <TextView-->
+<!--        android:id="@+id/tvAuthor"-->
+<!--        android:textColor="#ccc"-->
+<!--        android:visibility="gone"-->
+<!--        android:textSize="15sp"-->
+<!--        android:letterSpacing="0.04"-->
+<!--        android:fontFamily="@font/source_sans_pro"-->
+<!--        android:textStyle="normal"-->
+<!--        android:layout_margin="14dp"-->
+<!--        android:layout_gravity="bottom|left"-->
+<!--        android:text="Author name"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"/>-->
+<!--    <TextView-->
+<!--        android:id="@+id/tvUnsplash"-->
+<!--        android:textColor="#ccc"-->
+<!--        android:textSize="12sp"-->
+<!--        android:letterSpacing="0.03"-->
+<!--        android:fontFamily="@font/source_sans_pro"-->
+<!--        android:textStyle="normal"-->
+<!--        android:layout_margin="14dp"-->
+<!--        android:layout_gravity="bottom|left"-->
+<!--        android:text="Author name"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"/>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

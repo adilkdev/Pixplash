@@ -17,5 +17,8 @@ data class PhotoResponse (
     val color: String,
 
     @SerializedName("urls")
-    val urls: Urls
+    val urls: Urls,
+
+    @SerializedName("user")
+    val user: User
 )
