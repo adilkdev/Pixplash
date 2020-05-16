@@ -144,6 +144,7 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
             loadingView.setAnimation("empty_state.json")
             loadingView()
         } else {
+            searchPhotoAdapter.resetList()
             loadingView.setAnimation("loading.json")
             viewModel.searchPhotos(query = query)
             searchPhotoAdapter.setQuery(query)

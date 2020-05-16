@@ -112,6 +112,7 @@ class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), Colle
             loadingView.setAnimation("empty_state.json")
             loadingView()
         } else {
+            collectionAdapter.resetList()
             loadingView.setAnimation("loading.json")
             viewModel.searchCollection(query = query)
             this.query = query

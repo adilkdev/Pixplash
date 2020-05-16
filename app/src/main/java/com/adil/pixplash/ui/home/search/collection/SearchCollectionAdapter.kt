@@ -101,9 +101,7 @@ class SearchCollectionAdapter(val context: Context,
     }
 
     fun resetList() {
-        CoroutineScope(Dispatchers.IO + job).launch {
-            list.clear()
-        }
+        list.clear()
         notifyDataSetChanged()
     }
 
