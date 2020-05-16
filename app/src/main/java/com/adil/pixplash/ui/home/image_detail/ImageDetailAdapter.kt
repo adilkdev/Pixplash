@@ -40,7 +40,7 @@ class ImageDetailAdapter(val context: Context,
 
     override fun onBindViewHolder(holder: ImageDetailViewHolder, position: Int) {
         val image = list[holder.adapterPosition].urls.regular
-        Picasso.get().load(image).into(holder.ivImage)
+        Picasso.get().load(image).placeholder(R.drawable.placeholder).into(holder.ivImage)
         holder.tvAuthor.text = list[holder.adapterPosition].user.name
     }
 

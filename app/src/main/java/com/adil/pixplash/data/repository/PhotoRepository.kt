@@ -18,7 +18,7 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
 ) {
 
     companion object {
-        const val pageSize = 20
+        const val pageSize = 30
     }
 
     fun fetchPhotos(page: Int = 1, itemsPerPage: Int = pageSize, orderBy: String = "latest")

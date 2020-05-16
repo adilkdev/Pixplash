@@ -45,7 +45,7 @@ class CollectionPhotosViewModel (
         compositeDisposable.add(
             photoRepository
                 .fetchCollectionPhoto(collectionId = collectionId,page = pageNo)
-                .delay(0, TimeUnit.MILLISECONDS)
+                .delay(400, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {

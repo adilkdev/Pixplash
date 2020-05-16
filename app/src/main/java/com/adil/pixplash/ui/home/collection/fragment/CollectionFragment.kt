@@ -122,7 +122,7 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
         collectionAdapter.setTheReloadListener(reload)
 
         viewModel.randomPhoto.observe(this, Observer {
-            Picasso.get().load(it).into(ivBanner)
+            Picasso.get().load(it).placeholder(R.drawable.placeholder).into(ivBanner)
         })
         viewModel.collections.observe(this, Observer {
             it.data?.run { collectionAdapter.appendList(this) }

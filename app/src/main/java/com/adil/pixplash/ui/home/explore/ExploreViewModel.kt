@@ -41,7 +41,7 @@ class ExploreViewModel(
         compositeDisposable.add(
             photoRepository
                 .fetchPhotos(page = pageNo, orderBy = orderBy)
-                .delay(0, TimeUnit.MILLISECONDS)
+                .delay(400, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {

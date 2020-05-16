@@ -80,7 +80,7 @@ class CollectionAdapter(val context: Context,
             is CollectionViewHolder -> {
                 val item = list[holder.adapterPosition]
                 val image = item.coverPhoto.urls.regular
-                Picasso.get().load(image).into(holder.ivImage)
+                Picasso.get().load(image).placeholder(R.drawable.placeholder).into(holder.ivImage)
                 holder.tvTitle.text = item.title
                 holder.tvPhotoCount.text = "${item.photosCount} photos"
             }

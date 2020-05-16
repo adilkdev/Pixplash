@@ -35,7 +35,7 @@ class SearchPhotoViewModel(
         compositeDisposable.add(
             photoRepository
                 .searchPhotos(page = pageNo, query = query)
-                .delay(0, TimeUnit.MILLISECONDS)
+                .delay(400, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {

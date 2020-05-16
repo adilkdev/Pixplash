@@ -8,15 +8,10 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
-import com.adil.pixplash.data.local.db.entity.Link
 import com.adil.pixplash.data.local.db.entity.Photo
-import com.adil.pixplash.data.local.db.entity.Url
-import com.adil.pixplash.data.remote.response.User
-import com.adil.pixplash.ui.home.HomeActivity
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
@@ -24,7 +19,6 @@ import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.footer_view.view.*
 import kotlinx.android.synthetic.main.grid_item_image.view.*
-import kotlinx.android.synthetic.main.header_view.view.*
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,7 +66,7 @@ class SearchPhotoAdapter(
         when (holder) {
             is ViewHolder -> {
                 val image = list[holder.adapterPosition].urls.small
-                Picasso.get().load(image).into(holder.imageView)
+                Picasso.get().load(image).placeholder(R.drawable.placeholder).into(holder.imageView)
             }
             is FooterView -> {
                 val layoutParams =

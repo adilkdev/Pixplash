@@ -119,11 +119,14 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         exploreAdapter.setRemovePhotoInDBListener(removePhotos)
 
         rvExplore.apply {
-
+            /**
+             * The below piece of code will remove the default animator applied to the recycler view.
+             */
+            itemAnimator = null
             setItemViewCacheSize(30)
             this.adapter = exploreAdapter
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
             layoutManager = gridLayoutManager
             val itemSpacingDP = 12f
             val itemSpacing: Int = TypedValue.applyDimension(
@@ -167,7 +170,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         removePhotos(true)
 
         viewModel.randomPhoto.observe(this, Observer {
-            Picasso.get().load(it).into(ivBanner)
+            Picasso.get().load(it).placeholder(R.drawable.placeholder).into(ivBanner)
         })
 
         viewModel.photos.observe(this, Observer {
