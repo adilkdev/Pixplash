@@ -96,8 +96,12 @@ class SearchCollectionAdapter(val context: Context,
     }
 
     fun appendList(appendThisList: List<Collection>) {
-        list.addAll(appendThisList)
-        notifyDataSetChanged()
+        CoroutineScope(Dispatchers.Main + job).launch {
+            withContext(Dispatchers.Default) {
+                list.addAll(appendThisList)
+            }
+            notifyDataSetChanged()
+        }
     }
 
     fun resetList() {
@@ -117,9 +121,8 @@ class SearchCollectionAdapter(val context: Context,
      * Cancel all the background tasks while removing adapter
      */
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    fun cancelAllJobs() {
         job.cancel()
-        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     /**

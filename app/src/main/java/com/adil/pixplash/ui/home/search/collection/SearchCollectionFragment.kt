@@ -119,4 +119,9 @@ class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), Colle
         }
     }
 
+    override fun onDestroy() {
+        collectionAdapter.cancelAllJobs()
+        super.onDestroy()
+    }
+
 }

@@ -153,9 +153,8 @@ class SearchPhotoAdapter(
      * Cancel all the background tasks while removing adapter
      */
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    fun cancelAllJobs() {
         job.cancel()
-        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     /**

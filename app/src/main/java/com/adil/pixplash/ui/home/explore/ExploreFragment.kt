@@ -1,9 +1,6 @@
 package com.adil.pixplash.ui.home.explore
 
-import android.R.attr.transitionName
 import android.content.Intent
-import android.content.SharedPreferences
-import android.graphics.Color
 import android.graphics.Outline
 import android.os.Bundle
 import android.transition.Fade
@@ -18,20 +15,15 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.local.prefs.UserPreferences
-import com.adil.pixplash.data.local.prefs.UserPreferences_Factory
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
-import com.adil.pixplash.ui.home.HomeActivity
 import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
 import com.adil.pixplash.utils.view.GridSpacingItemDecoration
-import com.bumptech.glide.GenericTransitionOptions.with
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kotlinx.android.synthetic.main.fragment_explore.loadingView
-import java.lang.Exception
 import javax.inject.Inject
 
 
@@ -161,6 +153,15 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
                         }
                     }
                 }
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
+                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                        recyclerView.invalidateItemDecorations()
+                    }
+                }
+
             })
         }
     }

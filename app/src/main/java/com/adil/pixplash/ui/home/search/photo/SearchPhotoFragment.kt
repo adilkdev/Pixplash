@@ -91,6 +91,15 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
                         }
                     }
                 }
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
+                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                        recyclerView.invalidateItemDecorations()
+                    }
+                }
+
             })
         }
     }
@@ -154,6 +163,7 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
 
     override fun onDestroy() {
         viewModel.removePhotos(AppConstants.PHOTO_TYPE_SEARCH)
+        searchPhotoAdapter.cancelAllJobs()
         super.onDestroy()
     }
 }
