@@ -41,7 +41,7 @@ class ImageDetailAdapter(val context: Context,
     override fun onBindViewHolder(holder: ImageDetailViewHolder, position: Int) {
         val image = list[holder.adapterPosition].urls.regular
         Picasso.get().load(image).placeholder(R.drawable.placeholder).into(holder.ivImage)
-        holder.tvAuthor.text = list[holder.adapterPosition].user.name
+        //holder.tvAuthor.text = list[holder.adapterPosition].user.name
     }
 
     fun setTheDismissListener(dismissListener: (value: Boolean) -> Unit) {
@@ -63,27 +63,28 @@ class ImageDetailAdapter(val context: Context,
 
     inner class ImageDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ivImage: ZoomageView = itemView.ivImage
-        val ivLink = itemView.ivLink
         val ivDownload = itemView.ivDownload
-        val tvAuthor = itemView.tvAuthor
-        val tvUnsplash = itemView.tvUnsplash
+//        val ivLink = itemView.ivLink
+//        val tvAuthor = itemView.tvAuthor
+//        val tvUnsplash = itemView.tvUnsplash
 
         init {
-            tvAuthor.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+//            tvAuthor.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+//            tvUnsplash.setOnClickListener {
+//                val link = "https://unsplash.com"
+//                visitLink(link)
+//            }
+//            ivLink.setOnClickListener {
+//                val link = "https://unsplash.com/photos/${list[adapterPosition].photoId}"
+//                visitLink(link)
+//            }
+//            tvAuthor.setOnClickListener {
+//                val link = "https://unsplash.com/@${list[adapterPosition].user.username}"
+//                visitLink(link)
+//            }
+
             ivDownload.setOnClickListener {
                 download()
-            }
-            tvUnsplash.setOnClickListener {
-                val link = "https://unsplash.com"
-                visitLink(link)
-            }
-            ivLink.setOnClickListener {
-                val link = "https://unsplash.com/photos/${list[adapterPosition].photoId}"
-                visitLink(link)
-            }
-            tvAuthor.setOnClickListener {
-                val link = "https://unsplash.com/@${list[adapterPosition].user.username}"
-                visitLink(link)
             }
 
             ivImage.setOnTouchListener(object : View.OnTouchListener {
@@ -94,21 +95,21 @@ class ImageDetailAdapter(val context: Context,
                                 dismissListener(true)
                                 if (ivDownload.visibility==View.VISIBLE) {
                                     ivDownload.visibility = View.INVISIBLE
-                                    ivLink.visibility = View.INVISIBLE
-                                    tvAuthor.visibility = View.INVISIBLE
-                                    tvUnsplash.visibility = View.INVISIBLE
+//                                    ivLink.visibility = View.INVISIBLE
+//                                    tvAuthor.visibility = View.INVISIBLE
+//                                    tvUnsplash.visibility = View.INVISIBLE
                                 } else {
                                     ivDownload.visibility = View.VISIBLE
-                                    ivLink.visibility = View.VISIBLE
-                                    tvAuthor.visibility = View.VISIBLE
-                                    tvUnsplash.visibility = View.VISIBLE
+//                                    ivLink.visibility = View.VISIBLE
+//                                    tvAuthor.visibility = View.VISIBLE
+//                                    tvUnsplash.visibility = View.VISIBLE
                                 }
                             } else {
                                 dismissListener(false)
                                 ivDownload.visibility = View.INVISIBLE
-                                ivLink.visibility = View.INVISIBLE
-                                tvAuthor.visibility = View.INVISIBLE
-                                tvUnsplash.visibility = View.INVISIBLE
+//                                ivLink.visibility = View.INVISIBLE
+//                                tvAuthor.visibility = View.INVISIBLE
+//                                tvUnsplash.visibility = View.INVISIBLE
                             }
                         }
                     }

@@ -24,7 +24,7 @@
                 android:layout_height="match_parent">
                 <ImageView
                     android:id="@+id/ivBanner"
-                    android:src="@drawable/pic"
+                    android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

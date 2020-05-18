@@ -12,7 +12,7 @@
         <ImageView
             android:id="@+id/image"
             android:scaleType="fitXY"
-            android:src="@drawable/pic"
+            android:src="@drawable/placeholder"
             android:adjustViewBounds="true"
             android:contentDescription="image"
             android:layout_width="match_parent"

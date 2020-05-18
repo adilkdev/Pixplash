@@ -23,7 +23,7 @@
             <ImageView
                 android:id="@+id/ivCover"
                 android:transitionName="image_transition"
-                android:src="@drawable/pic"
+                android:src="@drawable/placeholder"
                 android:background="@android:color/transparent"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"

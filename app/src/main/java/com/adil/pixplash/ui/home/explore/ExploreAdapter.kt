@@ -88,7 +88,9 @@ class ExploreAdapter(
             }
             is ViewHolder -> {
                 val image = list[holder.adapterPosition].urls.small
-                get().load(image).placeholder(R.drawable.placeholder).into(holder.imageView)
+                get().load(image)
+                    //.placeholder(R.drawable.placeholder)
+                    .into(holder.imageView)
             }
             is FooterView -> {
                 val layoutParams =
