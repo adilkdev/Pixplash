@@ -141,8 +141,10 @@ class ExploreAdapter(
             this@ExploreAdapter.page = page
             list.addAll(appendThisList)
             savePhotoListener(appendThisList)
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
+            }
         }
-        notifyDataSetChanged()
     }
 
     fun resetList() {
@@ -152,8 +154,10 @@ class ExploreAdapter(
                 Url("","","","","")
                 ,Link(""),"",AppConstants.PHOTO_TYPE_EXPLORE, User("","")))
             removePhotoListener(true)
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
+            }
         }
-        notifyDataSetChanged()
     }
 
     /**
@@ -180,9 +184,8 @@ class ExploreAdapter(
      * Cancel all the background tasks while removing adapter
      */
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    fun cancelAllJobs() {
         job.cancel()
-        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     /**

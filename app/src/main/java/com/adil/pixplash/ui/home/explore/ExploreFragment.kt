@@ -230,6 +230,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
     override fun onDestroy() {
         viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
+        exploreAdapter.cancelAllJobs()
         super.onDestroy()
     }
 

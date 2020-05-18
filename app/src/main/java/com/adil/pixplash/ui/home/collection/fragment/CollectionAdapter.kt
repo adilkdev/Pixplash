@@ -24,10 +24,7 @@ import kotlinx.android.synthetic.main.collection_item.view.*
 import kotlinx.android.synthetic.main.footer_view.view.*
 import kotlinx.android.synthetic.main.footer_view.view.tvLatest
 import kotlinx.android.synthetic.main.header_view.view.*
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class CollectionAdapter(val context: Context,
                         val job: CompletableJob
@@ -126,12 +123,16 @@ class CollectionAdapter(val context: Context,
     }
 
     fun resetList() {
-        list.clear()
-        list.add(
-            Collection("","",0, CoverPhoto(
-                Urls("","","")
-            )))
-        notifyDataSetChanged()
+        CoroutineScope(Dispatchers.Default + job).launch {
+            list.clear()
+            list.add(
+                Collection("","",0, CoverPhoto(
+                    Urls("","","")
+                )))
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
+            }
+        }
     }
 
     /**
@@ -150,9 +151,8 @@ class CollectionAdapter(val context: Context,
      * Cancel all the background tasks while removing adapter
      */
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    fun cancelAllJobs() {
         job.cancel()
-        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     /**

@@ -176,4 +176,10 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
     }
 
     override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+
+    override fun onDestroy() {
+        collectionAdapter.cancelAllJobs()
+        super.onDestroy()
+    }
+
 }

@@ -65,7 +65,6 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
         viewModel.setPage(page)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-
         pagerType = extras?.getString("type")!!
         if (pagerType == AppConstants.PHOTO_TYPE_EXPLORE) {
             activeOrder = extras?.get(AppConstants.ACTIVE_ORDER) as String
@@ -228,6 +227,7 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
 
     override fun onDestroy() {
         job.cancel()
+        imageDetailAdapter.cancelAllJobs()
         super.onDestroy()
     }
 

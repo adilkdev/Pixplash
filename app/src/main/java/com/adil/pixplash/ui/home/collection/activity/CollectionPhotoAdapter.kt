@@ -196,16 +196,18 @@ class CollectionPhotoAdapter(
         val imageView: ImageView = itemView.image
         init {
             imageView.setOnClickListener {
-                context.startActivity(
-                    Intent(context as CollectionPhotosActivity, ImageDetailActivity::class.java)
-                    .putExtra(AppConstants.ADAPTER_POSITION_PHOTO_ID, list[adapterPosition].photoId)
-                    .putExtra(AppConstants.LOADED_PAGES, page)
-                    .putExtra(AppConstants.ACTIVE_ORDER, ExploreAdapter.activeOrder)
-                    .putExtra("type",AppConstants.PHOTO_TYPE_COLLECTION)
-                    .putExtra("collectionId", collectionId)
+                if (adapterPosition!=-1) {
+                    context.startActivity(
+                        Intent(context as CollectionPhotosActivity, ImageDetailActivity::class.java)
+                            .putExtra(AppConstants.ADAPTER_POSITION_PHOTO_ID, list[adapterPosition].photoId)
+                            .putExtra(AppConstants.LOADED_PAGES, page)
+                            .putExtra(AppConstants.ACTIVE_ORDER, ExploreAdapter.activeOrder)
+                            .putExtra("type",AppConstants.PHOTO_TYPE_COLLECTION)
+                            .putExtra("collectionId", collectionId)
 
-                )
-                context.overridePendingTransition(R.anim.slide_up, R.anim.nothing)
+                    )
+                    context.overridePendingTransition(R.anim.slide_up, R.anim.nothing)
+                }
             }
         }
     }

@@ -96,17 +96,21 @@ class SearchCollectionAdapter(val context: Context,
     }
 
     fun appendList(appendThisList: List<Collection>) {
-        CoroutineScope(Dispatchers.Main + job).launch {
-            withContext(Dispatchers.Default) {
-                list.addAll(appendThisList)
+        CoroutineScope(Dispatchers.IO + job).launch {
+            list.addAll(appendThisList)
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
             }
-            notifyDataSetChanged()
         }
     }
 
     fun resetList() {
-        list.clear()
-        notifyDataSetChanged()
+        CoroutineScope(Dispatchers.IO).launch {
+            list.clear()
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
+            }
+        }
     }
 
     /**

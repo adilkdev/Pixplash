@@ -19,24 +19,25 @@ import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.footer_view.view.*
 import kotlinx.android.synthetic.main.grid_item_image.view.*
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class SearchPhotoAdapter(
     val context: Context,
     val job: CompletableJob
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    lateinit var fragmentListeners: FragmentListeners
+
     companion object {
         const val TYPE_ITEM = 1
         const val TYPE_FOOTER = 2
     }
 
+    /**
     lateinit var reloadListener: (Boolean) -> Unit
     lateinit var savePhotoListener: (List<Photo>) -> Unit
     lateinit var removePhotoListener: (Boolean) -> Unit
+    */
 
     private var isFooterEnabled = false
     private var isRetryFooter = false
@@ -100,6 +101,10 @@ class SearchPhotoAdapter(
      * @param isEnabled boolean to turn on or off footer.
      */
 
+    fun setListener(fragmentListeners: FragmentListeners) {
+        this.fragmentListeners = fragmentListeners
+    }
+
     fun enableFooterRetry(value: Boolean, errorString: String?) {
         isRetryFooter = value
         if (errorString!=null)
@@ -116,22 +121,27 @@ class SearchPhotoAdapter(
         CoroutineScope(Dispatchers.IO + job).launch {
             this@SearchPhotoAdapter.page = page
             list.addAll(appendThisList)
-            savePhotoListener(appendThisList)
+            //savePhotoListener(appendThisList)
+            fragmentListeners.onSave(appendThisList)
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
+            }
         }
-        notifyDataSetChanged()
     }
 
     fun resetList() {
         CoroutineScope(Dispatchers.IO + job).launch {
             list.clear()
-            removePhotoListener(true)
+            //removePhotoListener(true)
+            fragmentListeners.onRemove(true)
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
+            }
         }
-        notifyDataSetChanged()
     }
 
     /**
      * Setting all listeners
-     */
 
     fun setTheReloadListener(listener: (Boolean) -> Unit) {
         this.reloadListener = listener
@@ -144,6 +154,9 @@ class SearchPhotoAdapter(
     fun setRemovePhotoInDBListener(removePhotoListener: (Boolean) -> Unit) {
         this.removePhotoListener = removePhotoListener
     }
+
+     */
+
 
     fun setQuery(query: String) {
         this.query = query
@@ -183,8 +196,15 @@ class SearchPhotoAdapter(
         val tvError: TextView = itemView.tvError
         init {
             cardRetry.setOnClickListener {
-                reloadListener(true)
+                //reloadListener(true)
+                fragmentListeners.onReload(true)
             }
         }
     }
+}
+
+interface FragmentListeners {
+    fun onSave(value: List<Photo>)
+    fun onRemove(value: Boolean)
+    fun onReload(value: Boolean)
 }

@@ -17,7 +17,9 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.loadingView
 import javax.inject.Inject
 
-class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListener {
+class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListener, FragmentListeners {
+
+
 
     @Inject
     lateinit var searchPhotoAdapter: SearchPhotoAdapter
@@ -27,18 +29,18 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
     /**
      * All type of listeners
      */
-    private val savePhotos: (value: List<Photo>) -> Unit = {
-        viewModel.savePhotos(it, AppConstants.PHOTO_TYPE_SEARCH)
-    }
-
-    private val removePhotos: (value: Boolean) -> Unit = {
-        viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
-    }
-
-    private val reload: (value: Boolean) -> Unit = {
-        viewModel.onLoadMore(query = query)
-        searchPhotoAdapter.enableFooterRetry(false, "")
-    }
+//    private val savePhotos: (value: List<Photo>) -> Unit = {
+//        viewModel.savePhotos(it, AppConstants.PHOTO_TYPE_SEARCH)
+//    }
+//
+//    private val removePhotos: (value: Boolean) -> Unit = {
+//        viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
+//    }
+//
+//    private val reload: (value: Boolean) -> Unit = {
+//        viewModel.onLoadMore(query = query)
+//        searchPhotoAdapter.enableFooterRetry(false, "")
+//    }
 
     override fun provideLayoutId(): Int = R.layout.fragment_search
 
@@ -50,9 +52,9 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
 
     private fun setupRecyclerView() {
         rvSearch.apply {
-            searchPhotoAdapter.setTheReloadListener(reload)
-            searchPhotoAdapter.setSavePhotoInDBListener(savePhotos)
-            searchPhotoAdapter.setRemovePhotoInDBListener(removePhotos)
+//            searchPhotoAdapter.setTheReloadListener(reload)
+//            searchPhotoAdapter.setSavePhotoInDBListener(savePhotos)
+//            searchPhotoAdapter.setRemovePhotoInDBListener(removePhotos)
 
             setItemViewCacheSize(30)
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -106,6 +108,7 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
 
     override fun setupObservers() {
         super.setupObservers()
+        searchPhotoAdapter.setListener(this)
         viewModel.photos.observe(this, Observer {
             doneLoadingView()
             it.data?.run { searchPhotoAdapter.appendList(this, viewModel.getPage()) }
@@ -165,6 +168,19 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
         viewModel.removePhotos(AppConstants.PHOTO_TYPE_SEARCH)
         searchPhotoAdapter.cancelAllJobs()
         super.onDestroy()
+    }
+
+    override fun onSave(value: List<Photo>) {
+        viewModel.savePhotos(value, AppConstants.PHOTO_TYPE_SEARCH)
+    }
+
+    override fun onRemove(value: Boolean) {
+        viewModel.removePhotos(AppConstants.PHOTO_TYPE_SEARCH)
+    }
+
+    override fun onReload(value: Boolean) {
+        viewModel.onLoadMore(query = query)
+        searchPhotoAdapter.enableFooterRetry(false, "")
     }
 }
 

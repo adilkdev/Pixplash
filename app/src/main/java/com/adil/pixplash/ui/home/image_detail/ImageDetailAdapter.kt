@@ -57,9 +57,8 @@ class ImageDetailAdapter(val context: Context,
         }
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    fun cancelAllJobs() {
         job.cancel()
-        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     inner class ImageDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
