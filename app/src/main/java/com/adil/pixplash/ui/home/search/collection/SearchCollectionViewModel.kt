@@ -63,4 +63,8 @@ class SearchCollectionViewModel (
 
     fun getPage() = page - 1
 
+    fun resetPage() {
+        page = 1
+    }
+
 }

@@ -2,7 +2,6 @@ package com.adil.pixplash.ui.home.search.collection
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
 import com.adil.pixplash.data.remote.response.Collection
-import com.adil.pixplash.ui.home.HomeActivity
 import com.adil.pixplash.ui.home.collection.activity.CollectionPhotosActivity
 import com.adil.pixplash.ui.home.search.SearchActivity
 import com.airbnb.lottie.LottieAnimationView

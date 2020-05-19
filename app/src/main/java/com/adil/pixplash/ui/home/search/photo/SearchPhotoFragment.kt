@@ -15,6 +15,9 @@ import com.adil.pixplash.utils.view.GridSpacingItemDecoration
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.loadingView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListener, FragmentListeners {
@@ -130,18 +133,28 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
 
     private fun doneLoadingView() {
         loadingView.visibility = View.GONE
+        loadingViewLoading.visibility = View.GONE
         errorLayout.visibility = View.GONE
         rvSearch.visibility = View.VISIBLE
     }
 
     private fun loadingView() {
+        loadingView.visibility = View.GONE
+        loadingViewLoading.visibility = View.VISIBLE
+        errorLayout.visibility = View.GONE
+        rvSearch.visibility = View.GONE
+    }
+
+    private fun resetLoadingView() {
         loadingView.visibility = View.VISIBLE
+        loadingViewLoading.visibility = View.GONE
         errorLayout.visibility = View.GONE
         rvSearch.visibility = View.GONE
     }
 
     private fun onErrorView(it: Int) {
         loadingView.visibility = View.GONE
+        loadingViewLoading.visibility = View.GONE
         errorLayout.visibility = View.VISIBLE
         rvSearch.visibility = View.GONE
         tvDescription.text = context?.resources?.getString(it)
@@ -151,16 +164,18 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
     override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 
     override fun onSearch(query: String) {
+        viewModel.resetPage()
         if (query.isBlank()) {
             searchPhotoAdapter.resetList()
-            loadingView.setAnimation("empty_state.json")
-            loadingView()
+            resetLoadingView()
         } else {
-            searchPhotoAdapter.resetList()
-            loadingView.setAnimation("loading.json")
+            loadingView()
+            CoroutineScope(Dispatchers.IO).launch {
+                searchPhotoAdapter.resetList()
+                searchPhotoAdapter.setQuery(query)
+                this@SearchPhotoFragment.query = query
+            }
             viewModel.searchPhotos(query = query)
-            searchPhotoAdapter.setQuery(query)
-            this.query = query
         }
     }
 

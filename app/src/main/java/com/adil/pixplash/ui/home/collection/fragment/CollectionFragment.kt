@@ -1,7 +1,6 @@
 package com.adil.pixplash.ui.home.collection.fragment
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Outline
 import android.os.Bundle
 import android.util.TypedValue

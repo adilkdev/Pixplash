@@ -1,6 +1,5 @@
 package com.adil.pixplash.ui.home.search.collection
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,11 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
-import com.adil.pixplash.ui.home.collection.fragment.CollectionAdapter
 import com.adil.pixplash.ui.home.search.CollectionQueryListener
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.loadingView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), CollectionQueryListener {
@@ -86,12 +87,21 @@ class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), Colle
 
     private fun doneLoadingView() {
         loadingView.visibility = View.GONE
+        loadingViewLoading.visibility = View.GONE
         errorLayout.visibility = View.GONE
         rvSearch.visibility = View.VISIBLE
     }
 
     private fun loadingView() {
+        loadingView.visibility = View.GONE
+        loadingViewLoading.visibility = View.VISIBLE
+        errorLayout.visibility = View.GONE
+        rvSearch.visibility = View.GONE
+    }
+
+    private fun resetLoadingView() {
         loadingView.visibility = View.VISIBLE
+        loadingViewLoading.visibility = View.GONE
         errorLayout.visibility = View.GONE
         rvSearch.visibility = View.GONE
     }
@@ -107,15 +117,17 @@ class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), Colle
     override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 
     override fun onSearch(query: String) {
+        viewModel.resetPage()
         if (query.isBlank()) {
             collectionAdapter.resetList()
-            loadingView.setAnimation("empty_state.json")
-            loadingView()
+            resetLoadingView()
         } else {
-            collectionAdapter.resetList()
-            loadingView.setAnimation("loading.json")
+            loadingView()
+            CoroutineScope(Dispatchers.IO).launch {
+                collectionAdapter.resetList()
+                this@SearchCollectionFragment.query = query
+            }
             viewModel.searchCollection(query = query)
-            this.query = query
         }
     }
 

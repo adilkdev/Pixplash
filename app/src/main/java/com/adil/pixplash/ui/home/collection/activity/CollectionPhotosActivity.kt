@@ -16,7 +16,6 @@ import com.adil.pixplash.utils.view.GridSpacingItemDecoration
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_collection_photos.*
 import kotlinx.android.synthetic.main.activity_collection_photos.errorLayout
-import kotlinx.android.synthetic.main.activity_collection_photos.loadingView
 import kotlinx.android.synthetic.main.activity_collection_photos.tvBigTitle
 import kotlinx.android.synthetic.main.error_layout.*
 import javax.inject.Inject

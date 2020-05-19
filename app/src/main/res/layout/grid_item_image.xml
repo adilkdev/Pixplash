@@ -11,7 +11,7 @@
     android:orientation="vertical">
         <ImageView
             android:id="@+id/image"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@drawable/placeholder"
             android:adjustViewBounds="true"
             android:contentDescription="image"

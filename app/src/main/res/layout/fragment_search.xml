@@ -13,6 +13,16 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:lottie_fileName="empty_state.json"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:visibility="gone"
+        android:id="@+id/loadingViewLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:lottie_fileName="loading.json"/>
+
     <include
         android:id="@+id/errorLayout"
         android:visibility="gone"
