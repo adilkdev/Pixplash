@@ -144,10 +144,12 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
     private var x1 = 0f
     //private  var x2 = 0f
     private val MIN_DISTANCE = 250
+    private var flagSwipe = 0
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         val interpolator = AccelerateInterpolator()
-        val isDownMotionEnabled: Boolean
+        var isDownMotion: Boolean
+        var isSwipeMotion: Boolean
         if (isDismissible) {
             when (event!!.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -155,14 +157,22 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
                     x1 = event.x
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    isDownMotionEnabled = kotlin.math.abs(event.x - x1) < 30
-                    if (event.y > y1 && isDownMotionEnabled) {
+                    isSwipeMotion = (kotlin.math.abs(event.x - x1) > 30)
+                    isDownMotion = (kotlin.math.abs(event.y - y1) > 30)
+                    if (isSwipeMotion && flagSwipe==0) {
+                        flagSwipe = 1
+                    }
+                    if (isDownMotion && flagSwipe==0) {
+                        flagSwipe = 2
+                    }
+                    if (event.y > y1 && flagSwipe == 2) {
                         y2 = event.y
                         rvImages.translationY = y2-y1
                         bg.alpha = interpolator.getInterpolation(1-(rvImages.y/rvImages.height*0.7f))
                     }
                 }
                 MotionEvent.ACTION_UP -> {
+                    flagSwipe = 0
                     //y2 = event!!.y
                     val deltaY: Float = y2 - y1
                     //Log.e("adil", "deltaY = $y2 - $y1 = $deltaY")
@@ -206,6 +216,7 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
                     y2 = 0f
                     y1 = 0f
                 }
+
             }
         }
         return super.dispatchTouchEvent(event)

@@ -3,6 +3,7 @@ package com.adil.pixplash.ui.home.explore
 import android.content.Intent
 import android.graphics.Outline
 import android.os.Bundle
+import android.os.Handler
 import android.transition.Fade
 import android.util.TypedValue
 import android.view.View

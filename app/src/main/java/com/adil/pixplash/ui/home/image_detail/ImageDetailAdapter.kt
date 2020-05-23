@@ -44,6 +44,11 @@ class ImageDetailAdapter(val context: Context,
         //holder.tvAuthor.text = list[holder.adapterPosition].user.name
     }
 
+    override fun onViewRecycled(holder: ImageDetailViewHolder) {
+        super.onViewRecycled(holder)
+        Picasso.get().cancelRequest(holder.ivImage)
+    }
+
     fun setTheDismissListener(dismissListener: (value: Boolean) -> Unit) {
         this.dismissListener = dismissListener
     }

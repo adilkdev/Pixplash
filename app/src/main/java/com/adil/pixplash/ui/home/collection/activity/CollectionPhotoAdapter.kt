@@ -27,6 +27,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
 class CollectionPhotoAdapter(
     val context: Context, val job: CompletableJob
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
