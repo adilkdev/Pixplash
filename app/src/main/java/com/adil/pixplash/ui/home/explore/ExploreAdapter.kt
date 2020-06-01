@@ -91,6 +91,9 @@ class ExploreAdapter(
                 get().load(image)
                     .placeholder(R.drawable.placeholder)
                     .into(holder.imageView)
+                val item = list[holder.adapterPosition]
+                val aspectRatio = item.width.toFloat() / item.height.toFloat()
+                holder.imageView.setAspectRatio(aspectRatio = aspectRatio)
             }
             is FooterView -> {
                 val layoutParams =
@@ -195,7 +198,7 @@ class ExploreAdapter(
      * */
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.image
+        val imageView = itemView.image
         init {
             imageView.setOnClickListener {
                 context.startActivity(Intent(context as HomeActivity, ImageDetailActivity::class.java)

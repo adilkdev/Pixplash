@@ -160,10 +160,10 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
                     isSwipeMotion = (kotlin.math.abs(event.x - x1) > 30)
                     isDownMotion = (kotlin.math.abs(event.y - y1) > 30)
                     if (isSwipeMotion && flagSwipe==0) {
-                        flagSwipe = 1
+                        flagSwipe = 1 // horizontal
                     }
                     if (isDownMotion && flagSwipe==0) {
-                        flagSwipe = 2
+                        flagSwipe = 2  // vertical
                     }
                     if (event.y > y1 && flagSwipe == 2) {
                         y2 = event.y
