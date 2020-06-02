@@ -22,7 +22,7 @@ class DynamicHeightNetworkImageView : androidx.appcompat.widget.AppCompatImageVi
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val measuredWidth: Int = getMeasuredWidth()
+        val measuredWidth: Int = measuredWidth
         setMeasuredDimension(measuredWidth, (measuredWidth / mAspectRatio).toInt())
     }
 }

@@ -75,7 +75,7 @@ class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
             setItemViewCacheSize(30)
             this.adapter = collectionPhotoAdapter
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
             layoutManager = gridLayoutManager
             val itemSpacingDP = 12f
             val itemSpacing: Int = TypedValue.applyDimension(

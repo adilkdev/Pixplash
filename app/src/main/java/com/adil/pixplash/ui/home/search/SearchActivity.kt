@@ -88,6 +88,7 @@ class SearchActivity: BaseActivity<HomeViewModel>() {
         viewPagerAdapter.addFragment(searchPhotoFragment, "Photos")
         viewPagerAdapter.addFragment(searchCollectionFragment, "Collections")
         viewPager.adapter = viewPagerAdapter
+        //tabLayout.setTabTextColors(resources.getColor(R.color.colorLightGray), resources.getColor(R.color.colorPrimaryDark))
         changeTabsFont()
     }
 
@@ -101,9 +102,9 @@ class SearchActivity: BaseActivity<HomeViewModel>() {
             for (i in 0 until tabChildCount) {
                 val tabViewChild: View = vgTab.getChildAt(i)
                 if (tabViewChild is TextView) {
-                    tabViewChild.setTypeface(typeface, Typeface.NORMAL)
-                    tabViewChild.setTextColor(Color.BLACK)
-                    tabViewChild.letterSpacing = 0.05f
+                    tabViewChild.setTypeface(typeface, Typeface.BOLD)
+                    //tabViewChild.setTextColor(Color.BLACK)
+                    tabViewChild.letterSpacing = 0.1f
                 }
             }
         }

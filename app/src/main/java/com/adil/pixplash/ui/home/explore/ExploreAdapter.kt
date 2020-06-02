@@ -87,13 +87,14 @@ class ExploreAdapter(
                 holder.itemView.layoutParams = layoutParams
             }
             is ViewHolder -> {
-                val image = list[holder.adapterPosition].urls.small
+                val item = list[holder.adapterPosition]
+                val image = item.urls.small
                 get().load(image)
                     .placeholder(R.drawable.placeholder)
                     .into(holder.imageView)
-                val item = list[holder.adapterPosition]
                 val aspectRatio = item.width.toFloat() / item.height.toFloat()
                 holder.imageView.setAspectRatio(aspectRatio = aspectRatio)
+                holder.imageView.requestLayout()
             }
             is FooterView -> {
                 val layoutParams =

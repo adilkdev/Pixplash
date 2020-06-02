@@ -65,6 +65,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="2dp"
         app:tabIndicatorColor="@color/colorPrimaryDark"
+        app:tabSelectedTextColor="@color/colorPrimaryDark"
+        app:tabTextColor="@color/light_gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

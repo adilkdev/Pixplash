@@ -15,6 +15,7 @@ import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
+import com.adil.pixplash.utils.view.DynamicHeightNetworkImageView
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.footer_view.view.*
@@ -66,10 +67,14 @@ class SearchPhotoAdapter(
     private fun bind(holder: RecyclerView.ViewHolder) {
         when (holder) {
             is ViewHolder -> {
-                val image = list[holder.adapterPosition].urls.small
+                val item = list[holder.adapterPosition]
+                val image = item.urls.small
                 Picasso.get().load(image)
                     .placeholder(R.drawable.placeholder)
                     .into(holder.imageView)
+                val aspectRatio = item.width.toFloat() / item.height.toFloat()
+                holder.imageView.setAspectRatio(aspectRatio = aspectRatio)
+                holder.imageView.requestLayout()
             }
             is FooterView -> {
                 val layoutParams =
@@ -177,7 +182,7 @@ class SearchPhotoAdapter(
      * */
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.image
+        val imageView: DynamicHeightNetworkImageView = itemView.image
         init {
             imageView.setOnClickListener {
                 context.startActivity(
