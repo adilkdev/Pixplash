@@ -5,6 +5,7 @@ import android.graphics.Outline
 import android.os.Bundle
 import android.os.Handler
 import android.transition.Fade
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -220,7 +221,14 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     }
 
     private fun RecyclerView.smoothSnapToPosition(position: Int, snapMode: Int = LinearSmoothScroller.SNAP_TO_START) {
+        val MILLISECONDS_PER_INCH = 10f
+        val MAX_SCROLL_ON_FLING_DURATION = 300
         val smoothScroller = object : LinearSmoothScroller(this.context) {
+            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
+                return MILLISECONDS_PER_INCH / (displayMetrics?.densityDpi ?: 1)
+            }
+            override fun calculateTimeForScrolling(dx: Int): Int =
+                Math.min(MAX_SCROLL_ON_FLING_DURATION, super.calculateTimeForScrolling(dx))
             override fun getVerticalSnapPreference(): Int = snapMode
             override fun getHorizontalSnapPreference(): Int = snapMode
         }

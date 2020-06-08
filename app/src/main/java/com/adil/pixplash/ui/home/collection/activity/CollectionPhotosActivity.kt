@@ -114,9 +114,10 @@ class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
-                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
-                        recyclerView.invalidateItemDecorations()
-                    }
+                    recyclerView.invalidateItemDecorations()
+//                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
+//                        recyclerView.invalidateItemDecorations()
+//                    }
                 }
 
             })
