@@ -10,6 +10,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
+            android:visibility="gone"
             android:background="#00000000"
             app:elevation="0dp"
             android:clipChildren="false"
@@ -104,8 +105,8 @@
         android:id="@+id/rvExplore"
         android:visibility="gone"
         android:paddingTop="0dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

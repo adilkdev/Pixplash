@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.transition.Fade
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -72,7 +73,21 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
     override fun setupView(savedInstanceState: View) {
         setTransition()
+        //olderRoundClip()
 
+        setupRecyclerView()
+
+        searchView.setOnClickListener {
+            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this.activity!!,
+                it,  // Starting view
+                "search_transition" // The String
+            )
+            context?.startActivity(Intent(this.activity, SearchActivity::class.java), options.toBundle())
+        }
+    }
+
+    private fun olderRoundClip() {
         val viewOutlineProvider: ViewOutlineProvider = object : ViewOutlineProvider() {
             override fun getOutline(view: View, outline: Outline) {
                 val cornerRadiusDP = 35f
@@ -86,16 +101,6 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         }
         relative.outlineProvider = viewOutlineProvider
         relative.clipToOutline = true
-        setupRecyclerView()
-
-        searchView.setOnClickListener {
-            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this.activity!!,
-                it,  // Starting view
-                "search_transition" // The String
-            )
-            context?.startActivity(Intent(this.activity, SearchActivity::class.java), options.toBundle())
-        }
     }
 
     private fun setTransition() {
@@ -174,7 +179,8 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         removePhotos(true)
 
         viewModel.randomPhoto.observe(this, Observer {
-            Picasso.get().load(it).placeholder(R.drawable.placeholder).into(ivBanner)
+            //Picasso.get().load(it).placeholder(R.drawable.placeholder).into(ivBanner)
+            exploreAdapter.setBannerImage(it)
         })
 
         viewModel.photos.observe(this, Observer {

@@ -2,12 +2,16 @@ package com.adil.pixplash.ui.home.explore
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -18,8 +22,11 @@ import com.adil.pixplash.data.local.db.entity.Url
 import com.adil.pixplash.data.remote.response.User
 import com.adil.pixplash.ui.home.HomeActivity
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
+import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
+import com.adil.pixplash.utils.view.ClippedBanner
 import com.airbnb.lottie.LottieAnimationView
+import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.get
 import kotlinx.android.synthetic.main.footer_view.view.*
 import kotlinx.android.synthetic.main.grid_item_image.view.*
@@ -53,6 +60,8 @@ class ExploreAdapter(
 
     private var page: Int = 0
 
+    private var url = ""
+
     init {
         list.add(Photo(0,"","","","",
             Url("","","","","")
@@ -85,6 +94,22 @@ class ExploreAdapter(
                     )
                 layoutParams.isFullSpan = true
                 holder.itemView.layoutParams = layoutParams
+                if (url.isNotEmpty())
+                get().load(url).into(object: com.squareup.picasso.Target {
+                    override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
+                        Log.e("Adil","${e?.stackTrace}")
+                        //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                        //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                        Log.e("Adil","here")
+                        holder.bannerView.setBitmpap(bitmap!!)
+                    }
+                })
             }
             is ViewHolder -> {
                 val item = list[holder.adapterPosition]
@@ -122,6 +147,11 @@ class ExploreAdapter(
         return if (position==0) TYPE_HEADER
         else if (isFooterEnabled && position >= list.size) TYPE_FOOTER
         else TYPE_ITEM
+    }
+
+    fun setBannerImage(url: String) {
+        this.url = url
+        notifyDataSetChanged()
     }
 
     /**
@@ -221,8 +251,18 @@ class ExploreAdapter(
         val tvLatest: TextView = itemView.tvLatest
         val tvOldest: TextView = itemView.tvOldest
         val tvPopular: TextView = itemView.tvPopular
+        val bannerView: ClippedBanner = itemView.bannerView
+        val searchView = itemView.searchView
 
         init {
+            searchView.setOnClickListener {
+                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    context as HomeActivity,
+                    it,  // Starting view
+                    "search_transition" // The String
+                )
+                context?.startActivity(Intent(context, SearchActivity::class.java), options.toBundle())
+            }
             cardLatest.setOnClickListener{
                 it.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_dark)
                 cardOldest.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_gray)
