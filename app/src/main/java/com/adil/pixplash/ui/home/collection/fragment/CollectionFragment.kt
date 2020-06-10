@@ -52,8 +52,10 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
      * All type of listeners
      */
     private val orderByClick: (Int) -> Unit = { type ->
+        Log.e("Adil","$type")
         viewModel.updateType(type)
         collectionAdapter.resetList()
+        viewModel.onLoadMore()
     }
 
     private val reload: (value: Boolean) -> Unit = {

@@ -35,7 +35,7 @@ class CollectionViewModel (
     }
 
     private fun makeCall(pageNo: Int = page) {
-        //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
+        Log.e("Adil", "page = $pageNo")
         loading.value = true
         randomPhoto()
         compositeDisposable.add(
@@ -59,7 +59,7 @@ class CollectionViewModel (
     }
 
     private fun makeFeaturedCall(pageNo: Int = page) {
-        //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
+        Log.e("Adil", "page = $pageNo")
         loading.value = true
         randomPhoto()
         compositeDisposable.add(

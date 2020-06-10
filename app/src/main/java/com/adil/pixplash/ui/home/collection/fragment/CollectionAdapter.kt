@@ -209,11 +209,13 @@ class CollectionAdapter(val context: Context,
         val tvFeatured: TextView = itemView.tvOldest
         val bannerView: ClippedBanner = itemView.bannerView
         val searchView = itemView.searchView
+        val tvBigTitle = itemView.tvBigTitle
 
         init {
             cardPopular.visibility = View.GONE
             tvAll.text = "All"
             tvFeatured.text = "Featured"
+            tvBigTitle.text = "Collection"
 
             searchView.setOnClickListener {
                 val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
