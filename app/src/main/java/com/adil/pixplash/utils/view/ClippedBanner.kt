@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import android.widget.ImageView
 import com.adil.pixplash.R
 
 
@@ -29,6 +30,21 @@ class ClippedBanner @JvmOverloads constructor(
     fun setBitmpap(bitmap: Bitmap) {
         this.bitmap = bitmap
         invalidate()
+
+//        val animation = ValueAnimator.ofInt(1,255)
+//        animation.addUpdateListener { animation ->
+//            paint.alpha = (animation.animatedValue as Int)
+//            invalidate()
+//            //Need to manually call invalidate to redraw the view
+//            Log.e("Adil","${animation.animatedValue}")
+//        }
+//        animation.addListener(object : AnimatorListenerAdapter() {
+//            override fun onAnimationEnd(animation: Animator) {
+//            }
+//        })
+//        animation.interpolator = LinearInterpolator()
+//        animation.duration = 500
+//        animation.start()
     }
 
     private fun drawCombinedClipping(canvas: Canvas){
@@ -50,14 +66,13 @@ class ClippedBanner @JvmOverloads constructor(
         )
         canvas.clipPath(path)
 
-        val placeHolderBitmap = BitmapFactory.decodeResource(resources, R.drawable.placeholder)
         if (bitmap==null)
-            bitmap = placeHolderBitmap
-        val scaledBitmap = scaleCenterCrop(this!!.bitmap!!, height, width)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.placeholder)
+        bitmap = scaleCenterCrop(this!!.bitmap!!, height, width)
         //ColorFilter filter = new LightingColorFilter(0xFFFFFFFF , 0x00222222); // lighten
         val filter: ColorFilter = LightingColorFilter(-0x525252, 0x00000000) // darken
         paint.colorFilter = filter
-        canvas.drawBitmap(scaledBitmap, 0f, 0f, paint)
+        canvas.drawBitmap(bitmap!!, 0f, 0f, paint)
     }
 
     private fun scaleCenterCrop(source: Bitmap, newHeight: Int, newWidth: Int): Bitmap {

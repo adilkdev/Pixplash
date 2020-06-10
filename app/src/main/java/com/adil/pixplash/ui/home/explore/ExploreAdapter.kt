@@ -98,15 +98,9 @@ class ExploreAdapter(
                 get().load(url).into(object: com.squareup.picasso.Target {
                     override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
                         Log.e("Adil","${e?.stackTrace}")
-                        //To change body of created functions use File | Settings | File Templates.
                     }
-
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                        //To change body of created functions use File | Settings | File Templates.
-                    }
-
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                        Log.e("Adil","here")
                         holder.bannerView.setBitmpap(bitmap!!)
                     }
                 })
@@ -151,7 +145,7 @@ class ExploreAdapter(
 
     fun setBannerImage(url: String) {
         this.url = url
-        notifyDataSetChanged()
+        notifyItemChanged(0)
     }
 
     /**

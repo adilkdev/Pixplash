@@ -163,11 +163,11 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
-                    recyclerView.invalidateItemDecorations()
-//                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
-//                        recyclerView.invalidateItemDecorations()
-//                    }
+
+                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                        recyclerView.invalidateItemDecorations()
+                        (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
+                    }
                 }
 
             })
@@ -177,10 +177,11 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     override fun setupObservers() {
         super.setupObservers()
         removePhotos(true)
-
         viewModel.randomPhoto.observe(this, Observer {
-            //Picasso.get().load(it).placeholder(R.drawable.placeholder).into(ivBanner)
-            exploreAdapter.setBannerImage(it)
+            Handler().postDelayed({
+                exploreAdapter.setBannerImage(it)
+                Log.e("Adil","called")
+            }, 1000)
         })
 
         viewModel.photos.observe(this, Observer {
