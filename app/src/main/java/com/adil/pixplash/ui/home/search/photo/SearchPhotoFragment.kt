@@ -69,7 +69,7 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
                 itemSpacingDP,
                 resources.displayMetrics
             ).toInt()
-            addItemDecoration(GridSpacingItemDecoration(itemSpacing))
+            addItemDecoration(GridSpacingItemDecoration(itemSpacing, false))
 
             var pastVisibleItems = 0
             var visibleItemCount: Int
@@ -99,11 +99,10 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
-                    recyclerView.invalidateItemDecorations()
-//                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
-//                        recyclerView.invalidateItemDecorations()
-//                    }
+                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                        recyclerView.invalidateItemDecorations()
+                        (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
+                    }
                 }
 
             })

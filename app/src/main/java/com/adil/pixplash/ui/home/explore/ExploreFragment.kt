@@ -133,7 +133,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
                 itemSpacingDP,
                 resources.displayMetrics
             ).toInt()
-            addItemDecoration(GridSpacingItemDecoration(itemSpacing))
+            addItemDecoration(GridSpacingItemDecoration(itemSpacing, true))
 
             var pastVisibleItems = 0
             var visibleItemCount: Int
@@ -163,7 +163,6 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-
                     if(newState == RecyclerView.SCROLL_STATE_IDLE){
                         recyclerView.invalidateItemDecorations()
                         (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()

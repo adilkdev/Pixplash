@@ -31,7 +31,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearch"
-        android:paddingTop="7dp"
+        android:paddingTop="0dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

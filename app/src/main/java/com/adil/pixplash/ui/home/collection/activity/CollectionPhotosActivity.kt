@@ -83,7 +83,7 @@ class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
                 itemSpacingDP,
                 resources.displayMetrics
             ).toInt()
-            addItemDecoration(GridSpacingItemDecoration(itemSpacing))
+            addItemDecoration(GridSpacingItemDecoration(itemSpacing, true))
 
             var pastVisibleItems = 0
             var visibleItemCount: Int

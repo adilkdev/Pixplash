@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
-class GridSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
+class GridSpacingItemDecoration(private val spacing: Int, private val containsHeader: Boolean) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -15,7 +15,7 @@ class GridSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDec
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        if (parent.getChildAdapterPosition(view) == 0) {
+        if (parent.getChildAdapterPosition(view) == 0 && containsHeader) {
             outRect.left = 0
             outRect.right = 0
             outRect.bottom = 0
@@ -24,7 +24,7 @@ class GridSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDec
             val (spanCount, spanIndex, spanSize) = extractGridData(parent, view)
             outRect.left = (spacing * ((spanCount - spanIndex) / spanCount.toFloat())).toInt()
             outRect.right = (spacing * ((spanIndex + spanSize) / spanCount.toFloat())).toInt()
-            outRect.bottom = spacing
+            outRect.top = spacing
         }
     }
 
