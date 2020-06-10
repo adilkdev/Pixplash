@@ -2,11 +2,15 @@ package com.adil.pixplash.ui.home.collection.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
@@ -18,6 +22,8 @@ import com.adil.pixplash.ui.home.collection.activity.CollectionPhotosActivity
 import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment.Companion.TYPE_ALL
 import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment.Companion.TYPE_FEATURED
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
+import com.adil.pixplash.ui.home.search.SearchActivity
+import com.adil.pixplash.utils.view.ClippedBanner
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.collection_item.view.*
@@ -38,6 +44,7 @@ class CollectionAdapter(val context: Context,
         var activeOrder = TYPE_ALL
     }
 
+    private var url: String = ""
     lateinit var orderByClickListener: (Int) -> Unit
     lateinit var reloadListener: (Boolean) -> Unit
 
@@ -74,6 +81,18 @@ class CollectionAdapter(val context: Context,
 
     private fun bind(holder: RecyclerView.ViewHolder) {
         when (holder) {
+            is HeaderViewHolder -> {
+                if (url.isNotEmpty())
+                    Picasso.get().load(url).into(object: com.squareup.picasso.Target {
+                        override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
+                            Log.e("Adil","${e?.stackTrace}")
+                        }
+                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                            holder.bannerView.setBitmpap(bitmap!!)
+                        }
+                    })
+            }
             is CollectionViewHolder -> {
                 val item = list[holder.adapterPosition]
                 val image = item.coverPhoto.urls.regular
@@ -100,6 +119,11 @@ class CollectionAdapter(val context: Context,
         return if (position==0) TYPE_HEADER
         else if (isFooterEnabled && position >= list.size) TYPE_FOOTER
         else TYPE_ITEM
+    }
+
+    fun setBannerImage(url: String) {
+        this.url = url
+        notifyItemChanged(0)
     }
 
     /**
@@ -183,11 +207,22 @@ class CollectionAdapter(val context: Context,
         val cardPopular: FrameLayout = itemView.cardPopular
         val tvAll: TextView = itemView.tvLatest
         val tvFeatured: TextView = itemView.tvOldest
+        val bannerView: ClippedBanner = itemView.bannerView
+        val searchView = itemView.searchView
 
         init {
             cardPopular.visibility = View.GONE
             tvAll.text = "All"
             tvFeatured.text = "Featured"
+
+            searchView.setOnClickListener {
+                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    context as HomeActivity,
+                    it,  // Starting view
+                    "search_transition" // The String
+                )
+                context?.startActivity(Intent(context, SearchActivity::class.java), options.toBundle())
+            }
 
             cardAll.setOnClickListener{
                 it.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_dark)

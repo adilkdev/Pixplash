@@ -3,7 +3,9 @@ package com.adil.pixplash.ui.home.collection.fragment
 import android.content.Intent
 import android.graphics.Outline
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -122,7 +124,11 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
         collectionAdapter.setTheReloadListener(reload)
 
         viewModel.randomPhoto.observe(this, Observer {
-            Picasso.get().load(it).placeholder(R.drawable.placeholder).into(ivBanner)
+            //Picasso.get().load(it).placeholder(R.drawable.placeholder).into(ivBanner)
+            Handler().postDelayed({
+                collectionAdapter.setBannerImage(it)
+                Log.e("Adil","called")
+            }, 1000)
         })
         viewModel.collections.observe(this, Observer {
             it.data?.run { collectionAdapter.appendList(this) }
