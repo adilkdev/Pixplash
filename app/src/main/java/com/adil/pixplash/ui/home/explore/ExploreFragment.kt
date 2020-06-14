@@ -73,34 +73,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
     override fun setupView(savedInstanceState: View) {
         setTransition()
-        //olderRoundClip()
-
         setupRecyclerView()
-
-        searchView.setOnClickListener {
-            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this.activity!!,
-                it,  // Starting view
-                "search_transition" // The String
-            )
-            context?.startActivity(Intent(this.activity, SearchActivity::class.java), options.toBundle())
-        }
-    }
-
-    private fun olderRoundClip() {
-        val viewOutlineProvider: ViewOutlineProvider = object : ViewOutlineProvider() {
-            override fun getOutline(view: View, outline: Outline) {
-                val cornerRadiusDP = 35f
-                val cornerRadius = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    cornerRadiusDP,
-                    resources.displayMetrics
-                )
-                outline.setRoundRect(0, - cornerRadius.toInt(), view.width, ((view.height) ), cornerRadius)
-            }
-        }
-        relative.outlineProvider = viewOutlineProvider
-        relative.clipToOutline = true
     }
 
     private fun setTransition() {

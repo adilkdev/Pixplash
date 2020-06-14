@@ -67,31 +67,33 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
     override fun provideLayoutId(): Int = R.layout.fragment_explore
 
     override fun setupView(savedInstanceState: View) {
-        tvBigTitle.text = "Collections"
-
-        val viewOutlineProvider: ViewOutlineProvider = object : ViewOutlineProvider() {
-            override fun getOutline(view: View, outline: Outline) {
-                val cornerRadiusDP = 35f
-                val cornerRadius = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    cornerRadiusDP,
-                    resources.displayMetrics
-                )
-                outline.setRoundRect(0, - cornerRadius.toInt(), view.width, ((view.height) ), cornerRadius)
-            }
-        }
-        relative.outlineProvider = viewOutlineProvider
-        relative.clipToOutline = true
         setupRecyclerView()
 
-        searchView.setOnClickListener {
-            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this.activity!!,
-                it,  // Starting view
-                "search_transition" // The String
-            )
-            context?.startActivity(Intent(this.activity, SearchActivity::class.java), options.toBundle())
-        }
+//        tvBigTitle.text = "Collections"
+//
+//        val viewOutlineProvider: ViewOutlineProvider = object : ViewOutlineProvider() {
+//            override fun getOutline(view: View, outline: Outline) {
+//                val cornerRadiusDP = 35f
+//                val cornerRadius = TypedValue.applyDimension(
+//                    TypedValue.COMPLEX_UNIT_DIP,
+//                    cornerRadiusDP,
+//                    resources.displayMetrics
+//                )
+//                outline.setRoundRect(0, - cornerRadius.toInt(), view.width, ((view.height) ), cornerRadius)
+//            }
+//        }
+//        relative.outlineProvider = viewOutlineProvider
+//        relative.clipToOutline = true
+//
+//
+//        searchView.setOnClickListener {
+//            val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                this.activity!!,
+//                it,  // Starting view
+//                "search_transition" // The String
+//            )
+//            context?.startActivity(Intent(this.activity, SearchActivity::class.java), options.toBundle())
+//        }
     }
 
     private fun setupRecyclerView() {

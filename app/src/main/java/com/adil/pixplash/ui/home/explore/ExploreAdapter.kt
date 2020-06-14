@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -101,7 +100,7 @@ class ExploreAdapter(
                     }
                     override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                        holder.bannerView.setBitmpap(bitmap!!)
+                        holder.bannerView.setBitmap(bitmap!!)
                     }
                 })
             }

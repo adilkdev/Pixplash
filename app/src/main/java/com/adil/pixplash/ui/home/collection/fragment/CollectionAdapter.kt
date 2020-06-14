@@ -89,7 +89,7 @@ class CollectionAdapter(val context: Context,
                         }
                         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
                         override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                            holder.bannerView.setBitmpap(bitmap!!)
+                            holder.bannerView.setBitmap(bitmap!!)
                         }
                     })
             }

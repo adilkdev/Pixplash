@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
 import com.adil.pixplash.R
+import kotlinx.coroutines.*
 
 
 class ClippedBanner @JvmOverloads constructor(
@@ -14,65 +14,71 @@ class ClippedBanner @JvmOverloads constructor(
 
     private val path = Path()
     private var bitmap: Bitmap? = null
+    private lateinit var tempCanvas: Canvas
+    private lateinit var tempBitmap: Bitmap
+
+    //ColorFilter filter = new LightingColorFilter(0xFFFFFFFF , 0x00222222); // lighten
+    val filter: ColorFilter = LightingColorFilter(-0x525252, 0x00000000) // darken
 
     private val paint = Paint().apply {
         // Smooth out edges of what is drawn without affecting shape.
         isAntiAlias = true
     }
 
+    init {
+        setLayerType(LAYER_TYPE_SOFTWARE, null)
+    }
+
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        tempBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ALPHA_8)
+        tempCanvas = Canvas(tempBitmap)
+        tempCanvas.drawRoundRect(
+            0f, 0f, width.toFloat(), height.toFloat(), radius, radius, paint
+        )
+        tempCanvas.drawRect(0f, 0f, width.toFloat(), 150f, paint)
         drawCombinedClipping(canvas!!)
     }
 
     private val radius = dpToPx(40).toFloat()
 
-    fun setBitmpap(bitmap: Bitmap) {
+    fun setBitmap(bitmap: Bitmap) {
         this.bitmap = bitmap
         invalidate()
-
-//        val animation = ValueAnimator.ofInt(1,255)
-//        animation.addUpdateListener { animation ->
-//            paint.alpha = (animation.animatedValue as Int)
-//            invalidate()
-//            //Need to manually call invalidate to redraw the view
-//            Log.e("Adil","${animation.animatedValue}")
-//        }
-//        animation.addListener(object : AnimatorListenerAdapter() {
-//            override fun onAnimationEnd(animation: Animator) {
-//            }
-//        })
-//        animation.interpolator = LinearInterpolator()
-//        animation.duration = 500
-//        animation.start()
     }
 
     private fun drawCombinedClipping(canvas: Canvas){
-        path.addRoundRect(
-            0f,
-            0f,
-            width.toFloat(),
-            height.toFloat(),
-            radius,
-            radius,
-            Path.Direction.CCW
-        )
-        path.addRect(
-            0f,
-            0f,
-            width.toFloat(),
-            150f,
-            Path.Direction.CCW
-        )
-        canvas.clipPath(path)
+//        path.addRoundRect(
+//            0f,
+//            0f,
+//            width.toFloat(),
+//            height.toFloat(),
+//            radius,
+//            radius,
+//            Path.Direction.CCW
+//        )
+//        path.addRect(
+//            0f,
+//            0f,
+//            width.toFloat(),
+//            150f,
+//            Path.Direction.CCW
+//        )
+        //canvas.clipPath(path)
 
         if (bitmap==null)
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.placeholder)
-        bitmap = scaleCenterCrop(this!!.bitmap!!, height, width)
-        //ColorFilter filter = new LightingColorFilter(0xFFFFFFFF , 0x00222222); // lighten
-        val filter: ColorFilter = LightingColorFilter(-0x525252, 0x00000000) // darken
+        CoroutineScope(Dispatchers.Default).launch {
+            val job = async { scaleCenterCrop(bitmap!!, height, width) }
+            job.await()
+            bitmap = job.getCompleted()
+        }
+        //bitmap = scaleCenterCrop(this!!.bitmap!!, height, width)
         paint.colorFilter = filter
-        canvas.drawBitmap(bitmap!!, 0f, 0f, paint)
+        canvas.drawBitmap(tempBitmap, 0f, 0f, paint) // Destination
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap!!, 0f, 0f, paint) // Source
+        paint.xfermode = null
     }
 
     private fun scaleCenterCrop(source: Bitmap, newHeight: Int, newWidth: Int): Bitmap {
