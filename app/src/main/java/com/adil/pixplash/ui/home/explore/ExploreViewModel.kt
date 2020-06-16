@@ -37,6 +37,7 @@ class ExploreViewModel(
     private fun makeCall(pageNo: Int = page, orderBy: String = orderByStr) {
         //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
         loading.value = true
+        randomPhoto()
         compositeDisposable.add(
             photoRepository
                 .fetchPhotos(page = pageNo, orderBy = orderBy)
@@ -46,8 +47,8 @@ class ExploreViewModel(
                     {
                         photos.postValue(Resource.success(it))
                         loading.postValue(false)
-                        if (page==1)
-                        randomPhoto()
+//                        if (page==1)
+//                        randomPhoto()
                         page++
                     },
                     {

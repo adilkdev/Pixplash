@@ -86,6 +86,7 @@ class ExploreAdapter(
     private fun bind(holder: RecyclerView.ViewHolder) {
         when (holder) {
             is HeaderViewHolder -> {
+                Log.e("Adil","holder update")
                 val layoutParams =
                     StaggeredGridLayoutManager.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -249,12 +250,13 @@ class ExploreAdapter(
 
         init {
             searchView.setOnClickListener {
-                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    context as HomeActivity,
-                    it,  // Starting view
-                    "search_transition" // The String
-                )
-                context?.startActivity(Intent(context, SearchActivity::class.java), options.toBundle())
+//                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                    context as HomeActivity,
+//                    it,  // Starting view
+//                    "search_transition" // The String
+//                )
+//                context?.startActivity(Intent(context, SearchActivity::class.java), options.toBundle())
+                context?.startActivity(Intent(context, SearchActivity::class.java))
             }
             cardLatest.setOnClickListener{
                 it.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_dark)

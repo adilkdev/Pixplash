@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.adil.pixplash.PixplashApplication
 import com.adil.pixplash.di.component.ActivityComponent
 import com.adil.pixplash.di.component.DaggerActivityComponent

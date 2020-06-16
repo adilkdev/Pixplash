@@ -3,6 +3,7 @@ package com.adil.pixplash.ui.home
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.StrictMode
 import android.transition.Fade
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -33,7 +34,7 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
-        setTransitions()
+        //setTransitions()
 
         /*initialize all fragments */
         val exploreFragment = ExploreFragment.newInstance()

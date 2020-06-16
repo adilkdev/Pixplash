@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
-import android.view.ViewOutlineProvider
-import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -18,8 +15,6 @@ import com.adil.pixplash.R
 import com.adil.pixplash.data.local.prefs.UserPreferences
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
-import com.adil.pixplash.ui.home.search.SearchActivity
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kotlinx.android.synthetic.main.fragment_explore.loadingView
@@ -52,7 +47,7 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
      * All type of listeners
      */
     private val orderByClick: (Int) -> Unit = { type ->
-        Log.e("Adil","$type")
+        //Log.e("Adil","$type")
         viewModel.updateType(type)
         collectionAdapter.resetList()
         viewModel.onLoadMore()
@@ -129,10 +124,10 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
 
         viewModel.randomPhoto.observe(this, Observer {
             //Picasso.get().load(it).placeholder(R.drawable.placeholder).into(ivBanner)
+            collectionAdapter.setBannerImage(it)
             Handler().postDelayed({
-                collectionAdapter.setBannerImage(it)
-                Log.e("Adil","called")
-            }, 1000)
+
+            }, 100)
         })
         viewModel.collections.observe(this, Observer {
             it.data?.run { collectionAdapter.appendList(this) }

@@ -218,12 +218,13 @@ class CollectionAdapter(val context: Context,
             tvBigTitle.text = "Collection"
 
             searchView.setOnClickListener {
-                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    context as HomeActivity,
-                    it,  // Starting view
-                    "search_transition" // The String
-                )
-                context?.startActivity(Intent(context, SearchActivity::class.java), options.toBundle())
+//                val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                    context as HomeActivity,
+//                    it,  // Starting view
+//                    "search_transition" // The String
+//                )
+//                context?.startActivity(Intent(context, SearchActivity::class.java), options.toBundle())
+                context?.startActivity(Intent(context, SearchActivity::class.java))
             }
 
             cardAll.setOnClickListener{

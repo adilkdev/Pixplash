@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#fff"
+    android:layout_height="match_parent">
 
-    <com.adil.pixplash.utils.view.ShadowLayout
-        android:visibility="gone"
-        android:layout_width="match_parent"
+    <TextView
+        android:fontFamily="@font/source_sans_pro_black"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_centerInParent="true"
-        app:sl_shadow_color="#8400BCD4"
-        app:sl_shadow_radius="10dp"
-        android:id="@+id/sl"
-        android:layout_height="match_parent">
-        <androidx.cardview.widget.CardView
-            app:cardCornerRadius="12dp"
-            android:layout_margin="50dp"
-            app:cardElevation="0dp"
-            android:background="#83E91E1E"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/placeholder"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </androidx.cardview.widget.CardView>
-    </com.adil.pixplash.utils.view.ShadowLayout>
+        android:textSize="35sp"
+        android:text="PixPlash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

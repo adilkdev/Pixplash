@@ -34,7 +34,7 @@ class SearchActivity: BaseActivity<HomeViewModel>() {
     override fun provideLayoutId(): Int = R.layout.activity_search
 
     override fun setupView(savedInstanceState: Bundle?) {
-        setTransition()
+        //setTransition()
         setupTabLayout()
         tvCancel.setOnClickListener {
             onBackPressed()

@@ -1,7 +1,5 @@
 package com.adil.pixplash.ui.home.explore
 
-import android.content.Intent
-import android.graphics.Outline
 import android.os.Bundle
 import android.os.Handler
 import android.transition.Fade
@@ -9,24 +7,21 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
-import android.view.ViewOutlineProvider
-import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Photo
-import com.adil.pixplash.data.local.prefs.UserPreferences
 import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
-import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
 import com.adil.pixplash.utils.view.GridSpacingItemDecoration
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
-import kotlinx.android.synthetic.main.fragment_explore.loadingView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -42,9 +37,6 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             return fragment
         }
     }
-
-    @Inject
-    lateinit var prefs: UserPreferences
 
     @Inject
     lateinit var exploreAdapter: ExploreAdapter
@@ -72,8 +64,10 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     override fun provideLayoutId(): Int = R.layout.fragment_explore
 
     override fun setupView(savedInstanceState: View) {
-        setTransition()
-        setupRecyclerView()
+        CoroutineScope(Dispatchers.Default).launch {
+            setupRecyclerView()
+            //setTransition()
+        }
     }
 
     private fun setTransition() {
@@ -150,10 +144,10 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         super.setupObservers()
         removePhotos(true)
         viewModel.randomPhoto.observe(this, Observer {
+            exploreAdapter.setBannerImage(it)
             Handler().postDelayed({
-                exploreAdapter.setBannerImage(it)
-                Log.e("Adil","called")
-            }, 1000)
+
+            }, 100)
         })
 
         viewModel.photos.observe(this, Observer {
