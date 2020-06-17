@@ -145,9 +145,6 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         removePhotos(true)
         viewModel.randomPhoto.observe(this, Observer {
             exploreAdapter.setBannerImage(it)
-            Handler().postDelayed({
-
-            }, 100)
         })
 
         viewModel.photos.observe(this, Observer {

@@ -3,12 +3,14 @@ package com.adil.pixplash.ui.home.collection.fragment
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -31,6 +33,7 @@ import kotlinx.android.synthetic.main.footer_view.view.*
 import kotlinx.android.synthetic.main.footer_view.view.tvLatest
 import kotlinx.android.synthetic.main.header_view.view.*
 import kotlinx.coroutines.*
+import java.lang.Exception
 
 class CollectionAdapter(val context: Context,
                         val job: CompletableJob
@@ -82,16 +85,15 @@ class CollectionAdapter(val context: Context,
     private fun bind(holder: RecyclerView.ViewHolder) {
         when (holder) {
             is HeaderViewHolder -> {
-                if (url.isNotEmpty())
-                    Picasso.get().load(url).into(object: com.squareup.picasso.Target {
-                        override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
-                            Log.e("Adil","${e?.stackTrace}")
+                if (url.isNotEmpty()) {
+                    val iv = ImageView(context)
+                    Picasso.get().load(url).into(iv, object: com.squareup.picasso.Callback {
+                        override fun onSuccess() {
+                            holder.bannerView.setBitmap((iv.drawable as BitmapDrawable).bitmap)
                         }
-                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                            holder.bannerView.setBitmap(bitmap!!)
-                        }
+                        override fun onError(e: Exception?) {}
                     })
+                }
             }
             is CollectionViewHolder -> {
                 val item = list[holder.adapterPosition]

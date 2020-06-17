@@ -3,12 +3,14 @@ package com.adil.pixplash.ui.home.explore
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -25,6 +27,7 @@ import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
 import com.adil.pixplash.utils.view.ClippedBanner
 import com.airbnb.lottie.LottieAnimationView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.get
 import kotlinx.android.synthetic.main.footer_view.view.*
@@ -32,6 +35,7 @@ import kotlinx.android.synthetic.main.grid_item_image.view.*
 import kotlinx.android.synthetic.main.header_view.view.*
 import kotlinx.android.synthetic.main.header_view.view.tvLatest
 import kotlinx.coroutines.*
+import java.lang.Exception
 
 
 class ExploreAdapter(
@@ -94,16 +98,24 @@ class ExploreAdapter(
                     )
                 layoutParams.isFullSpan = true
                 holder.itemView.layoutParams = layoutParams
-                if (url.isNotEmpty())
-                get().load(url).into(object: com.squareup.picasso.Target {
-                    override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
-                        Log.e("Adil","${e?.stackTrace}")
-                    }
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                        holder.bannerView.setBitmap(bitmap!!)
-                    }
-                })
+                if (url.isNotEmpty()) {
+                    val iv = ImageView(context)
+                    get().load(url).into(iv, object: com.squareup.picasso.Callback {
+                        override fun onSuccess() {
+                            holder.bannerView.setBitmap((iv.drawable as BitmapDrawable).bitmap)
+                        }
+                        override fun onError(e: Exception?) {}
+                    })
+                }
+//                get().load(url).into(object: com.squareup.picasso.Target {
+//                    override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
+//                        Log.e("Adil","${e?.stackTrace}")
+//                    }
+//                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+//                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+//                        holder.bannerView.setBitmap(bitmap!!)
+//                    }
+//                })
             }
             is ViewHolder -> {
                 val item = list[holder.adapterPosition]

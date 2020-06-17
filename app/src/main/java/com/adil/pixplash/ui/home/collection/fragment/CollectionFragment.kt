@@ -125,9 +125,6 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
         viewModel.randomPhoto.observe(this, Observer {
             //Picasso.get().load(it).placeholder(R.drawable.placeholder).into(ivBanner)
             collectionAdapter.setBannerImage(it)
-            Handler().postDelayed({
-
-            }, 100)
         })
         viewModel.collections.observe(this, Observer {
             it.data?.run { collectionAdapter.appendList(this) }
