@@ -2,6 +2,7 @@ package com.adil.pixplash.utils.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.ImageView
 
 class DynamicHeightNetworkImageView : androidx.appcompat.widget.AppCompatImageView {
@@ -17,12 +18,14 @@ class DynamicHeightNetworkImageView : androidx.appcompat.widget.AppCompatImageVi
 
     fun setAspectRatio(aspectRatio: Float) {
         mAspectRatio = aspectRatio
-        requestLayout()
+        //requestLayout()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val measuredWidth: Int = measuredWidth
-        setMeasuredDimension(measuredWidth, (measuredWidth / mAspectRatio).toInt())
+        val measuredHeight: Int = (measuredWidth * mAspectRatio).toInt()
+        Log.e("resize", "$mAspectRatio $measuredWidth, $measuredHeight")
+        setMeasuredDimension(measuredWidth, measuredHeight)
     }
 }

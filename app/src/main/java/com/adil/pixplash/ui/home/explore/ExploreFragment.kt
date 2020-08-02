@@ -1,10 +1,7 @@
 package com.adil.pixplash.ui.home.explore
 
 import android.os.Bundle
-import android.os.Handler
-import android.transition.Fade
 import android.util.DisplayMetrics
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.lifecycle.Observer
@@ -25,12 +22,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class ExploreFragment: BaseFragment<ExploreViewModel>() {
+class ExploreFragment : BaseFragment<ExploreViewModel>() {
 
     companion object {
         const val TAG = "ExploreFragment"
 
-        fun newInstance() : ExploreFragment {
+        fun newInstance(): ExploreFragment {
             val args = Bundle()
             val fragment = ExploreFragment()
             fragment.arguments = args
@@ -66,16 +63,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
     override fun setupView(savedInstanceState: View) {
         CoroutineScope(Dispatchers.Default).launch {
             setupRecyclerView()
-            //setTransition()
         }
-    }
-
-    private fun setTransition() {
-        val fade = Fade()
-        fade.excludeTarget(android.R.id.statusBarBackground, true)
-        fade.excludeTarget(android.R.id.navigationBarBackground, true)
-        activity?.window?.enterTransition = fade
-        activity?.window?.exitTransition = fade
     }
 
     private fun setupRecyclerView() {
@@ -88,13 +76,15 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
             /**
              * The below piece of code will remove the default animator applied to the recycler view.
              */
-            itemAnimator = null
+            //itemAnimator = null
             setItemViewCacheSize(30)
+            setHasFixedSize(true)
             this.adapter = exploreAdapter
-            val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+            val gridLayoutManager =
+                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+//            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
             layoutManager = gridLayoutManager
-            val itemSpacingDP = 12f
+            val itemSpacingDP = 14f
             val itemSpacing: Int = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 itemSpacingDP,
@@ -114,7 +104,9 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
                         totalItemCount = (layoutManager as StaggeredGridLayoutManager).itemCount
                         var firstVisibleItems: IntArray? = null
                         firstVisibleItems =
-                            (layoutManager as StaggeredGridLayoutManager).findFirstVisibleItemPositions(firstVisibleItems)
+                            (layoutManager as StaggeredGridLayoutManager).findFirstVisibleItemPositions(
+                                firstVisibleItems
+                            )
                         if (firstVisibleItems != null && firstVisibleItems.isNotEmpty()) {
                             pastVisibleItems = firstVisibleItems[0]
                         }
@@ -130,7 +122,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                         recyclerView.invalidateItemDecorations()
                         (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
                     }
@@ -159,7 +151,7 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
                 exploreAdapter.enableFooterRetry(true, context?.resources?.getString(it))
             } else {
                 onErrorView(it)
-                cardRetry.setOnClickListener{
+                cardRetry.setOnClickListener {
                     viewModel.onLoadMore()
                     loadingView()
                 }
@@ -190,15 +182,20 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         rvExplore.smoothSnapToPosition(0)
     }
 
-    private fun RecyclerView.smoothSnapToPosition(position: Int, snapMode: Int = LinearSmoothScroller.SNAP_TO_START) {
+    private fun RecyclerView.smoothSnapToPosition(
+        position: Int,
+        snapMode: Int = LinearSmoothScroller.SNAP_TO_START
+    ) {
         val MILLISECONDS_PER_INCH = 10f
         val MAX_SCROLL_ON_FLING_DURATION = 300
         val smoothScroller = object : LinearSmoothScroller(this.context) {
             override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
                 return MILLISECONDS_PER_INCH / (displayMetrics?.densityDpi ?: 1)
             }
+
             override fun calculateTimeForScrolling(dx: Int): Int =
                 Math.min(MAX_SCROLL_ON_FLING_DURATION, super.calculateTimeForScrolling(dx))
+
             override fun getVerticalSnapPreference(): Int = snapMode
             override fun getHorizontalSnapPreference(): Int = snapMode
         }
@@ -206,7 +203,8 @@ class ExploreFragment: BaseFragment<ExploreViewModel>() {
         layoutManager?.startSmoothScroll(smoothScroller)
     }
 
-    override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+    override fun injectDependencies(fragmentComponent: FragmentComponent) =
+        fragmentComponent.inject(this)
 
     override fun onDestroy() {
         viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
