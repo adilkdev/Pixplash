@@ -22,28 +22,10 @@ import javax.inject.Inject
 
 class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListener, FragmentListeners {
 
-
-
     @Inject
     lateinit var searchPhotoAdapter: SearchPhotoAdapter
 
     private var query = ""
-
-    /**
-     * All type of listeners
-     */
-//    private val savePhotos: (value: List<Photo>) -> Unit = {
-//        viewModel.savePhotos(it, AppConstants.PHOTO_TYPE_SEARCH)
-//    }
-//
-//    private val removePhotos: (value: Boolean) -> Unit = {
-//        viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
-//    }
-//
-//    private val reload: (value: Boolean) -> Unit = {
-//        viewModel.onLoadMore(query = query)
-//        searchPhotoAdapter.enableFooterRetry(false, "")
-//    }
 
     override fun provideLayoutId(): Int = R.layout.fragment_search
 
@@ -55,15 +37,13 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
 
     private fun setupRecyclerView() {
         rvSearch.apply {
-//            searchPhotoAdapter.setTheReloadListener(reload)
-//            searchPhotoAdapter.setSavePhotoInDBListener(savePhotos)
-//            searchPhotoAdapter.setRemovePhotoInDBListener(removePhotos)
 
+            setHasFixedSize(true)
             setItemViewCacheSize(30)
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+            //gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
             layoutManager = gridLayoutManager
-            val itemSpacingDP = 12f
+            val itemSpacingDP = 14f
             val itemSpacing: Int = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 itemSpacingDP,

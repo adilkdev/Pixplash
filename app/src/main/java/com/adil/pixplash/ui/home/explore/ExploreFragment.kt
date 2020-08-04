@@ -196,8 +196,8 @@ class ExploreFragment : BaseFragment<ExploreViewModel>() {
             override fun calculateTimeForScrolling(dx: Int): Int =
                 Math.min(MAX_SCROLL_ON_FLING_DURATION, super.calculateTimeForScrolling(dx))
 
-            override fun getVerticalSnapPreference(): Int = snapMode
             override fun getHorizontalSnapPreference(): Int = snapMode
+            override fun getVerticalSnapPreference(): Int = snapMode
         }
         smoothScroller.targetPosition = position
         layoutManager?.startSmoothScroll(smoothScroller)

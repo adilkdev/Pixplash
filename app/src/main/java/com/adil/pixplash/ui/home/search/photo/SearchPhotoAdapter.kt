@@ -69,12 +69,14 @@ class SearchPhotoAdapter(
             is ViewHolder -> {
                 val item = list[holder.adapterPosition]
                 val image = item.urls.small
+                val aspectRatio = item.width.toFloat() / item.height.toFloat()
+                val rlp = holder.imageView.layoutParams
+                rlp.height = (rlp.width * aspectRatio).toInt()
+                holder.imageView.layoutParams = rlp
+                holder.imageView.setAspectRatio(aspectRatio = aspectRatio)
                 Picasso.get().load(image)
                     .placeholder(R.drawable.placeholder)
                     .into(holder.imageView)
-                val aspectRatio = item.width.toFloat() / item.height.toFloat()
-                holder.imageView.setAspectRatio(aspectRatio = aspectRatio)
-                holder.imageView.requestLayout()
             }
             is FooterView -> {
                 val layoutParams =
@@ -108,10 +110,6 @@ class SearchPhotoAdapter(
      * @param isEnabled boolean to turn on or off footer.
      */
 
-    fun setListener(fragmentListeners: FragmentListeners) {
-        this.fragmentListeners = fragmentListeners
-    }
-
     fun enableFooterRetry(value: Boolean, errorString: String?) {
         isRetryFooter = value
         if (errorString!=null)
@@ -122,6 +120,10 @@ class SearchPhotoAdapter(
     fun enableFooter(value: Boolean) {
         isFooterEnabled = value
         notifyDataSetChanged()
+    }
+
+    fun setListener(fragmentListeners: FragmentListeners) {
+        this.fragmentListeners = fragmentListeners
     }
 
     fun appendList(appendThisList: List<Photo>, page: Int) {
@@ -146,23 +148,6 @@ class SearchPhotoAdapter(
             }
         }
     }
-
-    /**
-     * Setting all listeners
-
-    fun setTheReloadListener(listener: (Boolean) -> Unit) {
-        this.reloadListener = listener
-    }
-
-    fun setSavePhotoInDBListener(savePhotoListener: (List<Photo>) -> Unit) {
-        this.savePhotoListener = savePhotoListener
-    }
-
-    fun setRemovePhotoInDBListener(removePhotoListener: (Boolean) -> Unit) {
-        this.removePhotoListener = removePhotoListener
-    }
-
-     */
 
 
     fun setQuery(query: String) {
