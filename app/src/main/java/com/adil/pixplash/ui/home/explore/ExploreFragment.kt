@@ -124,7 +124,7 @@ class ExploreFragment : BaseFragment<ExploreViewModel>() {
                     super.onScrollStateChanged(recyclerView, newState)
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                         recyclerView.invalidateItemDecorations()
-                        (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
+//                        (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
                     }
                 }
 
