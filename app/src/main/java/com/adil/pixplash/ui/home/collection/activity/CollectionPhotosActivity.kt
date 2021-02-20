@@ -75,7 +75,7 @@ class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
             setItemViewCacheSize(30)
             this.adapter = collectionPhotoAdapter
             val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+            //gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
             layoutManager = gridLayoutManager
             val itemSpacingDP = 12f
             val itemSpacing: Int = TypedValue.applyDimension(
@@ -113,11 +113,10 @@ class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
-                    recyclerView.invalidateItemDecorations()
-//                    if(newState == RecyclerView.SCROLL_STATE_IDLE){
-//                        recyclerView.invalidateItemDecorations()
-//                    }
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        recyclerView.invalidateItemDecorations()
+//                        (recyclerView.layoutManager as StaggeredGridLayoutManager?)!!.invalidateSpanAssignments()
+                    }
                 }
 
             })
