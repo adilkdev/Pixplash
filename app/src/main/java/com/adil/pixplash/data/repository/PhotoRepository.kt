@@ -1,20 +1,26 @@
 package com.adil.pixplash.data.repository
 
-import android.util.Log
 import com.adil.pixplash.data.local.db.DatabaseService
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.remote.NetworkService
-import com.adil.pixplash.data.remote.response.*
 import com.adil.pixplash.data.remote.response.Collection
+import com.adil.pixplash.data.remote.response.PhotoDetailResponse
+import com.adil.pixplash.data.remote.response.SearchCollectionResponse
+import com.adil.pixplash.data.remote.response.SearchPhotoResponse
 import io.reactivex.Single
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * updated code will go in this branch
+ */
+
 @Singleton
-class PhotoRepository @Inject constructor(private val networkService: NetworkService,
-                                          private val databaseService: DatabaseService,
-                                          private val job: CompletableJob
+class PhotoRepository @Inject constructor(
+    private val networkService: NetworkService,
+    private val databaseService: DatabaseService,
+    private val job: CompletableJob
 ) {
 
     companion object {
@@ -34,16 +40,27 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
     fun fetchPhotoDetails(photoId: String): Single<PhotoDetailResponse> =
         networkService.fetchPhotoDetails(photoId)
 
-    fun fetchCollections(page: Int = 1, itemsPerPage: Int = pageSize) : Single<List<Collection>> =
+    fun fetchCollections(page: Int = 1, itemsPerPage: Int = pageSize): Single<List<Collection>> =
         networkService.fetchCollections(page = page, perPage = itemsPerPage)
 
-    fun searchCollections(page: Int = 1, itemsPerPage: Int = pageSize, query: String = "") : Single<SearchCollectionResponse> =
+    fun searchCollections(
+        page: Int = 1,
+        itemsPerPage: Int = pageSize,
+        query: String = ""
+    ): Single<SearchCollectionResponse> =
         networkService.searchCollections(page = page, perPage = itemsPerPage, query = query)
 
-    fun fetchFeaturedCollections(page: Int = 1, itemsPerPage: Int = pageSize) : Single<List<Collection>> =
+    fun fetchFeaturedCollections(
+        page: Int = 1,
+        itemsPerPage: Int = pageSize
+    ): Single<List<Collection>> =
         networkService.fetchFeaturedCollections(page = page, perPage = itemsPerPage)
 
-    fun fetchCollectionPhoto(collectionId: String, page: Int = 1, itemsPerPage: Int = pageSize) : Single<List<Photo>> =
+    fun fetchCollectionPhoto(
+        collectionId: String,
+        page: Int = 1,
+        itemsPerPage: Int = pageSize
+    ): Single<List<Photo>> =
         networkService.fetchCollectionPhotos(id = collectionId, page = page, perPage = itemsPerPage)
 
     fun savePhotos(photos: List<Photo>, photoType: String) {
@@ -70,6 +87,7 @@ class PhotoRepository @Inject constructor(private val networkService: NetworkSer
         return photos
     }
 
-    private suspend fun gettingPhotos(photoType: String) = databaseService.exploreDao().getAllPhotosFromDB(photoType)
+    private suspend fun gettingPhotos(photoType: String) =
+        databaseService.exploreDao().getAllPhotosFromDB(photoType)
 
 }

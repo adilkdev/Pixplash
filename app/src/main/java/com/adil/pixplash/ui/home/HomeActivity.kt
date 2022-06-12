@@ -101,7 +101,7 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
                 setDarkTheme()
             } else -> {
             coordinatorLayout.setBackgroundColor(Color.WHITE)
-        }
+            }
         }
     }
 
