@@ -6,17 +6,17 @@ import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseViewModel
 import com.adil.pixplash.utils.common.Resource
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class ImageDetailViewModel(schedulerProvider: SchedulerProvider,
-                           compositeDisposable: CompositeDisposable,
+class ImageDetailViewModel(coroutineDispatcherProvider: CoroutineDispatcherProvider,
                            networkHelper: NetworkHelper,
                            private val photoRepository: PhotoRepository
-): BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
+): BaseViewModel(coroutineDispatcherProvider, networkHelper) {
 
     private val TAG = this::class.simpleName
     private var page = 1
@@ -28,15 +28,12 @@ class ImageDetailViewModel(schedulerProvider: SchedulerProvider,
 
     val error: MutableLiveData<Int> = MutableLiveData()
 
-    override fun onCreate() {
-
-    }
-
     fun setPagerType(type: String, id: String) {
         this.type = type
         this.collectionId = id
     }
 
+    /*
     fun loadMore(pageNo: Int = page, orderBy: String = orderByStr) {
         //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
         compositeDisposable.add(
@@ -96,6 +93,7 @@ class ImageDetailViewModel(schedulerProvider: SchedulerProvider,
                 )
         )
     }
+     */
 
     fun setPage(page: Int) {
         this.page = page + 1

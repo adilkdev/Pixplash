@@ -1,27 +1,15 @@
 package com.adil.pixplash.ui.base
 
-import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.adil.pixplash.R
-import com.adil.pixplash.utils.common.Resource
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
 import com.adil.pixplash.utils.network.NetworkHelper
-import com.adil.pixplash.utils.rx.SchedulerProvider
-import io.reactivex.disposables.CompositeDisposable
 import javax.net.ssl.HttpsURLConnection
 
 abstract class BaseViewModel(
-    protected val schedulerProvider: SchedulerProvider,
-    protected  val compositeDisposable: CompositeDisposable,
+    protected val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     protected val networkHelper: NetworkHelper
 ): ViewModel() {
-
-    override fun onCleared() {
-        compositeDisposable.dispose()
-        super.onCleared()
-    }
-
-    abstract fun onCreate()
 
     protected fun checkInternetConnectionWithMessage(): Boolean = networkHelper.isNetworkConnected()
 

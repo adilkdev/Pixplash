@@ -13,15 +13,14 @@ import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.adil.pixplash.R
 import com.adil.pixplash.data.repository.PhotoRepository
-import com.adil.pixplash.di.component.ActivityComponent
 import com.adil.pixplash.ui.base.BaseActivity
 import com.adil.pixplash.utils.AppConstants
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_image_detail.*
 import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.reflect.typeOf
 
-
+@AndroidEntryPoint
 class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
 
     private var isDismissible = true
@@ -100,11 +99,11 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
                     super.onPageSelected(position)
                     if (position == imageDetailAdapter.itemCount - 3) {
                         if (pagerType == AppConstants.PHOTO_TYPE_EXPLORE) {
-                            viewModel.loadMore()
+                            //viewModel.loadMore()
                         } else if (pagerType == AppConstants.PHOTO_TYPE_COLLECTION) {
-                            viewModel.loadMoreCollectionPhotos()
+                            //viewModel.loadMoreCollectionPhotos()
                         } else {
-                            viewModel.searchPhotos(query = query)
+                            //viewModel.searchPhotos(query = query)
                         }
                     }
                 }
@@ -220,10 +219,6 @@ class ImageDetailActivity: BaseActivity<ImageDetailViewModel>() {
             }
         }
         return super.dispatchTouchEvent(event)
-    }
-
-    override fun injectDependencies(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
     }
 
     override fun onBackPressed() {

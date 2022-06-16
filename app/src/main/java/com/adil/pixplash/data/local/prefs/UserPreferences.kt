@@ -9,10 +9,4 @@ class UserPreferences @Inject constructor(private val prefs: SharedPreferences) 
         const val ACTIVE_THEME = "PREF_THEME"
     }
 
-    fun getTheme(): Int =
-        prefs.getInt(ACTIVE_THEME, 1)
-
-    fun setTheme(theme: Int) =
-        prefs.edit().putInt(ACTIVE_THEME, theme).apply()
-
 }

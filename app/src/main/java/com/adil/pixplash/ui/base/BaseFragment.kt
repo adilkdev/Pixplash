@@ -7,10 +7,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import com.adil.pixplash.PixplashApplication
-import com.adil.pixplash.di.component.DaggerFragmentComponent
-import com.adil.pixplash.di.component.FragmentComponent
-import com.adil.pixplash.di.module.FragmentModule
 import com.adil.pixplash.utils.display.Toaster
 import javax.inject.Inject
 
@@ -20,10 +16,8 @@ abstract class BaseFragment<VM: BaseViewModel> : Fragment() {
     lateinit var viewModel: VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        injectDependencies(buildFragmentComponent())
         super.onCreate(savedInstanceState)
         setupObservers()
-        viewModel.onCreate()
     }
 
     override fun onCreateView(
@@ -40,28 +34,12 @@ abstract class BaseFragment<VM: BaseViewModel> : Fragment() {
     @LayoutRes
     protected abstract fun provideLayoutId(): Int
 
-    protected open fun setupObservers() {
-//        viewModel.messageStringId.observe(this, Observer {
-//            //it.data?.run { showMessage(this) }
-//        })
-//        viewModel.messageString.observe(this, Observer {
-//            //it.data?.run { showMessage(this) }
-//        })
-    }
+    protected open fun setupObservers() {}
 
-    private fun buildFragmentComponent() =
-        DaggerFragmentComponent
-            .builder()
-            .applicationComponent((context!!.applicationContext as PixplashApplication).applicationComponent)
-            .fragmentModule(FragmentModule(this))
-            .build()
+    protected abstract fun setupView(savedInstanceState: View)
 
     fun showMessage(message: String) = Toaster.show(context!!, message)
 
     fun showMessage(@StringRes resId: Int) = showMessage(getString(resId))
-
-    protected abstract fun setupView(savedInstanceState: View)
-
-    protected abstract fun injectDependencies(fragmentComponent: FragmentComponent)
 
 }

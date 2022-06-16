@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Photo
-import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.ui.home.search.PhotoQueryListener
 import com.adil.pixplash.utils.AppConstants
@@ -141,8 +140,6 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
         tvTitle.visibility = View.GONE
     }
 
-    override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-
     override fun onSearch(query: String) {
         viewModel.resetPage()
         if (query.isBlank()) {
@@ -155,7 +152,7 @@ class SearchPhotoFragment: BaseFragment<SearchPhotoViewModel>(), PhotoQueryListe
                 searchPhotoAdapter.setQuery(query)
                 this@SearchPhotoFragment.query = query
             }
-            viewModel.searchPhotos(query = query)
+            //viewModel.searchPhotos(query = query)
         }
     }
 

@@ -7,6 +7,7 @@ import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseViewModel
 import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment
 import com.adil.pixplash.utils.common.Resource
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -14,11 +15,10 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class SearchCollectionViewModel (
-    schedulerProvider : SchedulerProvider,
-    compositeDisposable: CompositeDisposable,
+    coroutineDispatcherProvider: CoroutineDispatcherProvider,
     networkHelper: NetworkHelper,
     private val photoRepository: PhotoRepository
-) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
+) : BaseViewModel(coroutineDispatcherProvider, networkHelper) {
 
     val loading: MutableLiveData<Boolean> = MutableLiveData()
     val collections: MutableLiveData<Resource<List<Collection>>> = MutableLiveData()
@@ -28,10 +28,7 @@ class SearchCollectionViewModel (
     private var page = 1
     private var query = ""
 
-    override fun onCreate() {
-
-    }
-
+    /*
     fun searchCollection(pageNo: Int = page, query: String = "") {
         //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
         loading.value = true
@@ -60,6 +57,8 @@ class SearchCollectionViewModel (
             searchCollection(query = query)
         }
     }
+
+     */
 
     fun getPage() = page - 1
 

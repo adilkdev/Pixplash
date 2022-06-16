@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.SplashActivity"
+            android:exported="true"
             android:theme="@style/SplashTheme"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">

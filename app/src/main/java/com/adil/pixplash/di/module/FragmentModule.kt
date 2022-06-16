@@ -1,106 +1,108 @@
 package com.adil.pixplash.di.module
 
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.adil.pixplash.data.repository.PhotoRepository
-import com.adil.pixplash.ui.base.BaseFragment
-import com.adil.pixplash.ui.home.HomeViewModel
+import com.adil.pixplash.di.FragmentScope
 import com.adil.pixplash.ui.home.collection.fragment.CollectionAdapter
 import com.adil.pixplash.ui.home.collection.fragment.CollectionViewModel
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
+import com.adil.pixplash.ui.home.explore.ExploreEventsListener
+import com.adil.pixplash.ui.home.explore.ExploreEventsListenerImpl
 import com.adil.pixplash.ui.home.explore.ExploreViewModel
 import com.adil.pixplash.ui.home.search.collection.SearchCollectionAdapter
 import com.adil.pixplash.ui.home.search.collection.SearchCollectionViewModel
 import com.adil.pixplash.ui.home.search.photo.SearchPhotoAdapter
 import com.adil.pixplash.ui.home.search.photo.SearchPhotoViewModel
 import com.adil.pixplash.utils.ViewModelProviderFactory
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
 import com.adil.pixplash.utils.network.NetworkHelper
-import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Module
 import dagger.Provides
-import io.reactivex.disposables.CompositeDisposable
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 import kotlinx.coroutines.CompletableJob
 
 @Module
-    class FragmentModule(private val fragment: BaseFragment<*>) {
+@InstallIn(FragmentComponent::class)
+class FragmentModule() {
 
     @Provides
-    fun provideHomeViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
-        networkHelper: NetworkHelper
-    ) : HomeViewModel =
-        ViewModelProviders.of(fragment,
-            ViewModelProviderFactory(HomeViewModel::class) {
-                HomeViewModel(schedulerProvider, compositeDisposable, networkHelper)
-            }).get(HomeViewModel::class.java)
+    fun provideExploreFragmentEventListenerImplementation(
+        exploreViewModel: ExploreViewModel,
+        exploreAdapter: ExploreAdapter
+    ) : ExploreEventsListener = ExploreEventsListenerImpl(exploreViewModel, exploreAdapter)
 
     @Provides
     fun provideExploreViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
+        coroutineDispatcherProvider: CoroutineDispatcherProvider,
         networkHelper: NetworkHelper,
-        photoRepository: PhotoRepository
-    ) : ExploreViewModel =
+        photoRepository: PhotoRepository,
+        @FragmentScope fragment: Fragment
+    ): ExploreViewModel =
         ViewModelProviders.of(fragment,
             ViewModelProviderFactory(ExploreViewModel::class) {
-                ExploreViewModel(schedulerProvider, compositeDisposable, networkHelper, photoRepository)
-            }).get(ExploreViewModel::class.java)
+                ExploreViewModel(coroutineDispatcherProvider, networkHelper, photoRepository)
+            })[ExploreViewModel::class.java]
 
     @Provides
     fun provideCollectionViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
+        coroutineDispatcherProvider: CoroutineDispatcherProvider,
         networkHelper: NetworkHelper,
-        photoRepository: PhotoRepository
-    ) : CollectionViewModel =
+        photoRepository: PhotoRepository,
+        @FragmentScope fragment: Fragment
+    ): CollectionViewModel =
         ViewModelProviders.of(fragment,
             ViewModelProviderFactory(CollectionViewModel::class) {
                 CollectionViewModel(
-                    schedulerProvider,
-                    compositeDisposable,
+                    coroutineDispatcherProvider,
                     networkHelper,
                     photoRepository
                 )
-            }).get(CollectionViewModel::class.java)
+            })[CollectionViewModel::class.java]
 
     @Provides
     fun provideSearchPhotoViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
+        coroutineDispatcherProvider: CoroutineDispatcherProvider,
         networkHelper: NetworkHelper,
-        photoRepository: PhotoRepository
-    ) : SearchPhotoViewModel =
+        photoRepository: PhotoRepository,
+        @FragmentScope fragment: Fragment
+    ): SearchPhotoViewModel =
         ViewModelProviders.of(fragment,
             ViewModelProviderFactory(SearchPhotoViewModel::class) {
-                SearchPhotoViewModel(schedulerProvider, compositeDisposable, networkHelper, photoRepository)
-            }).get(SearchPhotoViewModel::class.java)
+                SearchPhotoViewModel(coroutineDispatcherProvider, networkHelper, photoRepository)
+            })[SearchPhotoViewModel::class.java]
 
     @Provides
     fun provideSearchCollectionViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
+        coroutineDispatcherProvider: CoroutineDispatcherProvider,
         networkHelper: NetworkHelper,
-        photoRepository: PhotoRepository
-    ) : SearchCollectionViewModel =
+        photoRepository: PhotoRepository,
+        @FragmentScope fragment: Fragment
+    ): SearchCollectionViewModel =
         ViewModelProviders.of(fragment,
             ViewModelProviderFactory(SearchCollectionViewModel::class) {
-                SearchCollectionViewModel(schedulerProvider, compositeDisposable, networkHelper, photoRepository)
-            }).get(SearchCollectionViewModel::class.java)
+                SearchCollectionViewModel(
+                    coroutineDispatcherProvider,
+                    networkHelper,
+                    photoRepository
+                )
+            })[SearchCollectionViewModel::class.java]
 
     @Provides
-    fun provideExploreAdapter(job: CompletableJob) =
+    fun provideExploreAdapter(job: CompletableJob, @FragmentScope fragment: Fragment) =
         ExploreAdapter(context = fragment.context!!, job = job)
 
     @Provides
-    fun provideSearchPhotoAdapter(job: CompletableJob) =
+    fun provideSearchPhotoAdapter(job: CompletableJob, @FragmentScope fragment: Fragment) =
         SearchPhotoAdapter(context = fragment.context!!, job = job)
 
     @Provides
-    fun provideCollectionAdapter(job: CompletableJob) =
+    fun provideCollectionAdapter(job: CompletableJob, @FragmentScope fragment: Fragment) =
         CollectionAdapter(context = fragment.context!!, job = job)
 
     @Provides
-    fun provideSearchCollectionAdapter(job: CompletableJob) =
+    fun provideSearchCollectionAdapter(job: CompletableJob, @FragmentScope fragment: Fragment) =
         SearchCollectionAdapter(context = fragment.context!!, job = job)
 
 }

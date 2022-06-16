@@ -6,11 +6,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import com.adil.pixplash.R
-import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.ui.home.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_about.*
 
+@AndroidEntryPoint
 class SettingFragment: BaseFragment<HomeViewModel>() {
 
     companion object {
@@ -40,6 +41,4 @@ class SettingFragment: BaseFragment<HomeViewModel>() {
 
         })
     }
-
-    override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 }

@@ -1,8 +1,11 @@
 package com.adil.pixplash.di.module
 
+import android.app.Activity
 import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.adil.pixplash.data.repository.PhotoRepository
+import com.adil.pixplash.di.ActivityContext
 import com.adil.pixplash.di.ActivityScope
 import com.adil.pixplash.ui.base.BaseActivity
 import com.adil.pixplash.ui.home.HomeViewModel
@@ -11,54 +14,54 @@ import com.adil.pixplash.ui.home.collection.activity.CollectionPhotosViewModel
 import com.adil.pixplash.ui.home.image_detail.ImageDetailAdapter
 import com.adil.pixplash.ui.home.image_detail.ImageDetailViewModel
 import com.adil.pixplash.utils.ViewModelProviderFactory
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CompletableJob
 
 @Module
-class ActivityModule(private val activity: BaseActivity<*>) {
-
-    @ActivityScope
-    @Provides
-    fun provideContext(): Context = activity
+@InstallIn(ActivityComponent::class)
+class ActivityModule() {
 
     @Provides
     fun provideHomeViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
-        networkHelper: NetworkHelper
+        coroutineDispatcherProvider: CoroutineDispatcherProvider,
+        networkHelper: NetworkHelper,
+        @ActivityContext activity: FragmentActivity
     ) : HomeViewModel =
         ViewModelProviders.of(activity,
             ViewModelProviderFactory(HomeViewModel::class) {
-                HomeViewModel(schedulerProvider, compositeDisposable, networkHelper)
-            }).get(HomeViewModel::class.java)
+                HomeViewModel(coroutineDispatcherProvider, networkHelper)
+            })[HomeViewModel::class.java]
 
     @Provides
     fun provideImageDetailViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
+       coroutineDispatcherProvider: CoroutineDispatcherProvider,
         networkHelper: NetworkHelper,
-        photoRepository: PhotoRepository
+        photoRepository: PhotoRepository,
+        @ActivityContext activity: FragmentActivity
     ) : ImageDetailViewModel =
         ViewModelProviders.of(activity,
             ViewModelProviderFactory(ImageDetailViewModel::class) {
                 ImageDetailViewModel(
-                    schedulerProvider,
-                    compositeDisposable,
+                    coroutineDispatcherProvider,
                     networkHelper,
                     photoRepository
                 )
             }).get(ImageDetailViewModel::class.java)
 
     @Provides
-    fun provideImageDetailAdapter(job: CompletableJob) =
+    fun provideImageDetailAdapter(job: CompletableJob, @ActivityContext activity: FragmentActivity) =
         ImageDetailAdapter(activity, job)
 
     @Provides
-    fun provideCollectionPhotoAdapter(job: CompletableJob) =
+    fun provideCollectionPhotoAdapter(job: CompletableJob, @ActivityContext activity: FragmentActivity) =
         CollectionPhotoAdapter(
             context = activity,
             job = job
@@ -66,16 +69,15 @@ class ActivityModule(private val activity: BaseActivity<*>) {
 
     @Provides
     fun provideCollectionPhotosViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
+        coroutineDispatcherProvider: CoroutineDispatcherProvider,
         networkHelper: NetworkHelper,
-        photoRepository: PhotoRepository
+        photoRepository: PhotoRepository,
+        @ActivityContext activity: FragmentActivity
     ) : CollectionPhotosViewModel =
         ViewModelProviders.of(activity,
             ViewModelProviderFactory(CollectionPhotosViewModel::class) {
                 CollectionPhotosViewModel(
-                    schedulerProvider,
-                    compositeDisposable,
+                    coroutineDispatcherProvider,
                     networkHelper,
                     photoRepository
                 )

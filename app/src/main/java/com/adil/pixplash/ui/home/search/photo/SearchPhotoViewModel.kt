@@ -6,6 +6,7 @@ import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseViewModel
 import com.adil.pixplash.utils.common.Resource
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -13,11 +14,10 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class SearchPhotoViewModel(
-    schedulerProvider : SchedulerProvider,
-    compositeDisposable: CompositeDisposable,
+    coroutineDispatcherProvider: CoroutineDispatcherProvider,
     networkHelper: NetworkHelper,
     private val photoRepository: PhotoRepository
-) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
+) : BaseViewModel(coroutineDispatcherProvider, networkHelper) {
 
     val loading: MutableLiveData<Boolean> = MutableLiveData()
     val photos: MutableLiveData<Resource<List<Photo>>> = MutableLiveData()
@@ -26,9 +26,7 @@ class SearchPhotoViewModel(
     private val TAG = this::class.simpleName
     private var page = 1
 
-    override fun onCreate() {
-    }
-
+/*
     fun searchPhotos(pageNo: Int = page, query: String = "") {
         //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
         loading.value = true
@@ -52,9 +50,11 @@ class SearchPhotoViewModel(
         )
     }
 
+ */
+
     fun onLoadMore(query: String) {
-        if (loading.value !== null || loading.value == false)
-            searchPhotos(query = query)
+        //if (loading.value !== null || loading.value == false)
+           // searchPhotos(query = query)
     }
 
     fun savePhotos(list: List<Photo>, photoType: String) {

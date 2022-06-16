@@ -10,16 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Photo
-import com.adil.pixplash.di.component.ActivityComponent
 import com.adil.pixplash.ui.base.BaseActivity
 import com.adil.pixplash.utils.view.GridSpacingItemDecoration
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_collection_photos.*
 import kotlinx.android.synthetic.main.activity_collection_photos.errorLayout
 import kotlinx.android.synthetic.main.activity_collection_photos.tvBigTitle
 import kotlinx.android.synthetic.main.error_layout.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
 
     private var coverPhotoUrl: String = ""
@@ -29,7 +30,7 @@ class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
     lateinit var collectionPhotoAdapter: CollectionPhotoAdapter
 
     private val reload: (value: Boolean) -> Unit = {
-        viewModel.onLoadMore()
+        //viewModel.onLoadMore()
         collectionPhotoAdapter.enableFooterRetry(false, "")
     }
 
@@ -104,7 +105,7 @@ class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
                         if (!viewModel.loading.value!!) {
                             if (visibleItemCount + pastVisibleItems >= totalItemCount) {
                                 collectionPhotoAdapter.enableFooter(true)
-                                viewModel.onLoadMore()
+                                //viewModel.onLoadMore()
                                 //Log.e(TAG, "LOAD NEXT ITEM")
                             }
                         }
@@ -138,7 +139,7 @@ class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
             } else {
                 onErrorView(it)
                 cardRetry.setOnClickListener{
-                    viewModel.onLoadMore()
+                    //viewModel.onLoadMore()
                     loadingView()
                 }
             }
@@ -163,8 +164,6 @@ class CollectionPhotosActivity: BaseActivity<CollectionPhotosViewModel>() {
         rvPhotos.visibility = View.GONE
         tvDescription.text = resources?.getString(it)
     }
-
-    override fun injectDependencies(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
     override fun onBackPressed() {
         super.onBackPressed()

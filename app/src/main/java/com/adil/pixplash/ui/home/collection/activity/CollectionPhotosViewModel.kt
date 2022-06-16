@@ -7,6 +7,7 @@ import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseViewModel
 import com.adil.pixplash.utils.AppConstants
 import com.adil.pixplash.utils.common.Resource
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -14,12 +15,11 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class CollectionPhotosViewModel (
-    schedulerProvider : SchedulerProvider,
-    compositeDisposable: CompositeDisposable,
+    coroutineDispatcherProvider: CoroutineDispatcherProvider,
     networkHelper: NetworkHelper,
     private val photoRepository: PhotoRepository
 ) : BaseViewModel(
-    schedulerProvider, compositeDisposable, networkHelper
+    coroutineDispatcherProvider, networkHelper
 ) {
 
     val loading: MutableLiveData<Boolean> = MutableLiveData()
@@ -30,15 +30,12 @@ class CollectionPhotosViewModel (
     private var page = 1
     private var collectionId: String = ""
 
-    override fun onCreate() {
-
-    }
-
     fun setCollectionId(collectionId: String) {
         this.collectionId = collectionId
-        makeCall()
+        //makeCall()
     }
 
+    /*
     private fun makeCall(pageNo: Int = page) {
         //Log.e("adil", "page = $pageNo  orderBy = $orderBy")
         loading.value = true
@@ -62,9 +59,11 @@ class CollectionPhotosViewModel (
         )
     }
 
+
     fun onLoadMore() {
         if (loading.value !== null || loading.value == false) makeCall()
     }
+    */
 
     fun getPage() = page - 1
 

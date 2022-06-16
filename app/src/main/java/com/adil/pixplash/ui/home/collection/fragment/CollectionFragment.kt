@@ -1,11 +1,7 @@
 package com.adil.pixplash.ui.home.collection.fragment
 
-import android.content.Intent
-import android.graphics.Outline
 import android.os.Bundle
-import android.os.Handler
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,13 +9,14 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
 import com.adil.pixplash.data.local.prefs.UserPreferences
-import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kotlinx.android.synthetic.main.fragment_explore.loadingView
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CollectionFragment: BaseFragment<CollectionViewModel>() {
 
     companion object {
@@ -183,8 +180,6 @@ class CollectionFragment: BaseFragment<CollectionViewModel>() {
         smoothScroller.targetPosition = position
         layoutManager?.startSmoothScroll(smoothScroller)
     }
-
-    override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 
     override fun onDestroy() {
         collectionAdapter.cancelAllJobs()

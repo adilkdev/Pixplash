@@ -7,6 +7,7 @@ import com.adil.pixplash.data.repository.PhotoRepository
 import com.adil.pixplash.ui.base.BaseViewModel
 import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment.Companion.TYPE_ALL
 import com.adil.pixplash.utils.common.Resource
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -14,11 +15,10 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class CollectionViewModel (
-    schedulerProvider : SchedulerProvider,
-    compositeDisposable: CompositeDisposable,
+    coroutineDispatcherProvider: CoroutineDispatcherProvider,
     networkHelper: NetworkHelper,
     private val photoRepository: PhotoRepository
-) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
+) : BaseViewModel(coroutineDispatcherProvider, networkHelper) {
 
     val loading: MutableLiveData<Boolean> = MutableLiveData()
     val collections: MutableLiveData<Resource<List<Collection>>> = MutableLiveData()
@@ -30,10 +30,7 @@ class CollectionViewModel (
 
     private var currentType = TYPE_ALL
 
-    override fun onCreate() {
-        makeCall()
-    }
-
+/*
     private fun makeCall(pageNo: Int = page) {
         //Log.e("Adil", "page = $pageNo")
         loading.value = true
@@ -98,12 +95,14 @@ class CollectionViewModel (
         )
     }
 
+ */
+
     fun onLoadMore() {
         if (loading.value !== null || loading.value == false) {
             if (currentType == TYPE_ALL) {
-                makeCall()
+                //makeCall()
             } else {
-                makeFeaturedCall()
+                //makeFeaturedCall()
             }
         }
     }

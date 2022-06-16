@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.RelativeLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -19,11 +19,10 @@ import com.adil.pixplash.data.local.db.entity.Link
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.data.local.db.entity.Url
 import com.adil.pixplash.data.remote.response.User
-import com.adil.pixplash.ui.home.HomeActivity
-import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
 import com.adil.pixplash.utils.view.ClippedBanner
+import com.adil.pixplash.utils.view.DynamicHeightNetworkImageView
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso.get
 import kotlinx.android.synthetic.main.footer_view.view.*
@@ -49,6 +48,7 @@ class ExploreAdapter(
     lateinit var reloadListener: (Boolean) -> Unit
     lateinit var savePhotoListener: (List<Photo>) -> Unit
     lateinit var removePhotoListener: (Boolean) -> Unit
+    lateinit var exploreEventsListener: ExploreEventsListener
 
     private var isFooterEnabled = true
     private var isRetryFooter = false
@@ -110,6 +110,7 @@ class ExploreAdapter(
                 val rlp = holder.imageView.layoutParams
                 rlp.height = (rlp.width * aspectRatio).toInt()
                 holder.imageView.layoutParams = rlp
+                Log.e("adilLogging", "aspect ratio $aspectRatio")
                 holder.imageView.setAspectRatio(aspectRatio = aspectRatio)
                 get().load(image)
                     .placeholder(R.drawable.placeholder)
@@ -151,7 +152,7 @@ class ExploreAdapter(
     /**
      * Enable or disable footer (Default is true)
      *
-     * @param isEnabled boolean to turn on or off footer.
+     * @param value boolean to turn on or off footer.
      */
 
     fun enableFooterRetry(value: Boolean, errorString: String?) {
@@ -170,7 +171,8 @@ class ExploreAdapter(
         CoroutineScope(Dispatchers.IO + job).launch {
             this@ExploreAdapter.page = page
             list.addAll(appendThisList)
-            savePhotoListener(appendThisList)
+//            savePhotoListener(appendThisList)
+            exploreEventsListener.onSavePhotos(appendThisList)
             withContext(Dispatchers.Main) {
                 notifyDataSetChanged()
             }
@@ -183,7 +185,8 @@ class ExploreAdapter(
             list.add(Photo(0,"","","","",
                 Url("","","","","")
                 ,Link(""),"",AppConstants.PHOTO_TYPE_EXPLORE, User("","")))
-            removePhotoListener(true)
+//            removePhotoListener(true)
+            exploreEventsListener.onRemovePhotos()
             withContext(Dispatchers.Main) {
                 notifyDataSetChanged()
             }
@@ -193,6 +196,10 @@ class ExploreAdapter(
     /**
      * Setting all listeners
      */
+
+    fun setTheExploreEventsListener(exploreEventsListener: ExploreEventsListener) {
+        this.exploreEventsListener = exploreEventsListener
+    }
 
     fun setTheReloadListener(listener: (Boolean) -> Unit) {
         this.reloadListener = listener
@@ -223,17 +230,17 @@ class ExploreAdapter(
      * */
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView = itemView.image
+        val imageView : DynamicHeightNetworkImageView = itemView.image
         init {
             imageView.setOnClickListener {
-                context.startActivity(Intent(context as HomeActivity, ImageDetailActivity::class.java)
-                    .putExtra(AppConstants.ADAPTER_POSITION_PHOTO_ID, list[adapterPosition].photoId)
-                    .putExtra(AppConstants.LOADED_PAGES, page)
-                    .putExtra(AppConstants.ACTIVE_ORDER, activeOrder)
-                    .putExtra("type",AppConstants.PHOTO_TYPE_EXPLORE)
-                    .putExtra("collectionId", "")
-                )
-                context.overridePendingTransition(R.anim.slide_up, R.anim.nothing)
+//                context.startActivity(Intent(context as HomeActivity, ImageDetailActivity::class.java)
+//                    .putExtra(AppConstants.ADAPTER_POSITION_PHOTO_ID, list[adapterPosition].photoId)
+//                    .putExtra(AppConstants.LOADED_PAGES, page)
+//                    .putExtra(AppConstants.ACTIVE_ORDER, activeOrder)
+//                    .putExtra("type",AppConstants.PHOTO_TYPE_EXPLORE)
+//                    .putExtra("collectionId", "")
+//                )
+//                context.overridePendingTransition(R.anim.slide_up, R.anim.nothing)
             }
         }
     }
@@ -246,11 +253,11 @@ class ExploreAdapter(
         val tvOldest: TextView = itemView.tvOldest
         val tvPopular: TextView = itemView.tvPopular
         val bannerView: ClippedBanner = itemView.bannerView
-        val searchView = itemView.searchView
+        val searchView: LinearLayout = itemView.searchView
 
         init {
             searchView.setOnClickListener {
-                context?.startActivity(Intent(context, SearchActivity::class.java))
+                context.startActivity(Intent(context, SearchActivity::class.java))
             }
             cardLatest.setOnClickListener{
                 it.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_dark)
@@ -260,7 +267,8 @@ class ExploreAdapter(
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.black))
                 activeOrder = "latest"
-                orderByClickListener(activeOrder)
+                //orderByClickListener(activeOrder)
+                exploreEventsListener.onOrderByStateChanged(activeOrder)
             }
             cardOldest.setOnClickListener{
                 cardLatest.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_gray)
@@ -270,7 +278,8 @@ class ExploreAdapter(
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.white))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.black))
                 activeOrder = "oldest"
-                orderByClickListener(activeOrder)
+                //orderByClickListener(activeOrder)
+                exploreEventsListener.onOrderByStateChanged(activeOrder)
             }
             cardPopular.setOnClickListener{
                 cardLatest.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_gray)
@@ -280,7 +289,8 @@ class ExploreAdapter(
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.white))
                 activeOrder = "popular"
-                orderByClickListener(activeOrder)
+                //orderByClickListener(activeOrder)
+                exploreEventsListener.onOrderByStateChanged(activeOrder)
             }
         }
     }
@@ -291,7 +301,8 @@ class ExploreAdapter(
         val tvError: TextView = itemView.tvError
         init {
             cardRetry.setOnClickListener {
-                reloadListener(true)
+                //reloadListener(true)
+                exploreEventsListener.onReload()
             }
         }
     }

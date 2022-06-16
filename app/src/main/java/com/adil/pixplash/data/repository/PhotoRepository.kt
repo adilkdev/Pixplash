@@ -7,6 +7,7 @@ import com.adil.pixplash.data.remote.response.Collection
 import com.adil.pixplash.data.remote.response.PhotoDetailResponse
 import com.adil.pixplash.data.remote.response.SearchCollectionResponse
 import com.adil.pixplash.data.remote.response.SearchPhotoResponse
+import com.adil.pixplash.ui.home.explore.PhotoCategory
 import io.reactivex.Single
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -27,40 +28,40 @@ class PhotoRepository @Inject constructor(
         const val pageSize = 30
     }
 
-    fun fetchPhotos(page: Int = 1, itemsPerPage: Int = pageSize, orderBy: String = "latest")
-            : Single<List<Photo>> =
+    suspend fun fetchPhotos(page: Int = 1, itemsPerPage: Int = pageSize, orderBy: String = PhotoCategory.LATEST.value)
+            : List<Photo> =
         networkService.fetchPhotos(page = page, perPage = itemsPerPage, orderBy = orderBy)
 
-    fun searchPhotos(page: Int = 1, itemsPerPage: Int = pageSize, query: String = "")
-            : Single<SearchPhotoResponse> =
+    suspend fun searchPhotos(page: Int = 1, itemsPerPage: Int = pageSize, query: String = "")
+            : SearchPhotoResponse =
         networkService.searchPhotos(page = page, perPage = itemsPerPage, query = query)
 
-    fun fetchOneRandomPhoto(): Single<Photo> = networkService.fetchOneRandomPhoto()
+    suspend fun fetchOneRandomPhoto(): Photo = networkService.fetchOneRandomPhoto()
 
-    fun fetchPhotoDetails(photoId: String): Single<PhotoDetailResponse> =
+    suspend fun fetchPhotoDetails(photoId: String): PhotoDetailResponse =
         networkService.fetchPhotoDetails(photoId)
 
-    fun fetchCollections(page: Int = 1, itemsPerPage: Int = pageSize): Single<List<Collection>> =
+    suspend fun fetchCollections(page: Int = 1, itemsPerPage: Int = pageSize): List<Collection> =
         networkService.fetchCollections(page = page, perPage = itemsPerPage)
 
-    fun searchCollections(
+    suspend fun searchCollections(
         page: Int = 1,
         itemsPerPage: Int = pageSize,
         query: String = ""
-    ): Single<SearchCollectionResponse> =
+    ): SearchCollectionResponse =
         networkService.searchCollections(page = page, perPage = itemsPerPage, query = query)
 
-    fun fetchFeaturedCollections(
+    suspend fun fetchFeaturedCollections(
         page: Int = 1,
         itemsPerPage: Int = pageSize
-    ): Single<List<Collection>> =
+    ): List<Collection> =
         networkService.fetchFeaturedCollections(page = page, perPage = itemsPerPage)
 
-    fun fetchCollectionPhoto(
+    suspend fun fetchCollectionPhoto(
         collectionId: String,
         page: Int = 1,
         itemsPerPage: Int = pageSize
-    ): Single<List<Photo>> =
+    ): List<Photo> =
         networkService.fetchCollectionPhotos(id = collectionId, page = page, perPage = itemsPerPage)
 
     fun savePhotos(photos: List<Photo>, photoType: String) {

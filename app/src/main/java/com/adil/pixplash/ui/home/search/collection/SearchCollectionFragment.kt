@@ -5,9 +5,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adil.pixplash.R
-import com.adil.pixplash.di.component.FragmentComponent
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.ui.home.search.CollectionQueryListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.loadingView
@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), CollectionQueryListener {
 
     private var query = ""
@@ -28,7 +29,7 @@ class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), Colle
      */
 
     private val reload: (value: Boolean) -> Unit = {
-        viewModel.onLoadMore(query = query)
+        //viewModel.onLoadMore(query = query)
         collectionAdapter.enableFooterRetry(false, "")
     }
 
@@ -51,13 +52,13 @@ class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), Colle
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    layoutManager?.run {
-                        if (this is LinearLayoutManager
-                            && itemCount > 0
-                            && itemCount == findLastVisibleItemPosition() + 1
-                        )
-                            viewModel.onLoadMore(query = query)
-                    }
+//                    layoutManager?.run {
+//                        if (this is LinearLayoutManager
+//                            && itemCount > 0
+//                            && itemCount == findLastVisibleItemPosition() + 1
+//                        )
+//                            //viewModel.onLoadMore(query = query)
+//                    }
                 }
             })
 
@@ -78,7 +79,7 @@ class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), Colle
             } else {
                 onErrorView(it)
                 cardRetry.setOnClickListener{
-                    viewModel.onLoadMore(query = query)
+                    //viewModel.onLoadMore(query = query)
                     loadingView()
                 }
             }
@@ -114,8 +115,6 @@ class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), Colle
         tvTitle.visibility = View.GONE
     }
 
-    override fun injectDependencies(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-
     override fun onSearch(query: String) {
         viewModel.resetPage()
         if (query.isBlank()) {
@@ -127,7 +126,7 @@ class SearchCollectionFragment: BaseFragment<SearchCollectionViewModel>(), Colle
                 collectionAdapter.resetList()
                 this@SearchCollectionFragment.query = query
             }
-            viewModel.searchCollection(query = query)
+            //viewModel.searchCollection(query = query)
         }
     }
 

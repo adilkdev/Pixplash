@@ -4,10 +4,9 @@
     android:id="@+id/cardImage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:translationZ="2dp"
     app:cardBackgroundColor="#fff"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="6dp"
     app:cardElevation="6dp">
 
         <com.adil.pixplash.utils.view.DynamicHeightNetworkImageView
@@ -15,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:contentDescription="image"
             android:scaleType="centerCrop"
             android:src="@drawable/placeholder" />
     </androidx.cardview.widget.CardView>

@@ -8,34 +8,33 @@ import com.adil.pixplash.PixplashApplication
 import com.adil.pixplash.data.local.db.DatabaseService
 import com.adil.pixplash.data.remote.NetworkService
 import com.adil.pixplash.data.remote.Networking
-import com.adil.pixplash.di.ApplicationContext
 import com.adil.pixplash.utils.AppConstants
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
+import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProviderImpl
 import com.adil.pixplash.utils.network.NetworkHelper
 import com.adil.pixplash.utils.rx.RxSchedulerProvider
 import com.adil.pixplash.utils.rx.SchedulerProvider
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.Job
 import javax.inject.Singleton
 
 @Module
-class ApplicationModule (private val application: PixplashApplication) {
-
-    @Singleton
-    @Provides
-    fun provideApplication(): Application = application
+@InstallIn(SingletonComponent::class)
+object AppModule {
 
     @Provides
-    @Singleton
-    @ApplicationContext
-    fun provideContext(): Context = application
+    fun provideApplication(@ApplicationContext context: Context) : PixplashApplication = context as PixplashApplication
 
-    /**
-     * Since this function do not have @Singleton then each time CompositeDisposable is injected
-     * then a new instance of CompositeDisposable will be provided
-     */
+    @Provides
+    fun getCoroutineDispatcherProvider() : CoroutineDispatcherProvider =
+        CoroutineDispatcherProviderImpl()
+
     @Provides
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
@@ -49,18 +48,18 @@ class ApplicationModule (private val application: PixplashApplication) {
 
     @Provides
     @Singleton
-    fun provideNetworkService(): NetworkService =
+    fun provideNetworkService(pixplashApplication: PixplashApplication): NetworkService =
         Networking.create(
             AppConstants.BASE_URL,
-            application.cacheDir,
+            pixplashApplication.cacheDir,
             10 * 1024 * 1024 // 10MB
         )
 
     @Provides
     @Singleton
-    fun provideDatabaseService(): DatabaseService =
+    fun provideDatabaseService(pixplashApplication: PixplashApplication): DatabaseService =
         Room.databaseBuilder(
-            application, DatabaseService::class.java,
+            pixplashApplication, DatabaseService::class.java,
             "pixplash-db"
         ).build()
 
@@ -69,11 +68,11 @@ class ApplicationModule (private val application: PixplashApplication) {
 
     @Singleton
     @Provides
-    fun provideNetworkHelper(): NetworkHelper = NetworkHelper(application)
+    fun provideNetworkHelper(pixplashApplication: PixplashApplication): NetworkHelper = NetworkHelper(pixplashApplication)
 
     @Provides
     @Singleton
-    fun provideSharedPreferences(): SharedPreferences =
-        application.getSharedPreferences("pixplash-prefs", Context.MODE_PRIVATE)
+    fun provideSharedPreferences(pixplashApplication: PixplashApplication): SharedPreferences =
+        pixplashApplication.getSharedPreferences("pixplash-prefs", Context.MODE_PRIVATE)
 
 }

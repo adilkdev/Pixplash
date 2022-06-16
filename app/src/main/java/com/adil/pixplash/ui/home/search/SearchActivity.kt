@@ -1,7 +1,6 @@
 package com.adil.pixplash.ui.home.search
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
@@ -13,19 +12,18 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.adil.pixplash.R
-import com.adil.pixplash.di.component.ActivityComponent
 import com.adil.pixplash.ui.base.BaseActivity
 import com.adil.pixplash.ui.home.HomeViewModel
 import com.adil.pixplash.ui.home.search.collection.SearchCollectionFragment
 import com.adil.pixplash.ui.home.search.photo.SearchPhotoFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_search.*
 
-
+@AndroidEntryPoint
 class SearchActivity: BaseActivity<HomeViewModel>() {
 
     private lateinit var photoQueryListener: PhotoQueryListener
@@ -108,10 +106,6 @@ class SearchActivity: BaseActivity<HomeViewModel>() {
                 }
             }
         }
-    }
-
-    override fun injectDependencies(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
     }
 
     private fun setTransition() {
