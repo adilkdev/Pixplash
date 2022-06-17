@@ -1,7 +1,6 @@
-package com.adil.pixplash.utils.view
+package com.adil.pixplash.utils.view_utils
 
 import android.graphics.Rect
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView

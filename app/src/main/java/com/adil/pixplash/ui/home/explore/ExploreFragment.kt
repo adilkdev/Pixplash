@@ -1,7 +1,6 @@
 package com.adil.pixplash.ui.home.explore
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.View
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -10,21 +9,20 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.utils.AppConstants
-import com.adil.pixplash.utils.AppConstants.MAX_SCROLL_ON_FLING_DURATION
-import com.adil.pixplash.utils.AppConstants.MILLISECONDS_PER_INCH
-import com.adil.pixplash.utils.view.GridSpacingItemDecoration
+import com.adil.pixplash.utils.view_utils.GridSpacingItemDecoration
+import com.adil.pixplash.utils.view_utils.PixplashLinearSmoothScroller
+import com.adil.pixplash.utils.view_utils.RecyclerViewListener
+import com.adil.pixplash.utils.view_utils.RecyclerViewScrollListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
-import kotlin.math.min
 
 @AndroidEntryPoint
-class ExploreFragment : BaseFragment<ExploreViewModel>() {
+class ExploreFragment : BaseFragment<ExploreViewModel>(), RecyclerViewListener {
 
     companion object {
         const val TAG = "ExploreFragment"
@@ -45,6 +43,9 @@ class ExploreFragment : BaseFragment<ExploreViewModel>() {
     lateinit var exploreEventsListenerImpl: ExploreEventsListener
 
     override fun provideLayoutId(): Int = R.layout.fragment_explore
+
+    @Inject
+    lateinit var recyclerViewScrollListener: RecyclerViewScrollListener
 
     override fun setupView(savedInstanceState: View) {
         CoroutineScope(Dispatchers.Default).launch {
@@ -73,34 +74,10 @@ class ExploreFragment : BaseFragment<ExploreViewModel>() {
             ).toInt()
             addItemDecoration(GridSpacingItemDecoration(itemSpacing, true))
 
-            var pastVisibleItems = 0
-            var visibleItemCount: Int
-            var totalItemCount: Int
+            recyclerViewScrollListener.setupRecyclerViewScrollListener(this@ExploreFragment)
+            recyclerViewScrollListener.setupLoading(viewModel.loading)
 
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    layoutManager.run {
-                        visibleItemCount = (layoutManager as StaggeredGridLayoutManager).childCount
-                        totalItemCount = (layoutManager as StaggeredGridLayoutManager).itemCount
-                        var firstVisibleItems: IntArray? = null
-                        firstVisibleItems =
-                            (layoutManager as StaggeredGridLayoutManager).findFirstVisibleItemPositions(
-                                firstVisibleItems
-                            )
-                        if (firstVisibleItems != null && firstVisibleItems.isNotEmpty()) {
-                            pastVisibleItems = firstVisibleItems[0]
-                        }
-                        if (!viewModel.loading.value!!) {
-                            if (visibleItemCount + pastVisibleItems >= totalItemCount) {
-                                exploreAdapter.enableFooter(true)
-                                viewModel.onLoadMore()
-                                Timber.tag(TAG).e("LOAD NEXT ITEM")
-                            }
-                        }
-                    }
-                }
-            })
+            addOnScrollListener(recyclerViewScrollListener)
         }
     }
 
@@ -113,7 +90,7 @@ class ExploreFragment : BaseFragment<ExploreViewModel>() {
 
         viewModel.photos.observe(this) {
             it.data?.run { exploreAdapter.appendList(this, viewModel.getPage()) }
-            doneLoadingView()
+            hideLoadingView()
             exploreAdapter.enableFooter(false)
             exploreAdapter.enableFooterRetry(false, null)
         }
@@ -125,20 +102,22 @@ class ExploreFragment : BaseFragment<ExploreViewModel>() {
                 onErrorView(it)
                 cardRetry.setOnClickListener {
                     viewModel.onLoadMore()
-                    loadingView()
+                    showLoadingView()
                 }
             }
         }
+
+        /** triggering initial load when the app launches for the very first time. */
         viewModel.onLoadMore()
     }
 
-    private fun doneLoadingView() {
+    private fun hideLoadingView() {
         loadingView.visibility = View.GONE
         errorLayout.visibility = View.GONE
         rvExplore.visibility = View.VISIBLE
     }
 
-    private fun loadingView() {
+    private fun showLoadingView() {
         loadingView.visibility = View.VISIBLE
         errorLayout.visibility = View.GONE
         rvExplore.visibility = View.GONE
@@ -155,24 +134,23 @@ class ExploreFragment : BaseFragment<ExploreViewModel>() {
         rvExplore.smoothSnapToPosition(0)
     }
 
+    /** this feature is used to smoothly scroll to a particular item */
     private fun RecyclerView.smoothSnapToPosition(
         position: Int,
         snapMode: Int = LinearSmoothScroller.SNAP_TO_START
     ) {
-
-        val smoothScroller = object : LinearSmoothScroller(this.context) {
-            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
-                return MILLISECONDS_PER_INCH / (displayMetrics?.densityDpi ?: 1)
-            }
-
-            override fun calculateTimeForScrolling(dx: Int): Int =
-                min(MAX_SCROLL_ON_FLING_DURATION, super.calculateTimeForScrolling(dx))
-
-            override fun getHorizontalSnapPreference(): Int = snapMode
-            override fun getVerticalSnapPreference(): Int = snapMode
+        val smoothScroller = this@ExploreFragment.context?.run {
+            PixplashLinearSmoothScroller(this, snapMode)
+        }?.also { scroller ->
+            scroller.targetPosition = position
         }
-        smoothScroller.targetPosition = position
+        smoothScroller?.targetPosition = position
         layoutManager?.startSmoothScroll(smoothScroller)
+    }
+
+    override fun loadMoreData() {
+        exploreAdapter.enableFooter(true)
+        viewModel.onLoadMore()
     }
 
     override fun onDestroy() {

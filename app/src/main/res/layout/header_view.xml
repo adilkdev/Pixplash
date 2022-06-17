@@ -5,7 +5,7 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.adil.pixplash.utils.view.ClippedBanner
+    <com.adil.pixplash.utils.view_utils.ClippedBanner
         android:id="@+id/bannerView"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"

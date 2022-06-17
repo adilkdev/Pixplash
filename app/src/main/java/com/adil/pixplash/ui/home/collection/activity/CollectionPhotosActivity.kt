@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.ui.base.BaseActivity
-import com.adil.pixplash.utils.view.GridSpacingItemDecoration
+import com.adil.pixplash.utils.view_utils.GridSpacingItemDecoration
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_collection_photos.*

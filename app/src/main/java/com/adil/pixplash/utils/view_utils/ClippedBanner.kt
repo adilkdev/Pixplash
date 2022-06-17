@@ -1,4 +1,4 @@
-package com.adil.pixplash.utils.view
+package com.adil.pixplash.utils.view_utils
 
 import android.content.Context
 import android.graphics.*

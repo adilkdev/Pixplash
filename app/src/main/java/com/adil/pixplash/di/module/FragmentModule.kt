@@ -17,6 +17,7 @@ import com.adil.pixplash.ui.home.search.photo.SearchPhotoViewModel
 import com.adil.pixplash.utils.ViewModelProviderFactory
 import com.adil.pixplash.utils.dispatcher.CoroutineDispatcherProvider
 import com.adil.pixplash.utils.network.NetworkHelper
+import com.adil.pixplash.utils.view_utils.RecyclerViewScrollListener
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +26,11 @@ import kotlinx.coroutines.CompletableJob
 
 @Module
 @InstallIn(FragmentComponent::class)
-class FragmentModule() {
+class FragmentModule {
+
+    @Provides
+    fun getRecyclerViewVerticalScrollListener() =
+        RecyclerViewScrollListener(true)
 
     @Provides
     fun provideExploreFragmentEventListenerImplementation(

@@ -1,9 +1,8 @@
-package com.adil.pixplash.utils.view
+package com.adil.pixplash.utils.view_utils
 
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
-import android.widget.ImageView
 
 class DynamicHeightNetworkImageView : androidx.appcompat.widget.AppCompatImageView {
     private var mAspectRatio = 1.5f

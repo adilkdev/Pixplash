@@ -21,8 +21,8 @@ import com.adil.pixplash.data.local.db.entity.Url
 import com.adil.pixplash.data.remote.response.User
 import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
-import com.adil.pixplash.utils.view.ClippedBanner
-import com.adil.pixplash.utils.view.DynamicHeightNetworkImageView
+import com.adil.pixplash.utils.view_utils.ClippedBanner
+import com.adil.pixplash.utils.view_utils.DynamicHeightNetworkImageView
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso.get
 import kotlinx.android.synthetic.main.footer_view.view.*
@@ -44,10 +44,6 @@ class ExploreAdapter(
         var activeOrder = "latest"
     }
 
-    lateinit var orderByClickListener: (String) -> Unit
-    lateinit var reloadListener: (Boolean) -> Unit
-    lateinit var savePhotoListener: (List<Photo>) -> Unit
-    lateinit var removePhotoListener: (Boolean) -> Unit
     lateinit var exploreEventsListener: ExploreEventsListener
 
     private var isFooterEnabled = true
@@ -193,28 +189,8 @@ class ExploreAdapter(
         }
     }
 
-    /**
-     * Setting all listeners
-     */
-
     fun setTheExploreEventsListener(exploreEventsListener: ExploreEventsListener) {
         this.exploreEventsListener = exploreEventsListener
-    }
-
-    fun setTheReloadListener(listener: (Boolean) -> Unit) {
-        this.reloadListener = listener
-    }
-
-    fun setSortingListener(orderByClickListener: (String) -> Unit) {
-        this.orderByClickListener = orderByClickListener
-    }
-
-    fun setSavePhotoInDBListener(savePhotoListener: (List<Photo>) -> Unit) {
-        this.savePhotoListener = savePhotoListener
-    }
-
-    fun setRemovePhotoInDBListener(removePhotoListener: (Boolean) -> Unit) {
-        this.removePhotoListener = removePhotoListener
     }
 
     /**
@@ -267,7 +243,6 @@ class ExploreAdapter(
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.black))
                 activeOrder = "latest"
-                //orderByClickListener(activeOrder)
                 exploreEventsListener.onOrderByStateChanged(activeOrder)
             }
             cardOldest.setOnClickListener{
@@ -278,7 +253,6 @@ class ExploreAdapter(
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.white))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.black))
                 activeOrder = "oldest"
-                //orderByClickListener(activeOrder)
                 exploreEventsListener.onOrderByStateChanged(activeOrder)
             }
             cardPopular.setOnClickListener{
@@ -289,7 +263,6 @@ class ExploreAdapter(
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.white))
                 activeOrder = "popular"
-                //orderByClickListener(activeOrder)
                 exploreEventsListener.onOrderByStateChanged(activeOrder)
             }
         }
@@ -301,7 +274,6 @@ class ExploreAdapter(
         val tvError: TextView = itemView.tvError
         init {
             cardRetry.setOnClickListener {
-                //reloadListener(true)
                 exploreEventsListener.onReload()
             }
         }

@@ -7,9 +7,6 @@ object AppConstants {
 
     const val BASE_URL = "https://api.unsplash.com"
 
-    const val MILLISECONDS_PER_INCH = 10f
-    const val MAX_SCROLL_ON_FLING_DURATION = 300
-
     // Explore Adapter
     const val ADAPTER_POSITION_PHOTO_ID = "id"
     const val LOADED_PAGES = "page"
