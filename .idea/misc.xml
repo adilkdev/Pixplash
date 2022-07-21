@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android_Projects/Pixplash/app/src/main/res/drawable/card_rounded_bg_dark.xml" value="0.172" />
+        <entry key="..\:/Android_Projects/Pixplash/app/src/main/res/drawable/card_rounded_bg_gray.xml" value="0.172" />
         <entry key="..\:/Android_Projects/Pixplash/app/src/main/res/layout/fragment_explore.xml" value="0.25" />
         <entry key="..\:/Android_Projects/Pixplash/app/src/main/res/layout/grid_item_image.xml" value="0.25" />
+        <entry key="..\:/Android_Projects/Pixplash/app/src/main/res/layout/header_view.xml" value="0.25052083333333336" />
       </map>
     </option>
   </component>

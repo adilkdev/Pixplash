@@ -1,4 +1,4 @@
-package com.adil.pixplash.utils.view_utils
+package com.adil.pixplash.utils.view_helpers
 
 import android.content.Context
 import android.graphics.*
@@ -40,7 +40,7 @@ class ClippedBanner @JvmOverloads constructor(
         drawCombinedClipping(canvas!!)
     }
 
-    private val radius = dpToPx(40).toFloat()
+    private val radius = dpToPx(0).toFloat()
 
     fun setBitmap(bitmap: Bitmap) {
         this.bitmap = bitmap
@@ -48,23 +48,6 @@ class ClippedBanner @JvmOverloads constructor(
     }
 
     private fun drawCombinedClipping(canvas: Canvas){
-//        path.addRoundRect(
-//            0f,
-//            0f,
-//            width.toFloat(),
-//            height.toFloat(),
-//            radius,
-//            radius,
-//            Path.Direction.CCW
-//        )
-//        path.addRect(
-//            0f,
-//            0f,
-//            width.toFloat(),
-//            150f,
-//            Path.Direction.CCW
-//        )
-        //canvas.clipPath(path)
 
         if (bitmap==null)
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.placeholder)
@@ -73,7 +56,6 @@ class ClippedBanner @JvmOverloads constructor(
             job.await()
             bitmap = job.getCompleted()
         }
-        //bitmap = scaleCenterCrop(this!!.bitmap!!, height, width)
         paint.colorFilter = filter
         canvas.drawBitmap(tempBitmap, 0f, 0f, paint) // Destination
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)

@@ -1,4 +1,4 @@
-package com.adil.pixplash.utils.view_utils
+package com.adil.pixplash.utils.view_helpers
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

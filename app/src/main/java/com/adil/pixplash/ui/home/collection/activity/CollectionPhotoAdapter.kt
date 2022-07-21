@@ -17,7 +17,7 @@ import com.adil.pixplash.data.remote.response.User
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import com.adil.pixplash.utils.AppConstants
-import com.adil.pixplash.utils.view_utils.DynamicHeightNetworkImageView
+import com.adil.pixplash.utils.view_helpers.DynamicHeightNetworkImageView
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.footer_view.view.*
@@ -208,7 +208,7 @@ class CollectionPhotoAdapter(
                         Intent(context as CollectionPhotosActivity, ImageDetailActivity::class.java)
                             .putExtra(AppConstants.ADAPTER_POSITION_PHOTO_ID, list[adapterPosition].photoId)
                             .putExtra(AppConstants.LOADED_PAGES, page)
-                            .putExtra(AppConstants.ACTIVE_ORDER, ExploreAdapter.activeOrder)
+                            .putExtra(AppConstants.ACTIVE_ORDER, ExploreAdapter.activeSortingOrder)
                             .putExtra("type",AppConstants.PHOTO_TYPE_COLLECTION)
                             .putExtra("collectionId", collectionId)
 

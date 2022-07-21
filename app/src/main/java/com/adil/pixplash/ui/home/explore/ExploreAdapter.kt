@@ -3,7 +3,6 @@ package com.adil.pixplash.ui.home.explore
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,14 +14,11 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
-import com.adil.pixplash.data.local.db.entity.Link
 import com.adil.pixplash.data.local.db.entity.Photo
-import com.adil.pixplash.data.local.db.entity.Url
-import com.adil.pixplash.data.remote.response.User
 import com.adil.pixplash.ui.home.search.SearchActivity
-import com.adil.pixplash.utils.AppConstants
-import com.adil.pixplash.utils.view_utils.ClippedBanner
-import com.adil.pixplash.utils.view_utils.DynamicHeightNetworkImageView
+import com.adil.pixplash.utils.extensions.emptyString
+import com.adil.pixplash.utils.view_helpers.ClippedBanner
+import com.adil.pixplash.utils.view_helpers.DynamicHeightNetworkImageView
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso.get
 import kotlinx.android.synthetic.main.footer_view.view.*
@@ -31,35 +27,38 @@ import kotlinx.android.synthetic.main.header_view.view.*
 import kotlinx.android.synthetic.main.header_view.view.tvLatest
 import kotlinx.coroutines.*
 
-
 class ExploreAdapter(
     val context: Context,
     val job: CompletableJob
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     companion object {
         const val TYPE_HEADER = 0
         const val TYPE_ITEM = 1
         const val TYPE_FOOTER = 2
-        var activeOrder = "latest"
+        var activeSortingOrder = SortBy.LATEST
     }
 
     lateinit var exploreEventsListener: ExploreEventsListener
 
     private var isFooterEnabled = true
     private var isRetryFooter = false
-    private var errorString: String = ""
+    private var errorString: String = emptyString()
 
     private var list : MutableList<Photo> = mutableListOf()
 
     private var page: Int = 0
 
-    private var url = ""
+    private var url = emptyString()
+
+    val layoutParamsFullWidthWrappedHeight =
+        StaggeredGridLayoutManager.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).apply { isFullSpan = true }
 
     init {
-        list.add(Photo(0,"","","","",
-            Url("","","","","")
-            ,Link(""),"",AppConstants.PHOTO_TYPE_EXPLORE, User("","")))
+        initializeList()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -81,21 +80,16 @@ class ExploreAdapter(
     private fun bind(holder: RecyclerView.ViewHolder) {
         when (holder) {
             is HeaderViewHolder -> {
-                Log.e("Adil","holder update")
-                val layoutParams =
-                    StaggeredGridLayoutManager.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-                layoutParams.isFullSpan = true
-                holder.itemView.layoutParams = layoutParams
+                holder.itemView.layoutParams = layoutParamsFullWidthWrappedHeight
                 if (url.isNotEmpty()) {
                     val iv = ImageView(context)
                     get().load(url).into(iv, object: com.squareup.picasso.Callback {
                         override fun onSuccess() {
                             holder.bannerView.setBitmap((iv.drawable as BitmapDrawable).bitmap)
                         }
-                        override fun onError(e: Exception?) {}
+                        override fun onError(e: Exception?) {
+                            println(e?.message)
+                        }
                     })
                 }
             }
@@ -106,28 +100,21 @@ class ExploreAdapter(
                 val rlp = holder.imageView.layoutParams
                 rlp.height = (rlp.width * aspectRatio).toInt()
                 holder.imageView.layoutParams = rlp
-                Log.e("adilLogging", "aspect ratio $aspectRatio")
                 holder.imageView.setAspectRatio(aspectRatio = aspectRatio)
                 get().load(image)
                     .placeholder(R.drawable.placeholder)
                     .into(holder.imageView)
             }
             is FooterView -> {
-                val layoutParams =
-                    StaggeredGridLayoutManager.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-                layoutParams.isFullSpan = true
-                holder.itemView.layoutParams = layoutParams
+                holder.itemView.layoutParams = layoutParamsFullWidthWrappedHeight
                 if (isRetryFooter) {
                     holder.loadingView.visibility = View.GONE
                     holder.cardRetry.visibility = View.VISIBLE
                     holder.tvError.visibility = View.VISIBLE
                     holder.tvError.text = errorString
                 } else {
-                    holder.tvError.visibility = View.GONE
                     holder.loadingView.visibility = View.VISIBLE
+                    holder.tvError.visibility = View.GONE
                     holder.cardRetry.visibility = View.GONE
                 }
             }
@@ -145,12 +132,6 @@ class ExploreAdapter(
         notifyItemChanged(0)
     }
 
-    /**
-     * Enable or disable footer (Default is true)
-     *
-     * @param value boolean to turn on or off footer.
-     */
-
     fun enableFooterRetry(value: Boolean, errorString: String?) {
         isRetryFooter = value
         if (errorString!=null)
@@ -158,33 +139,38 @@ class ExploreAdapter(
         notifyDataSetChanged()
     }
 
+    /**
+     * Enable or disable footer (Default is true)
+     *
+     * @param value boolean to turn on or off footer.
+     */
+
     fun enableFooter(value: Boolean) {
         isFooterEnabled = value
         notifyDataSetChanged()
     }
 
-    fun appendList(appendThisList: List<Photo>, page: Int) {
+    fun appendList(photosList: List<Photo>, page: Int) {
         CoroutineScope(Dispatchers.IO + job).launch {
             this@ExploreAdapter.page = page
-            list.addAll(appendThisList)
-//            savePhotoListener(appendThisList)
-            exploreEventsListener.onSavePhotos(appendThisList)
+            list.addAll(photosList)
+            exploreEventsListener.onSavePhotos(photosList)
             withContext(Dispatchers.Main) {
                 notifyDataSetChanged()
             }
         }
     }
 
+    private fun initializeList() {
+        list.clear()
+        list.add(Photo.getBlankPhotoItem())
+    }
+
     fun resetList() {
         CoroutineScope(Dispatchers.IO + job).launch {
-            list.clear()
-            list.add(Photo(0,"","","","",
-                Url("","","","","")
-                ,Link(""),"",AppConstants.PHOTO_TYPE_EXPLORE, User("","")))
-//            removePhotoListener(true)
             exploreEventsListener.onRemovePhotos()
             withContext(Dispatchers.Main) {
-                notifyDataSetChanged()
+                initializeList()
             }
         }
     }
@@ -242,8 +228,8 @@ class ExploreAdapter(
                 tvLatest.setTextColor(ContextCompat.getColor(context, R.color.white))
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.black))
-                activeOrder = "latest"
-                exploreEventsListener.onOrderByStateChanged(activeOrder)
+                activeSortingOrder = SortBy.LATEST
+                exploreEventsListener.onSortByStateChanged(SortBy.LATEST)
             }
             cardOldest.setOnClickListener{
                 cardLatest.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_gray)
@@ -252,8 +238,8 @@ class ExploreAdapter(
                 tvLatest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.white))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.black))
-                activeOrder = "oldest"
-                exploreEventsListener.onOrderByStateChanged(activeOrder)
+                activeSortingOrder = SortBy.OLDEST
+                exploreEventsListener.onSortByStateChanged(SortBy.OLDEST)
             }
             cardPopular.setOnClickListener{
                 cardLatest.background = ContextCompat.getDrawable(context, R.drawable.card_rounded_bg_gray)
@@ -262,8 +248,8 @@ class ExploreAdapter(
                 tvLatest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvOldest.setTextColor(ContextCompat.getColor(context, R.color.black))
                 tvPopular.setTextColor(ContextCompat.getColor(context, R.color.white))
-                activeOrder = "popular"
-                exploreEventsListener.onOrderByStateChanged(activeOrder)
+                activeSortingOrder = SortBy.POPULAR
+                exploreEventsListener.onSortByStateChanged(SortBy.POPULAR)
             }
         }
     }

@@ -5,6 +5,8 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.adil.pixplash.data.remote.response.User
+import com.adil.pixplash.utils.AppConstants
+import com.adil.pixplash.utils.extensions.emptyString
 import com.google.gson.annotations.SerializedName
 import org.jetbrains.annotations.NotNull
 
@@ -50,5 +52,28 @@ data class Photo(
     @Embedded
     @SerializedName("user")
     val user: User
+) {
 
-)
+    companion object {
+        fun getBlankPhotoItem() =
+            Photo(
+                0,
+                emptyString(),
+                emptyString(),
+                emptyString(),
+                emptyString(),
+                Url(
+                    emptyString(),
+                    emptyString(),
+                    emptyString(),
+                    emptyString(),
+                    emptyString()
+                ),
+                Link(emptyString()),
+                emptyString(),
+                AppConstants.PHOTO_TYPE_EXPLORE,
+                User(emptyString(), emptyString())
+            )
+    }
+
+}

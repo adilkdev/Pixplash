@@ -1,4 +1,4 @@
-package com.adil.pixplash.utils.view_utils
+package com.adil.pixplash.utils.view_helpers
 
 import android.content.Context
 import android.util.AttributeSet
@@ -24,7 +24,6 @@ class DynamicHeightNetworkImageView : androidx.appcompat.widget.AppCompatImageVi
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val measuredWidth: Int = measuredWidth
         val measuredHeight: Int = (measuredWidth * mAspectRatio).toInt()
-        Log.e("resize", "$mAspectRatio $measuredWidth, $measuredHeight")
         setMeasuredDimension(measuredWidth, measuredHeight)
     }
 }

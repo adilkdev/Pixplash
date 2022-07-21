@@ -8,7 +8,7 @@ interface ExploreEventsListener {
 
     fun onRemovePhotos()
 
-    fun onOrderByStateChanged(orderBy: String)
+    fun onSortByStateChanged(sortBy: SortBy)
 
     fun onReload()
 

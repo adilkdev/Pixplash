@@ -7,8 +7,7 @@ import com.adil.pixplash.data.remote.response.Collection
 import com.adil.pixplash.data.remote.response.PhotoDetailResponse
 import com.adil.pixplash.data.remote.response.SearchCollectionResponse
 import com.adil.pixplash.data.remote.response.SearchPhotoResponse
-import com.adil.pixplash.ui.home.explore.PhotoCategory
-import io.reactivex.Single
+import com.adil.pixplash.ui.home.explore.SortBy
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,7 +27,7 @@ class PhotoRepository @Inject constructor(
         const val pageSize = 30
     }
 
-    suspend fun fetchPhotos(page: Int = 1, itemsPerPage: Int = pageSize, orderBy: String = PhotoCategory.LATEST.value)
+    suspend fun fetchPhotos(page: Int = 1, itemsPerPage: Int = pageSize, orderBy: String = SortBy.LATEST.value)
             : List<Photo> =
         networkService.fetchPhotos(page = page, perPage = itemsPerPage, orderBy = orderBy)
 

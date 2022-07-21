@@ -1,4 +1,4 @@
-package com.adil.pixplash.utils.view_utils
+package com.adil.pixplash.utils.view_helpers
 
 import android.graphics.Rect
 import android.view.View

@@ -21,7 +21,7 @@ import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment.Companio
 import com.adil.pixplash.ui.home.collection.fragment.CollectionFragment.Companion.TYPE_FEATURED
 import com.adil.pixplash.ui.home.explore.ExploreAdapter
 import com.adil.pixplash.ui.home.search.SearchActivity
-import com.adil.pixplash.utils.view_utils.ClippedBanner
+import com.adil.pixplash.utils.view_helpers.ClippedBanner
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.collection_item.view.*

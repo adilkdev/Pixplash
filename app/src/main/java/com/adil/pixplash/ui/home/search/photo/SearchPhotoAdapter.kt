@@ -14,7 +14,7 @@ import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.ui.home.image_detail.ImageDetailActivity
 import com.adil.pixplash.ui.home.search.SearchActivity
 import com.adil.pixplash.utils.AppConstants
-import com.adil.pixplash.utils.view_utils.DynamicHeightNetworkImageView
+import com.adil.pixplash.utils.view_helpers.DynamicHeightNetworkImageView
 import com.airbnb.lottie.LottieAnimationView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.footer_view.view.*

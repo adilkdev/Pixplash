@@ -10,7 +10,7 @@ import com.adil.pixplash.data.local.db.entity.Photo
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.ui.home.search.PhotoQueryListener
 import com.adil.pixplash.utils.AppConstants
-import com.adil.pixplash.utils.view_utils.GridSpacingItemDecoration
+import com.adil.pixplash.utils.view_helpers.GridSpacingItemDecoration
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.loadingView

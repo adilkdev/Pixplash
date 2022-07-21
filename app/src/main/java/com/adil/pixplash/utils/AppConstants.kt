@@ -17,4 +17,9 @@ object AppConstants {
     const val PHOTO_TYPE_SEARCH = "search"
     const val PHOTO_TYPE_COLLECTION = "collection"
 
+    // Sorting types
+    const val SORT_BY_LATEST = "latest"
+    const val SORT_BY_OLDEST = "oldest"
+    const val SORT_BY_POPULAR = "popular"
+
 }

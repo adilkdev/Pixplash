@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.adil.pixplash.R
 import com.adil.pixplash.ui.base.BaseFragment
 import com.adil.pixplash.utils.AppConstants
-import com.adil.pixplash.utils.view_utils.GridSpacingItemDecoration
-import com.adil.pixplash.utils.view_utils.PixplashLinearSmoothScroller
-import com.adil.pixplash.utils.view_utils.RecyclerViewListener
-import com.adil.pixplash.utils.view_utils.RecyclerViewScrollListener
+import com.adil.pixplash.utils.view_helpers.GridSpacingItemDecoration
+import com.adil.pixplash.utils.view_helpers.PixplashLinearSmoothScroller
+import com.adil.pixplash.utils.view_helpers.RecyclerViewListener
+import com.adil.pixplash.utils.view_helpers.RecyclerViewScrollListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_explore.*
@@ -39,26 +39,28 @@ class ExploreFragment : BaseFragment<ExploreViewModel>(), RecyclerViewListener {
     @Inject
     lateinit var exploreAdapter: ExploreAdapter
 
-    @Inject
-    lateinit var exploreEventsListenerImpl: ExploreEventsListener
-
     override fun provideLayoutId(): Int = R.layout.fragment_explore
 
     @Inject
     lateinit var recyclerViewScrollListener: RecyclerViewScrollListener
 
     override fun setupView(savedInstanceState: View) {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             setupRecyclerView()
+        }
+        cardRetry.setOnClickListener {
+            viewModel.onLoadMore()
+            showLoadingView()
         }
     }
 
     private fun setupRecyclerView() {
-        exploreAdapter.setTheExploreEventsListener(exploreEventsListenerImpl)
+        exploreAdapter.setTheExploreEventsListener(ExploreEventsListenerImpl(this))
 
         rvExplore.apply {
             /** The below piece of code will remove the default animator applied to the recycler view. */
             itemAnimator = null
+
             setItemViewCacheSize(30)
             setHasFixedSize(true)
             adapter = exploreAdapter
@@ -83,7 +85,6 @@ class ExploreFragment : BaseFragment<ExploreViewModel>(), RecyclerViewListener {
 
     override fun setupObservers() {
         super.setupObservers()
-        exploreEventsListenerImpl.onRemovePhotos()
         viewModel.randomPhoto.observe(this) {
             exploreAdapter.setBannerImage(it)
         }
@@ -100,10 +101,6 @@ class ExploreFragment : BaseFragment<ExploreViewModel>(), RecyclerViewListener {
                 exploreAdapter.enableFooterRetry(true, context?.resources?.getString(it))
             } else {
                 onErrorView(it)
-                cardRetry.setOnClickListener {
-                    viewModel.onLoadMore()
-                    showLoadingView()
-                }
             }
         }
 

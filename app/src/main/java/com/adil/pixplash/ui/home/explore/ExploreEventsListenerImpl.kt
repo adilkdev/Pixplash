@@ -8,27 +8,28 @@ import com.adil.pixplash.utils.AppConstants
  */
 
 class ExploreEventsListenerImpl(
-    private val viewModel: ExploreViewModel,
-    private val exploreAdapter: ExploreAdapter
+    private val exploreFragment: ExploreFragment
 ) :
     ExploreEventsListener {
 
     override fun onSavePhotos(photos: List<Photo>) {
-        viewModel.savePhotos(photos, AppConstants.PHOTO_TYPE_EXPLORE)
+        exploreFragment.viewModel.savePhotos(photos, AppConstants.PHOTO_TYPE_EXPLORE)
     }
 
     override fun onRemovePhotos() {
-        viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
+        exploreFragment.viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
     }
 
-    override fun onOrderByStateChanged(orderBy: String) {
-        viewModel.updateState(orderBy)
-        exploreAdapter.resetList()
+    override fun onSortByStateChanged(sortBy: SortBy) {
+        exploreFragment.viewModel.updateState(sortBy)
+        exploreFragment.exploreAdapter.resetList()
+        exploreFragment.viewModel.removePhotos(AppConstants.PHOTO_TYPE_EXPLORE)
+        exploreFragment.viewModel.onLoadMore()
     }
 
     override fun onReload() {
-        viewModel.onLoadMore()
-        exploreAdapter.enableFooterRetry(false, "")
+        exploreFragment.viewModel.onLoadMore()
+        exploreFragment.exploreAdapter.enableFooterRetry(false, "")
     }
 
 
